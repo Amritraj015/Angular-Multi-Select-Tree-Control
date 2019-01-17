@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TreeComponent } from './multi-select-tree-main.component';
+import { MSTreeContainerComponent } from './ms-tree-container/ms-tree-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TreeComponent
+    MSTreeContainerComponent
   ],
   imports: [
     BrowserModule,
