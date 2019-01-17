@@ -5,9 +5,12 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './ms-tree-container.component.html',
   styleUrls: ['./ms-tree-container.component.less']
 })
+
 export class MSTreeContainerComponent implements OnInit {
 
-  constructor() { }
+  public count: number = 0;
+  constructor() {
+   }
 
   ngOnInit() {
   }
