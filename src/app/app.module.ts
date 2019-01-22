@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MSTreeContainerComponent } from './ms-tree-container/ms-tree-container.component';
+import { MSTreeComponent } from './ms-tree/ms-tree.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MSTreeContainerComponent
+    MSTreeContainerComponent,
+    MSTreeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-ms-tree-container',
   templateUrl: './ms-tree-container.component.html',
@@ -9,9 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class MSTreeContainerComponent implements OnInit {
 
   public count: number = 0;
-  constructor() {
-   }
-
+  
   ngOnInit() {
   }
 
