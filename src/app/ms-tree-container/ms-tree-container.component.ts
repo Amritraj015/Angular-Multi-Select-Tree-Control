@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 @Component({
-  selector: 'app-ms-tree-container',
+  selector: 'ms-tree-container',
   templateUrl: './ms-tree-container.component.html',
   styleUrls: ['./ms-tree-container.component.less']
 })
