@@ -65,7 +65,26 @@ export class MSTreeComponent implements OnInit {
       for (let node of actualNode.nodeChildren) {
         if (node.nodeVisited) continue;
         !node.nodeVisited;
+        console.log(node.nodeVisited);
         dfsStack.push(node);
+      }
+    }
+  }
+
+  breadthFirstSearch(): void {
+    let bfsQueue: BreadthFirstSearchQueue;
+    !this.root.nodeVisited;
+    bfsQueue.enqueue(this.root);
+
+    while(bfsQueue.queue.length !== 0){
+      let actualNode = bfsQueue.dequeue();
+
+      for(let node of actualNode.nodeChildren){
+        if(!node.nodeVisited){
+          !node.nodeVisited;
+          console.log(node.nodeVisited);
+          bfsQueue.enqueue(node);
+        }
       }
     }
   }
@@ -74,14 +93,27 @@ export class MSTreeComponent implements OnInit {
 }
 
 //  Custom stack class that is used by the Depth-First Search Algorithm.
-export class DepthFirstSearchStack {
+class DepthFirstSearchStack {
   stack: ITreeNode[] = [];
 
-  push(value: ITreeNode) {
+  push(value: ITreeNode): void {
     this.stack.push(value);
   }
 
-  pop() {
+  pop(): ITreeNode {
     return this.stack.pop();
+  }
+}
+
+//  Custom queue class that is used by the Breadth-First Search Algorithm
+class BreadthFirstSearchQueue{
+  queue: ITreeNode[] = [];
+
+  enqueue(treeNode: ITreeNode): void {
+    this.queue.unshift();
+  }
+
+  dequeue(): ITreeNode {
+    return this.queue.pop();
   }
 }

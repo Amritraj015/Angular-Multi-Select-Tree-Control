@@ -1,4 +1,4 @@
-<div *ngIf="root !== null">
+<div (click)='depthFirstSearch()' *ngIf="root !== null">
   <div class="inner-tree-container">
     <input id="searchBox" type="text" placeholder="Search" />
     <ul>
