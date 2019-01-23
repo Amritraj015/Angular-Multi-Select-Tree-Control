@@ -7,10 +7,10 @@ export interface ITreeNode {
   //  name of the node
   nodeName: string;
 
-  //  ID of a node (unique number for each node)
+  //  ID of a node (unique positive integer for each node)
   nodeID: number;
 
-  //    parent 'p' of a node where: p ∈ {0,1}
+  //    parent 'p' of a node where: p ∈ {null, 1}
   nodeParent: ITreeNode;
 
   //    children 'c' of a given node where: c ∈ Z+,

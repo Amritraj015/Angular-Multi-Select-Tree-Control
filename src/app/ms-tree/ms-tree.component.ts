@@ -13,8 +13,16 @@ export class MSTreeComponent implements OnInit {
     nodeParent: null,
     nodeChildren: [
       {
-        nodeName: "childLeftChild",
+        nodeName: "leftChild_LeftChild",
         nodeID: 3,
+        nodeParent: this.leftChild,
+        nodeChildren: null,
+        nodeSelected: false,
+        nodeVisited: false
+      },
+      {
+        nodeName: "rightChild_LeftChild",
+        nodeID: 4,
         nodeParent: this.leftChild,
         nodeChildren: null,
         nodeSelected: false,
@@ -45,6 +53,23 @@ export class MSTreeComponent implements OnInit {
 
   public tree: ITreeNode[] = [this.root, this.leftChild, this.rightChild];
 
+  //  Depth-First Search Algorithm to render the Tree.
+  depthFirstSearch(): void {
+    let dfsStack: DepthFirstSearchStack;
+    dfsStack.push(this.root);
+    !this.root.nodeVisited;
+
+    while (dfsStack.stack.length !== 0) {
+      let actualNode = dfsStack.pop();
+
+      for (let node of actualNode.nodeChildren) {
+        if (node.nodeVisited) continue;
+        !node.nodeVisited;
+        dfsStack.push(node);
+      }
+    }
+  }
+
   ngOnInit() {}
 }
 
@@ -57,6 +82,6 @@ export class DepthFirstSearchStack {
   }
 
   pop() {
-    this.stack.pop();
+    return this.stack.pop();
   }
 }
