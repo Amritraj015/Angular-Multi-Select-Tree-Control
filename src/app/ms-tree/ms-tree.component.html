@@ -1,8 +1,15 @@
-<div *ngIf='tree.length > 0'>
-  <div class='innert-tree-container' >
-      <input id="searchBox" type="text" placeholder="Search" />
-      <ul>
-        <li *ngFor='let treeNode of tree'>{{treeNode.nodeName}}</li>
-      </ul>
+<div *ngIf="tree.length > 0">
+  <div class="inner-tree-container">
+    <input id="searchBox" type="text" placeholder="Search" />
+    <ul>
+      <li *ngFor="let treeNode of tree">
+        {{ treeNode.nodeName }}
+        <ul>
+          <li *ngFor="let children of treeNode.nodeChildren">
+            {{ children.nodeName }}
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
 </div>
