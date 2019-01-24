@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ITreeNode } from "../TreeNodeInterface/ITreeNode";
+import { ITreeNode } from 'src/app/Interfaces/ITreeNode';
 
 @Component({
   selector: "ms-tree",
