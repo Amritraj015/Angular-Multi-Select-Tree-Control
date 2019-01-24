@@ -9,9 +9,10 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 })
 export class MSTreeComponent implements OnInit {
   root: ITreeNode;
-
-  constructor(tree: GetTreeService) {
-    this.root = tree.getTree();
+  tree: ITreeNode[];
+  constructor(treeObject: GetTreeService) {
+    this.root = treeObject.getRoot();
+    this.tree = treeObject.getTree();
   }
 
   //  Depth-First Search Algorithm to render the Tree.
