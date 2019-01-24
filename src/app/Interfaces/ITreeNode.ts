@@ -11,7 +11,7 @@ export interface ITreeNode {
   nodeID: number;
 
   //    parent 'p' of a node where: p ∈ {null, 1}
-  nodeParent: ITreeNode;
+  //  nodeParent: ITreeNode;
 
   //    children 'c' of a given node where: c ∈ Z+,
   nodeChildren: ITreeNode[];

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ITreeNode } from 'src/app/Interfaces/ITreeNode';
+import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 
 @Component({
   selector: "ms-tree",
@@ -10,21 +10,34 @@ export class MSTreeComponent implements OnInit {
   leftChild: ITreeNode = {
     nodeName: "leftChild",
     nodeID: 1,
-    nodeParent: null,
     nodeChildren: [
       {
         nodeName: "leftChild_LeftChild",
         nodeID: 3,
-        nodeParent: this.leftChild,
-        nodeChildren: null,
+        nodeChildren: [
+          {
+            nodeName: "amrit",
+            nodeID: 5,
+            nodeChildren: [
+              {
+                nodeName: "raj",
+                nodeID: 6,
+                nodeChildren: [],
+                nodeSelected: false,
+                nodeVisited: false
+              }
+            ],
+            nodeSelected: false,
+            nodeVisited: false
+          }
+        ],
         nodeSelected: false,
         nodeVisited: false
       },
       {
         nodeName: "rightChild_LeftChild",
         nodeID: 4,
-        nodeParent: this.leftChild,
-        nodeChildren: null,
+        nodeChildren: [],
         nodeSelected: false,
         nodeVisited: false
       }
@@ -36,8 +49,7 @@ export class MSTreeComponent implements OnInit {
   rightChild: ITreeNode = {
     nodeName: "rightChild",
     nodeID: 2,
-    nodeParent: null,
-    nodeChildren: null,
+    nodeChildren: [],
     nodeSelected: false,
     nodeVisited: false
   };
@@ -45,7 +57,6 @@ export class MSTreeComponent implements OnInit {
   root: ITreeNode = {
     nodeName: "Root",
     nodeID: 0,
-    nodeParent: null,
     nodeChildren: [this.leftChild, this.rightChild],
     nodeSelected: false,
     nodeVisited: false
@@ -62,32 +73,37 @@ export class MSTreeComponent implements OnInit {
 
     while (dfsStack.stack.length !== 0) {
       let actualNode = dfsStack.pop();
+      console.log(actualNode.nodeName);
 
       for (let node of actualNode.nodeChildren) {
-        if (node.nodeVisited) continue;
-        !node.nodeVisited;
-        //console.log(node.nodeVisited);
-        dfsStack.push(node);
+        if (!node.nodeVisited) {
+          node.nodeVisited = true;
+          dfsStack.push(node);
+        }
       }
     }
   }
 
   breadthFirstSearch(): void {
     let bfsQueue = new BreadthFirstSearchQueue();
-    !this.root.nodeVisited;
+    this.root.nodeVisited = true;
     bfsQueue.enqueue(this.root);
 
-    while(bfsQueue.queue.length !== 0){
+    while (bfsQueue.queue.length !== 0) {
       let actualNode = bfsQueue.dequeue();
+      console.log(actualNode.nodeName);
 
-      for(let node of actualNode.nodeChildren){
-        if(!node.nodeVisited){
-          !node.nodeVisited;
-          console.log(node.nodeVisited);
+      for (let node of actualNode.nodeChildren) {
+        if (!node.nodeVisited) {
+          node.nodeVisited = true;
           bfsQueue.enqueue(node);
         }
       }
     }
+  }
+
+  check(): string {
+    return `<li> This is a List </li>`;
   }
 
   ngOnInit() {}
@@ -111,7 +127,7 @@ class BreadthFirstSearchQueue {
   queue: ITreeNode[] = [];
 
   enqueue(treeNode: ITreeNode): void {
-    this.queue.unshift();
+    this.queue.unshift(treeNode);
   }
 
   dequeue(): ITreeNode {
