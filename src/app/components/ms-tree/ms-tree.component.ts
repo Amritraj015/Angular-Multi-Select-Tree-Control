@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { GetTreeService } from "src/app/services/get-tree.service";
+import { NestedTreeControl } from "@angular/cdk/tree";
+import { MatTreeNestedDataSource } from "@angular/material/tree";
 
 @Component({
   selector: "ms-tree",
@@ -8,81 +10,83 @@ import { GetTreeService } from "src/app/services/get-tree.service";
   styleUrls: ["./ms-tree.component.less"]
 })
 export class MSTreeComponent implements OnInit {
-  root: ITreeNode;
-  //  tree: ITreeNode[];
+  treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
+  dataSource = new MatTreeNestedDataSource<ITreeNode>();
+
   constructor(treeObject: GetTreeService) {
-    this.root = treeObject.getRoot();
-    //  this.tree = treeObject.getTree();
+    this.dataSource.data = treeObject.getRoot();
   }
+  hasChild = (_: number, node: ITreeNode) =>
+    !!node.nodeChildren && node.nodeChildren.length > 0;
 
   //  Depth-First Search Algorithm to render the Tree.
-  depthFirstSearch(): void {
-    let dfsStack = new DepthFirstSearchStack();
-    dfsStack.push(this.root);
-    this.root.nodeVisited = true;
-    console.log(this.root.nodeVisited);
+  // depthFirstSearch(): void {
+  //   let dfsStack = new DepthFirstSearchStack();
+  //   dfsStack.push(this.root);
+  //   this.root.nodeVisited = true;
+  //   console.log(this.root.nodeVisited);
 
-    while (dfsStack.stack.length !== 0) {
-      let actualNode = dfsStack.pop();
-      console.log(actualNode.nodeName);
+  //   while (dfsStack.stack.length !== 0) {
+  //     let actualNode = dfsStack.pop();
+  //     console.log(actualNode.nodeName);
 
-      for (let node of actualNode.nodeChildren) {
-        if (!node.nodeVisited) {
-          node.nodeVisited = true;
-          dfsStack.push(node);
-        }
-      }
-    }
-  }
+  //     for (let node of actualNode.nodeChildren) {
+  //       if (!node.nodeVisited) {
+  //         node.nodeVisited = true;
+  //         dfsStack.push(node);
+  //       }
+  //     }
+  //   }
+  // }
 
-  //  Breadth-First Search Algorithm to render the Tree.
-  breadthFirstSearch(): void {
-    let bfsQueue = new BreadthFirstSearchQueue();
-    this.root.nodeVisited = true;
-    bfsQueue.enqueue(this.root);
+  // //  Breadth-First Search Algorithm to render the Tree.
+  // breadthFirstSearch(): void {
+  //   let bfsQueue = new BreadthFirstSearchQueue();
+  //   this.root.nodeVisited = true;
+  //   bfsQueue.enqueue(this.root);
 
-    while (bfsQueue.queue.length !== 0) {
-      let actualNode = bfsQueue.dequeue();
-      console.log(actualNode.nodeName);
+  //   while (bfsQueue.queue.length !== 0) {
+  //     let actualNode = bfsQueue.dequeue();
+  //     console.log(actualNode.nodeName);
 
-      for (let node of actualNode.nodeChildren) {
-        if (!node.nodeVisited) {
-          node.nodeVisited = true;
-          bfsQueue.enqueue(node);
-        }
-      }
-    }
-  }
+  //     for (let node of actualNode.nodeChildren) {
+  //       if (!node.nodeVisited) {
+  //         node.nodeVisited = true;
+  //         bfsQueue.enqueue(node);
+  //       }
+  //     }
+  //   }
+  // }
 
-  check(): string {
-    return `<li> This is a List </li>`;
-  }
+  // searchNode(search): void {
+  //   console.log(search);
+  // }
 
   ngOnInit() {}
 }
 
 //  Custom stack class that is used by the Depth-First Search Algorithm.
-class DepthFirstSearchStack {
-  stack: ITreeNode[] = [];
+// class DepthFirstSearchStack {
+//   stack: ITreeNode[] = [];
 
-  push(value: ITreeNode): void {
-    this.stack.push(value);
-  }
+//   push(value: ITreeNode): void {
+//     this.stack.push(value);
+//   }
 
-  pop(): ITreeNode {
-    return this.stack.pop();
-  }
-}
+//   pop(): ITreeNode {
+//     return this.stack.pop();
+//   }
+// }
 
 //  Custom queue class that is used by the Breadth-First Search Algorithm
-class BreadthFirstSearchQueue {
-  queue: ITreeNode[] = [];
+// class BreadthFirstSearchQueue {
+//   queue: ITreeNode[] = [];
 
-  enqueue(treeNode: ITreeNode): void {
-    this.queue.unshift(treeNode);
-  }
+//   enqueue(treeNode: ITreeNode): void {
+//     this.queue.unshift(treeNode);
+//   }
 
-  dequeue(): ITreeNode {
-    return this.queue.pop();
-  }
-}
+//   dequeue(): ITreeNode {
+//     return this.queue.pop();
+//   }
+// }

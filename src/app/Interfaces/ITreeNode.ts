@@ -20,7 +20,10 @@ export interface ITreeNode {
   //
   //    true = node is selected
   //    false = node is not selected
-  nodeSelected: boolean;
+
+  //================================================
+  //  nodeSelected: boolean;
+  //================================================
 
   //    'nodeVisisted' is used for the Depth-First Search Algorithm to track if a given
   //    node has been visited already.
@@ -30,5 +33,8 @@ export interface ITreeNode {
   //
   //    true = node visited already
   //    false = node not vivited yet
-  nodeVisited: boolean;
+
+  //================================================
+  //  nodeVisited: boolean;
+  //================================================
 }
