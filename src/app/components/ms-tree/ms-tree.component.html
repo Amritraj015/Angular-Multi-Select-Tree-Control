@@ -43,6 +43,12 @@
         <li class="mat-tree-node">
           <!-- use a disabled button to provide padding for tree leaf -->
           <button mat-icon-button disabled></button>
+          <!-- <mat-checkbox
+            class="checklist-leaf-node"
+            [checked]="checklistSelection.isSelected(node)"
+            (change)="todoLeafItemSelectionToggle(node)"
+            >{{ node.nodeName }}</mat-checkbox
+          > -->
           <input class="form-check-input" type="checkbox" />{{ node.nodeName }}
         </li>
       </mat-tree-node>
@@ -62,6 +68,12 @@
                 }}
               </mat-icon>
             </button>
+            <!-- <mat-checkbox
+              [checked]="descendantsAllSelected(node)"
+              [indeterminate]="descendantsPartiallySelected(node)"
+              (change)="todoItemSelectionToggle(node)"
+              >{{ node.nodeName }}</mat-checkbox
+            > -->
             <input class="form-check-input" type="checkbox" />{{
               node.nodeName
             }}

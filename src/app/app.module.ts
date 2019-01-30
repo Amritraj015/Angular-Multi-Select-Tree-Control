@@ -9,7 +9,8 @@ import { GetTreeService } from "./services/get-tree.service";
 import {
   MatTreeModule,
   MatIconModule,
-  MatButtonModule
+  MatButtonModule,
+  MatCheckboxModule
 } from "@angular/material";
 
 @NgModule({
@@ -19,7 +20,8 @@ import {
     AppRoutingModule,
     MatTreeModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule
   ],
   providers: [GetTreeService],
   bootstrap: [AppComponent]
