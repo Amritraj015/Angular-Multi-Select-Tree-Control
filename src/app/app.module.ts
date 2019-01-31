@@ -12,6 +12,7 @@ import {
   MatButtonModule,
   MatCheckboxModule
 } from "@angular/material";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [AppComponent, MSTreeContainerComponent, MSTreeComponent],
@@ -21,7 +22,8 @@ import {
     MatTreeModule,
     MatIconModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    BrowserAnimationsModule
   ],
   providers: [GetTreeService],
   bootstrap: [AppComponent]

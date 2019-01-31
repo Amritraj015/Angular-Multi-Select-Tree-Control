@@ -7,24 +7,29 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
 export class GetTreeService {
   root: ITreeNode[] = [
     {
-      nodeName: "Root",
+      nodeName: "USA",
       nodeID: 0,
+      nodeSelected: false,
       nodeChildren: [
         {
-          nodeName: "leftChild",
+          nodeName: "Georgia",
           nodeID: 1,
+          nodeSelected: false,
           nodeChildren: [
             {
-              nodeName: "left_LeftChild",
+              nodeName: "Atlanta",
               nodeID: 3,
+              nodeSelected: false,
               nodeChildren: [
                 {
-                  nodeName: "amrit",
+                  nodeName: "Midtown",
                   nodeID: 5,
+                  nodeSelected: false,
                   nodeChildren: [
                     {
-                      nodeName: "raj",
+                      nodeName: "TalentQuest",
                       nodeID: 6,
+                      nodeSelected: false,
                       nodeChildren: []
                     }
                   ]
@@ -32,28 +37,40 @@ export class GetTreeService {
               ]
             },
             {
-              nodeName: "right_LeftChild",
+              nodeName: "Marietta",
               nodeID: 4,
-              nodeChildren: []
+              nodeSelected: false,
+              nodeChildren: [
+                {
+                  nodeName: "KSU",
+                  nodeID: 10,
+                  nodeSelected: false,
+                  nodeChildren: []
+                }
+              ]
             }
           ]
         },
         {
-          nodeName: "rightChild",
+          nodeName: "New York",
           nodeID: 2,
+          nodeSelected: false,
           nodeChildren: [
             {
-              nodeName: "test left",
+              nodeName: "NYC",
               nodeID: 7,
+              nodeSelected: false,
               nodeChildren: []
             },
             {
-              nodeName: "test right",
+              nodeName: "Manhattan",
               nodeID: 8,
+              nodeSelected: false,
               nodeChildren: [
                 {
-                  nodeName: "test right child",
+                  nodeName: "Downtown",
                   nodeID: 9,
+                  nodeSelected: false,
                   nodeChildren: []
                 }
               ]
