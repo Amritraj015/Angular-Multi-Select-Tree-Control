@@ -13,9 +13,34 @@ export class MsSearchComponent implements OnInit {
   treeData = new MSTreeComponent(this.treeService);
   dataSource: ITreeNode[] = this.treeData.getTreeData();
 
-  constructor() {
+  constructor() {}
+
+  searchTreeWithDepthFirstSearch = () => {
+    let filteredNodeNames: string[];
+    let stack = new Stack();
     console.log(this.dataSource);
-  }
+
+    stack.pushStack(this.dataSource);
+    console.log(stack);
+
+    return filteredNodeNames;
+  };
 
   ngOnInit(): void {}
+}
+
+class Stack {
+  stack: any[];
+
+  constructor() {
+    this.stack = [];
+  }
+
+  pushStack(treeNode: any): void {
+    this.stack.push(treeNode);
+  }
+
+  popStack(): any {
+    return this.stack.pop();
+  }
 }
