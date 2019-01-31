@@ -1,37 +1,5 @@
-<!-- <div *ngIf="dataSource.data !== null">
-  <div class="inner-tree-container">
-    <input
-      #search
-      (keyUp.enter)="searchNode(search.value)"
-      class="form-control m-2 w-75"
-      type="text"
-      autofocus="autofocus"
-      placeholder="Search"
-    />
-
-    <ul>
-      <li *ngFor="let treeNode of tree">
-        <input class="form-check-input" type="checkbox" />
-        {{ treeNode.nodeName }}
-        <ul>
-          <li *ngFor="let children of treeNode.nodeChildren">
-            <input class="form-check-input" type="checkbox" />
-            {{ children.nodeName }}
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-</div> -->
-
 <div class="inner-tree-container">
-  <input
-    class="form-control m-2 w-75"
-    type="text"
-    autofocus="autofocus"
-    placeholder="Search"
-  />
-
+  <ms-search></ms-search>
   <div class="tree-display">
     <mat-tree
       [dataSource]="dataSource"
@@ -41,9 +9,12 @@
       <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node">
-          <!-- use a disabled button to provide padding for tree leaf -->
+          <!-- use of a disabled button to provide padding for tree leaf -->
           <button mat-icon-button disabled></button>
-          <mat-checkbox color="warn">{{ node.nodeName }}</mat-checkbox>
+
+          <mat-checkbox (click)="isNodeSelected(node)" color="warn">{{
+            node.nodeName
+          }}</mat-checkbox>
         </li>
       </mat-tree-node>
 
@@ -63,7 +34,9 @@
               </mat-icon>
             </button>
 
-            <mat-checkbox color="warn">{{ node.nodeName }}</mat-checkbox>
+            <mat-checkbox (click)="isNodeSelected(node)" color="warn">{{
+              node.nodeName
+            }}</mat-checkbox>
           </div>
 
           <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">

@@ -5,7 +5,7 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
   providedIn: "root"
 })
 export class GetTreeService {
-  root: ITreeNode[] = [
+  tree: ITreeNode[] = [
     {
       nodeName: "USA",
       nodeID: 0,
@@ -81,7 +81,7 @@ export class GetTreeService {
     }
   ];
 
-  getRoot(): ITreeNode[] {
-    return this.root;
+  getTree(): ITreeNode[] {
+    return this.tree;
   }
 }

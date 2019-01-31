@@ -13,80 +13,22 @@ export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
 
-  constructor(treeObject: GetTreeService) {
-    this.dataSource.data = treeObject.getRoot();
+  constructor(treeService: GetTreeService) {
+    this.dataSource.data = treeService.getTree();
   }
+
   hasChild = (_: number, node: ITreeNode) =>
     !!node.nodeChildren && node.nodeChildren.length > 0;
 
-  //  Depth-First Search Algorithm to render the Tree.
-  // depthFirstSearch(): void {
-  //   let dfsStack = new DepthFirstSearchStack();
-  //   dfsStack.push(this.root);
-  //   this.root.nodeVisited = true;
-  //   console.log(this.root.nodeVisited);
+  isNodeSelected(node): void {
+    node.nodeSelected = !node.nodeSelected;
+    console.log(node.nodeName);
+    console.log(node.nodeSelected);
+  }
 
-  //   while (dfsStack.stack.length !== 0) {
-  //     let actualNode = dfsStack.pop();
-  //     console.log(actualNode.nodeName);
-
-  //     for (let node of actualNode.nodeChildren) {
-  //       if (!node.nodeVisited) {
-  //         node.nodeVisited = true;
-  //         dfsStack.push(node);
-  //       }
-  //     }
-  //   }
-  // }
-
-  // //  Breadth-First Search Algorithm to render the Tree.
-  // breadthFirstSearch(): void {
-  //   let bfsQueue = new BreadthFirstSearchQueue();
-  //   this.root.nodeVisited = true;
-  //   bfsQueue.enqueue(this.root);
-
-  //   while (bfsQueue.queue.length !== 0) {
-  //     let actualNode = bfsQueue.dequeue();
-  //     console.log(actualNode.nodeName);
-
-  //     for (let node of actualNode.nodeChildren) {
-  //       if (!node.nodeVisited) {
-  //         node.nodeVisited = true;
-  //         bfsQueue.enqueue(node);
-  //       }
-  //     }
-  //   }
-  // }
-
-  // searchNode(search): void {
-  //   console.log(search);
-  // }
+  getTreeData(): ITreeNode[] {
+    return this.dataSource.data;
+  }
 
   ngOnInit() {}
 }
-
-//  Custom stack class that is used by the Depth-First Search Algorithm.
-// class DepthFirstSearchStack {
-//   stack: ITreeNode[] = [];
-
-//   push(value: ITreeNode): void {
-//     this.stack.push(value);
-//   }
-
-//   pop(): ITreeNode {
-//     return this.stack.pop();
-//   }
-// }
-
-//  Custom queue class that is used by the Breadth-First Search Algorithm
-// class BreadthFirstSearchQueue {
-//   queue: ITreeNode[] = [];
-
-//   enqueue(treeNode: ITreeNode): void {
-//     this.queue.unshift(treeNode);
-//   }
-
-//   dequeue(): ITreeNode {
-//     return this.queue.pop();
-//   }
-// }
