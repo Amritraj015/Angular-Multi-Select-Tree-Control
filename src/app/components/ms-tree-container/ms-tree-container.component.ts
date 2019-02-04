@@ -37,6 +37,7 @@ export class MSTreeContainerComponent implements OnInit {
   }
 
   renderTree(): boolean {
+    console.log(this.count);
     this.text = !this.renderTreeDiv
       ? `${this.count} Selected`
       : "Select User Groups";
