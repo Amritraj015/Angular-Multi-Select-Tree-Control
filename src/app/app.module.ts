@@ -4,7 +4,8 @@ import {
   MatTreeModule,
   MatIconModule,
   MatButtonModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatInputModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -16,6 +17,7 @@ import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree
 import { MSTreeComponent } from "./components/ms-tree/ms-tree.component";
 import { GetTreeService } from "./services/get-tree.service";
 import { MsSearchComponent } from "./components/ms-search/ms-search.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -33,6 +35,9 @@ import { MsSearchComponent } from "./components/ms-search/ms-search.component";
     MatCheckboxModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatAutocompleteModule
   ],
   providers: [GetTreeService],

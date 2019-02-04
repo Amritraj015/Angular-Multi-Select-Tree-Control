@@ -32,7 +32,5 @@ export interface ITreeNode {
   //    true = node visited already
   //    false = node not vivited yet
 
-  //================================================
-  //  nodeVisited: boolean;
-  //================================================
+  nodeVisited: boolean;
 }

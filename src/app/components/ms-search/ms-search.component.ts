@@ -2,6 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { MSTreeComponent } from "../ms-tree/ms-tree.component";
 import { GetTreeService } from "src/app/services/get-tree.service";
+import { FormControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
 
 @Component({
   selector: "ms-search",
@@ -12,21 +15,46 @@ export class MsSearchComponent implements OnInit {
   treeService = new GetTreeService();
   treeData = new MSTreeComponent(this.treeService);
   dataSource: ITreeNode[] = this.treeData.getTreeData();
+  searchBoxList: string[] = [];
 
-  constructor() {}
+  searchControl = new FormControl();
+  filteredOptions: Observable<string[]>;
 
-  searchTreeWithDepthFirstSearch = () => {
-    let filteredNodeNames: string[];
+  ngOnInit() {
+    this.filteredOptions = this.searchControl.valueChanges.pipe(
+      startWith(""),
+      map(value => this._filter(value))
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.searchBoxList.filter(option =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
+  constructor() {
+    this.searchBoxList = this.searchTreeWithDepthFirstSearch(
+      this.dataSource[0]
+    );
+  }
+
+  searchTreeWithDepthFirstSearch = node => {
     let stack = new Stack();
-    console.log(this.dataSource);
+    stack.pushStack(node);
 
-    stack.pushStack(this.dataSource);
-    console.log(stack);
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+      this.searchBoxList.push(removedNode.nodeName);
+      for (let newNode of removedNode.nodeChildren) {
+        stack.pushStack(newNode);
+      }
+    }
 
-    return filteredNodeNames;
+    return this.searchBoxList;
   };
-
-  ngOnInit(): void {}
 }
 
 class Stack {

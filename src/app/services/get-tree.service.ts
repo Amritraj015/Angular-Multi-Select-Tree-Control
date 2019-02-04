@@ -10,26 +10,31 @@ export class GetTreeService {
       nodeName: "USA",
       nodeID: 0,
       nodeSelected: false,
+      nodeVisited: false,
       nodeChildren: [
         {
           nodeName: "Georgia",
           nodeID: 1,
           nodeSelected: false,
+          nodeVisited: false,
           nodeChildren: [
             {
               nodeName: "Atlanta",
               nodeID: 3,
               nodeSelected: false,
+              nodeVisited: false,
               nodeChildren: [
                 {
                   nodeName: "Midtown",
                   nodeID: 5,
                   nodeSelected: false,
+                  nodeVisited: false,
                   nodeChildren: [
                     {
                       nodeName: "TalentQuest",
                       nodeID: 6,
                       nodeSelected: false,
+                      nodeVisited: false,
                       nodeChildren: []
                     }
                   ]
@@ -40,11 +45,13 @@ export class GetTreeService {
               nodeName: "Marietta",
               nodeID: 4,
               nodeSelected: false,
+              nodeVisited: false,
               nodeChildren: [
                 {
                   nodeName: "KSU",
                   nodeID: 10,
                   nodeSelected: false,
+                  nodeVisited: false,
                   nodeChildren: []
                 }
               ]
@@ -55,22 +62,26 @@ export class GetTreeService {
           nodeName: "New York",
           nodeID: 2,
           nodeSelected: false,
+          nodeVisited: false,
           nodeChildren: [
             {
               nodeName: "NYC",
               nodeID: 7,
               nodeSelected: false,
+              nodeVisited: false,
               nodeChildren: []
             },
             {
               nodeName: "Manhattan",
               nodeID: 8,
               nodeSelected: false,
+              nodeVisited: false,
               nodeChildren: [
                 {
                   nodeName: "Downtown",
                   nodeID: 9,
                   nodeSelected: false,
+                  nodeVisited: false,
                   nodeChildren: []
                 }
               ]

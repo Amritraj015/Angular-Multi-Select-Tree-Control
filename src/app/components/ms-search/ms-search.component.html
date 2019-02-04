@@ -1,11 +1,20 @@
-<div>
-  <form>
-    <input
-      (keypress)="searchTreeWithDepthFirstSearch()"
-      class="form-control mt-1 mb-2 w-100"
-      type="text"
-      autofocus="autofocus"
-      placeholder="Search"
-    />
-  </form>
-</div>
+<form>
+  <input
+    class="form-control mt-1 mb-2 w-100"
+    type="text"
+    autofocus="autofocus"
+    aria-label="Number"
+    placeholder="Search"
+    matInput
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option
+      *ngFor="let option of (filteredOptions | async)"
+      [value]="option"
+    >
+      {{ option }}
+    </mat-option>
+  </mat-autocomplete>
+</form>
