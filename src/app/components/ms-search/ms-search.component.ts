@@ -5,6 +5,7 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 import { FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
+import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 
 @Component({
   selector: "ms-search",
@@ -16,9 +17,14 @@ export class MsSearchComponent implements OnInit {
   treeData = new MSTreeComponent(this.treeService);
   dataSource: ITreeNode[] = this.treeData.getTreeData();
   searchBoxList: string[] = [];
-
   searchControl = new FormControl();
   filteredOptions: Observable<string[]>;
+
+  constructor() {
+    this.searchBoxList = this.searchTreeWithDepthFirstSearch(
+      this.dataSource[0]
+    );
+  }
 
   ngOnInit() {
     this.filteredOptions = this.searchControl.valueChanges.pipe(
@@ -35,13 +41,7 @@ export class MsSearchComponent implements OnInit {
     );
   }
 
-  constructor() {
-    this.searchBoxList = this.searchTreeWithDepthFirstSearch(
-      this.dataSource[0]
-    );
-  }
-
-  searchTreeWithDepthFirstSearch = node => {
+  searchTreeWithDepthFirstSearch = (node: ITreeNode) => {
     let stack = new Stack();
     stack.pushStack(node);
 
@@ -55,20 +55,4 @@ export class MsSearchComponent implements OnInit {
 
     return this.searchBoxList;
   };
-}
-
-class Stack {
-  stack: any[];
-
-  constructor() {
-    this.stack = [];
-  }
-
-  pushStack(treeNode: any): void {
-    this.stack.push(treeNode);
-  }
-
-  popStack(): any {
-    return this.stack.pop();
-  }
 }

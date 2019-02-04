@@ -12,9 +12,12 @@
           <!-- use of a disabled button to provide padding for tree leaf -->
           <button mat-icon-button disabled></button>
 
-          <mat-checkbox (click)="isNodeSelected(node)" color="warn">{{
-            node.nodeName
-          }}</mat-checkbox>
+          <mat-checkbox
+            [checked]="node.nodeSelected"
+            (change)="isNodeSelected(node); updateCount()"
+            color="warn"
+            >{{ node.nodeName }}</mat-checkbox
+          >
         </li>
       </mat-tree-node>
 
@@ -34,9 +37,12 @@
               </mat-icon>
             </button>
 
-            <mat-checkbox (click)="isNodeSelected(node)" color="warn">{{
-              node.nodeName
-            }}</mat-checkbox>
+            <mat-checkbox
+              [checked]="node.nodeSelected"
+              (change)="isNodeSelected(node); updateCount()"
+              color="warn"
+              >{{ node.nodeName }}</mat-checkbox
+            >
           </div>
 
           <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
