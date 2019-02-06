@@ -14,7 +14,7 @@
 
           <mat-checkbox
             [checked]="node.nodeSelected"
-            (change)="isNodeSelected(node); updateCount()"
+            (change)="isNodeSelected(node)"
             color="warn"
             >{{ node.nodeName }}</mat-checkbox
           >
@@ -39,7 +39,7 @@
 
             <mat-checkbox
               [checked]="node.nodeSelected"
-              (change)="isNodeSelected(node); updateCount()"
+              (change)="isNodeSelected(node)"
               color="warn"
               >{{ node.nodeName }}</mat-checkbox
             >

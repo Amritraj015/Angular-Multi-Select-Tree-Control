@@ -1,9 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { GetTreeService } from "src/app/services/get-tree.service";
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
-import { MSTreeContainerComponent } from "../ms-tree-container/ms-tree-container.component";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 
 @Component({
@@ -14,37 +13,42 @@ import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
+  @Output() selectedCount = new EventEmitter<number>();
+  totalSelectedCount: number;
 
   constructor(treeService: GetTreeService) {
     this.dataSource.data = treeService.getTree();
+    this.totalSelectedCount = 0;
   }
 
   hasChild = (_: number, node: ITreeNode) =>
     !!node.nodeChildren && node.nodeChildren.length > 0;
 
-  isNodeSelected(node): void {
+  isNodeSelected(node: ITreeNode): void {
     let stack = new Stack();
 
     //  Toggle the checkbox for the current node
     node.nodeSelected = !node.nodeSelected;
 
     //  Toggle the checkbox for a node's children
-    if (node.nodeChildren.length > 0) {
-      stack.pushStack(node);
+    stack.pushStack(node);
 
-      while (stack.stack.length > 0) {
-        let removedNode: ITreeNode = stack.popStack();
-        removedNode.nodeSelected = node.nodeSelected;
-        for (let newNode of removedNode.nodeChildren) {
-          stack.pushStack(newNode);
-        }
-      }
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+      removedNode.nodeSelected = node.nodeSelected;
+
+      if (removedNode.nodeSelected) this.totalSelectedCount++;
+      else this.totalSelectedCount--;
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
+
+    //  Update the count for the total number of selected nodes
+    this.updateCount();
   }
 
   updateCount(): void {
-    let countUpdate = new MSTreeContainerComponent();
-    countUpdate.updateSelectedCount(this.dataSource.data[0]);
+    this.selectedCount.emit(this.totalSelectedCount);
   }
 
   getTreeData(): ITreeNode[] {

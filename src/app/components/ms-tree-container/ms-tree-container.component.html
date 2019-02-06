@@ -1,5 +1,8 @@
 <div class="container">
   <b>User Group(s)</b>
   <div (click)="renderTree()" class="flyout-container">{{ text }}</div>
-  <ms-tree *ngIf="renderTreeDiv"></ms-tree>
+  <ms-tree
+    *ngIf="renderTreeDiv"
+    (selectedCount)="updateSelectedCount($event)"
+  ></ms-tree>
 </div>

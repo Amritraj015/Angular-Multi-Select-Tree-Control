@@ -1,6 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { ITreeNode } from "src/app/Interfaces/ITreeNode";
-import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 
 @Component({
   selector: "ms-tree-container",
@@ -14,34 +12,26 @@ export class MSTreeContainerComponent implements OnInit {
 
   constructor() {
     this.count = 0;
+    console.log("constructor fired");
     this.text = "Select User Groups";
     this.renderTreeDiv = false;
   }
 
-  updateSelectedCount(tree): void {
-    this.count = 0;
-    let stack = new Stack();
-
-    stack.pushStack(tree);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeSelected) {
-        this.count++;
-      }
-      for (let newNode of removedNode.nodeChildren) {
-        stack.pushStack(newNode);
-      }
-    }
-    console.log(this.count);
+  updateSelectedCount(totalSelectedCount: number): void {
+    this.count = totalSelectedCount;
+    this.renderTree(true);
   }
 
-  renderTree(): boolean {
-    console.log(this.count);
-    this.text = !this.renderTreeDiv
-      ? `${this.count} Selected`
-      : "Select User Groups";
-    return (this.renderTreeDiv = !this.renderTreeDiv);
+  renderTree(firedFromUpdateSelectedCount: boolean): boolean {
+    if (!firedFromUpdateSelectedCount) {
+      this.text = !this.renderTreeDiv
+        ? `${this.count} Selected`
+        : "Select User Groups";
+      return (this.renderTreeDiv = !this.renderTreeDiv);
+    }
+
+    this.text = `${this.count} Selected`;
+    return this.renderTreeDiv;
   }
 
   ngOnInit() {}
