@@ -13,12 +13,10 @@ import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
-  @Output() selectedCount = new EventEmitter<number>();
-  totalSelectedCount: number;
+  @Output() selectedCount = new EventEmitter<ITreeNode>();
 
   constructor(treeService: GetTreeService) {
     this.dataSource.data = treeService.getTree();
-    this.totalSelectedCount = 0;
   }
 
   hasChild = (_: number, node: ITreeNode) =>
@@ -37,18 +35,10 @@ export class MSTreeComponent implements OnInit {
       let removedNode: ITreeNode = stack.popStack();
       removedNode.nodeSelected = node.nodeSelected;
 
-      if (removedNode.nodeSelected) this.totalSelectedCount++;
-      else this.totalSelectedCount--;
-
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
-    //  Update the count for the total number of selected nodes
-    this.updateCount();
-  }
-
-  updateCount(): void {
-    this.selectedCount.emit(this.totalSelectedCount);
+    this.selectedCount.emit(this.dataSource.data[0]);
   }
 
   getTreeData(): ITreeNode[] {
