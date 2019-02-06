@@ -21,12 +21,14 @@ export class MSTreeContainerComponent implements OnInit {
   updateSelectedCount(treeObject: ITreeNode): void {
     let stack = new Stack();
     stack.pushStack(treeObject);
+    this.count = 0;
     console.log(treeObject);
+
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
 
       if (removedNode.nodeSelected) this.count++;
-      else this.count--;
+      else if (!removedNode.nodeSelected && this.count > 0) this.count--;
 
       for (let child of removedNode.nodeChildren) stack.pushStack(child);
     }
