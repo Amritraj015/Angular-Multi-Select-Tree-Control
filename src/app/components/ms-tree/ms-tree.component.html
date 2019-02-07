@@ -1,5 +1,6 @@
 <div class="inner-tree-container">
   <ms-search></ms-search>
+
   <div class="tree-display">
     <mat-tree
       [dataSource]="dataSource"
@@ -16,7 +17,7 @@
             [checked]="node.nodeSelected"
             (change)="isNodeSelected(node)"
             color="warn"
-            >{{ node.nodeName }}</mat-checkbox
+            >{{ node.nodeName | searchFilter: searchTerm }}</mat-checkbox
           >
         </li>
       </mat-tree-node>
@@ -41,7 +42,7 @@
               [checked]="node.nodeSelected"
               (change)="isNodeSelected(node)"
               color="warn"
-              >{{ node.nodeName }}</mat-checkbox
+              >{{ node.nodeName | searchFilter: searchTerm }}</mat-checkbox
             >
           </div>
 

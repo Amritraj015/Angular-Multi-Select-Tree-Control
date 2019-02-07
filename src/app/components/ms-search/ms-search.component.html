@@ -8,6 +8,7 @@
     matInput
     [formControl]="searchControl"
     [matAutocomplete]="auto"
+    (input)="searchTerm = $event.target.value"
   />
   <mat-autocomplete #auto="matAutocomplete">
     <mat-option
@@ -18,3 +19,8 @@
     </mat-option>
   </mat-autocomplete>
 </form>
+
+<div
+  *ngFor="let name of searchBoxList"
+  [innerHTML]="name | searchFilter: searchTerm"
+></div>
