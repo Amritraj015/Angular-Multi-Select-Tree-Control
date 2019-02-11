@@ -17,7 +17,6 @@ export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
   @Output() selectedCount = new EventEmitter<ITreeNode>();
-
   searchBoxList: string[] = [];
   searchControl = new FormControl();
   filteredOptions: Observable<string[]>;
@@ -66,6 +65,7 @@ export class MSTreeComponent implements OnInit {
     );
   }
 
+  //  Initializes the search list for the auto-complete feature when searching
   private searchTreeWithDepthFirstSearch = (node: ITreeNode) => {
     let stack = new Stack();
     stack.pushStack(node);

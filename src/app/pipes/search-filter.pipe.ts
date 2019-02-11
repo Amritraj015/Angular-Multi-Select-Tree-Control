@@ -16,8 +16,6 @@ export class SearchFilterPipe implements PipeTransform {
       .join("|");
     let regex = new RegExp(pattern, "gi");
 
-    return search
-      ? treeNode.replace(regex, match => `<mark>${match}</mark>`)
-      : treeNode;
+    return search ? treeNode.replace(regex, match => match) : treeNode;
   }
 }
