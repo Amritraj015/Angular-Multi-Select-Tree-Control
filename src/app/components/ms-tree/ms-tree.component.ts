@@ -58,10 +58,6 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
-  getTreeData(): ITreeNode[] {
-    return this.dataSource.data;
-  }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -70,7 +66,7 @@ export class MSTreeComponent implements OnInit {
     );
   }
 
-  searchTreeWithDepthFirstSearch = (node: ITreeNode) => {
+  private searchTreeWithDepthFirstSearch = (node: ITreeNode) => {
     let stack = new Stack();
     stack.pushStack(node);
 
