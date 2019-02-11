@@ -17,7 +17,6 @@ import { AppComponent } from "./app.component";
 import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree-container.component";
 import { MSTreeComponent } from "./components/ms-tree/ms-tree.component";
 import { GetTreeService } from "./services/get-tree.service";
-import { MsSearchComponent } from "./components/ms-search/ms-search.component";
 import { SearchFilterPipe } from "./pipes/search-filter.pipe";
 
 @NgModule({
@@ -25,7 +24,6 @@ import { SearchFilterPipe } from "./pipes/search-filter.pipe";
     AppComponent,
     MSTreeContainerComponent,
     MSTreeComponent,
-    MsSearchComponent,
     SearchFilterPipe
   ],
   imports: [

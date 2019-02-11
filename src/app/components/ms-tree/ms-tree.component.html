@@ -1,5 +1,25 @@
 <div class="inner-tree-container">
-  <ms-search></ms-search>
+  <form>
+    <input
+      class="form-control mt-1 mb-2 w-100"
+      type="text"
+      autofocus="autofocus"
+      aria-label="Number"
+      placeholder="Search"
+      matInput
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+      (input)="searchTerm = $event.target.value"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of (filteredOptions | async)"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </form>
 
   <div class="tree-display">
     <mat-tree
