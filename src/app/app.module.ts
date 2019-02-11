@@ -5,7 +5,8 @@ import {
   MatIconModule,
   MatButtonModule,
   MatCheckboxModule,
-  MatInputModule
+  MatInputModule,
+  MatTabsModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -38,7 +39,8 @@ import { SearchFilterPipe } from "./pipes/search-filter.pipe";
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTabsModule
   ],
   providers: [GetTreeService],
   bootstrap: [AppComponent]

@@ -21,6 +21,11 @@
     </mat-autocomplete>
   </form>
 
+  <mat-tab-group>
+    <mat-tab label="Show All"></mat-tab>
+    <mat-tab label="Show Selected"></mat-tab>
+  </mat-tab-group>
+
   <div class="tree-display">
     <mat-tree
       [dataSource]="dataSource"
@@ -37,8 +42,8 @@
             [checked]="node.nodeSelected"
             (change)="isNodeSelected(node)"
             color="warn"
-            >{{ node.nodeName | searchFilter: searchTerm }}</mat-checkbox
-          >
+            ><div [innerHTML]="node.nodeName | searchFilter: searchTerm"></div
+          ></mat-checkbox>
         </li>
       </mat-tree-node>
 
@@ -62,8 +67,8 @@
               [checked]="node.nodeSelected"
               (change)="isNodeSelected(node)"
               color="warn"
-              >{{ node.nodeName | searchFilter: searchTerm }}</mat-checkbox
-            >
+              ><div [innerHTML]="node.nodeName | searchFilter: searchTerm"></div
+            ></mat-checkbox>
           </div>
 
           <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">

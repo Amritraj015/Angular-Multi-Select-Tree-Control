@@ -6,7 +6,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 export class SearchFilterPipe implements PipeTransform {
   transform(treeNode: string, search: string): any {
     if (!search) return treeNode;
-
     let pattern = search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     pattern = pattern
       .split(" ")
@@ -15,7 +14,10 @@ export class SearchFilterPipe implements PipeTransform {
       })
       .join("|");
     let regex = new RegExp(pattern, "gi");
-
-    return search ? treeNode.replace(regex, match => match) : treeNode;
+    let highlight = treeNode.replace(
+      regex,
+      match => `<span class="bg-warning">${match}</span>`
+    );
+    return search ? highlight : treeNode;
   }
 }
