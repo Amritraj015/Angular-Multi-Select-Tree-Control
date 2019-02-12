@@ -1,4 +1,4 @@
-<div class="inner-tree-container">
+<mat-card>
   <div class="search-container">
     <mat-form-field>
       <input
@@ -30,7 +30,7 @@
   <mat-tab-group mat-align-tabs="center">
     <!--  This is the "Show All" Tab  -->
     <mat-tab label="Show All">
-      <div class="tree-display">
+      <mat-card class="tree-display">
         <mat-tree
           [dataSource]="dataSource"
           [treeControl]="treeControl"
@@ -87,7 +87,7 @@
             </li>
           </mat-nested-tree-node>
         </mat-tree>
-      </div>
+      </mat-card>
     </mat-tab>
 
     <!--  This is the "Show Selected" Tab  -->
@@ -152,4 +152,4 @@
       </div>
     </mat-tab>
   </mat-tab-group>
-</div>
+</mat-card>

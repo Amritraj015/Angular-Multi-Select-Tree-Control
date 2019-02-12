@@ -6,7 +6,10 @@ import {
   MatButtonModule,
   MatCheckboxModule,
   MatInputModule,
-  MatTabsModule
+  MatTabsModule,
+  MatCardModule,
+  MatExpansionModule,
+  MatListModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -40,7 +43,9 @@ import { SearchFilterPipe } from "./pipes/search-filter.pipe";
     FormsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    MatTabsModule
+    MatTabsModule,
+    MatCardModule,
+    MatListModule
   ],
   providers: [GetTreeService],
   bootstrap: [AppComponent]

@@ -1,8 +1,17 @@
-<div class="container">
-  <b>User Group(s)</b>
-  <div (click)="renderTree()" class="flyout-container">{{ text }}</div>
-  <ms-tree
-    *ngIf="renderTreeDiv"
-    (selectedCount)="updateSelectedCount($event)"
-  ></ms-tree>
-</div>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>User Group(s)</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-list (click)="renderTree()" class="flyout-container">
+      <mat-list-item>{{ text }}</mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list>
+
+    <ms-tree
+      *ngIf="renderTreeDiv"
+      (selectedCount)="updateSelectedCount($event)"
+    ></ms-tree>
+  </mat-card-content>
+</mat-card>
