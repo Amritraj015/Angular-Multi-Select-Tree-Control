@@ -4,10 +4,26 @@
   </mat-card-header>
 
   <mat-card-content>
-    <mat-list (click)="renderTree()" class="flyout-container">
-      <mat-list-item>{{ text }}</mat-list-item>
-      <mat-divider></mat-divider>
-    </mat-list>
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="renderTree()"
+      class="flyout-button"
+    >
+      <span
+        *ngIf="renderTreeDiv && count === 0"
+        class="badge badge-secondary p-2"
+        >None</span
+      >
+
+      <span
+        *ngIf="renderTreeDiv && count > 0"
+        class="badge badge-warning p-1"
+        >{{ count }}</span
+      >
+
+      {{ text }}
+    </button>
 
     <ms-tree
       *ngIf="renderTreeDiv"

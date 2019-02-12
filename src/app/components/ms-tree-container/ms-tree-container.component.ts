@@ -36,13 +36,11 @@ export class MSTreeContainerComponent implements OnInit {
 
   renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
     if (!firedFromUpdateSelectedCount) {
-      this.text = !this.renderTreeDiv
-        ? `${this.count} Selected`
-        : "Select User Groups";
+      this.text = !this.renderTreeDiv ? " Selected" : "Select User Groups";
       return (this.renderTreeDiv = !this.renderTreeDiv);
     }
 
-    this.text = `${this.count} Selected`;
+    this.text = " Selected";
     return this.renderTreeDiv;
   }
 
