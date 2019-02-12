@@ -8,7 +8,6 @@ import {
   MatInputModule,
   MatTabsModule,
   MatCardModule,
-  MatExpansionModule,
   MatListModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
