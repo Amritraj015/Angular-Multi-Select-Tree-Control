@@ -92,7 +92,64 @@
 
     <!--  This is the "Show Selected" Tab  -->
     <mat-tab label="Show Selected">
-      <div class="tree-display">This is a Test Div</div>
+      <div class="tree-display">
+        <mat-tree
+          [dataSource]="dataSource"
+          [treeControl]="treeControl"
+          class="ms-tree"
+        >
+          <!-- This is the tree node template for leaf nodes -->
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+            <li class="mat-tree-node" *ngIf="node.nodeSelected">
+              <!-- use of a disabled button to provide padding for tree leaf -->
+              <button mat-icon-button disabled></button>
+
+              <mat-checkbox
+                [checked]="node.nodeSelected"
+                (change)="isNodeSelected(node)"
+                color="warn"
+                ><div
+                  [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                ></div
+              ></mat-checkbox>
+            </li>
+          </mat-tree-node>
+
+          <!-- This is the tree node template for expandable nodes -->
+          <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+            <li *ngIf="node.nodeSelected">
+              <div class="mat-tree-node">
+                <button
+                  mat-icon-button
+                  matTreeNodeToggle
+                  [attr.aria-label]="'toggle ' + node.nodeName"
+                >
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{
+                      treeControl.isExpanded(node)
+                        ? "expand_more"
+                        : "chevron_right"
+                    }}
+                  </mat-icon>
+                </button>
+
+                <mat-checkbox
+                  [checked]="node.nodeSelected"
+                  (change)="isNodeSelected(node)"
+                  color="warn"
+                  ><div
+                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                  ></div
+                ></mat-checkbox>
+              </div>
+
+              <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
+                <ng-container matTreeNodeOutlet></ng-container>
+              </ul>
+            </li>
+          </mat-nested-tree-node>
+        </mat-tree>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>
