@@ -116,7 +116,7 @@ export class GetTreeService {
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
       if (!removedNode.nodeAuthorized) {
-        removedNode = this.setAccessibility(removedNode);
+        removedNode = this.denyAccessToNode(removedNode);
         continue;
       }
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
@@ -124,7 +124,7 @@ export class GetTreeService {
     return [tree];
   }
 
-  private setAccessibility(node: ITreeNode): ITreeNode {
+  private denyAccessToNode(node: ITreeNode): ITreeNode {
     let stack = new Stack();
 
     stack.pushStack(node);
@@ -132,15 +132,17 @@ export class GetTreeService {
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
       removedNode.nodeAuthorized = false;
-      console.log(removedNode.nodeName);
-      console.log(removedNode.nodeAuthorized);
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
-    console.log(node);
     return node;
   }
+
+  //    This method will make a request to a server
+  //    to deliver an array with the tree object.
+  //    *** Since, this is a nested tree control, the array must have
+  //    one and only one nested tree object ***
 
   getTree(): ITreeNode[] {
     return this.tree;
