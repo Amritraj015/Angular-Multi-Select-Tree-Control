@@ -19,7 +19,7 @@ export class GetTreeService {
           nodeID: 1,
           nodeSelected: false,
           nodeVisited: false,
-          nodeAuthorized: true,
+          nodeAuthorized: false,
           nodeChildren: [
             {
               nodeName: "Atlanta",
@@ -121,7 +121,6 @@ export class GetTreeService {
       }
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
-    console.log(tree);
     return [tree];
   }
 
@@ -132,13 +131,14 @@ export class GetTreeService {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeSelected = false;
+      removedNode.nodeAuthorized = false;
       console.log(removedNode.nodeName);
       console.log(removedNode.nodeAuthorized);
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
+    console.log(node);
     return node;
   }
 
