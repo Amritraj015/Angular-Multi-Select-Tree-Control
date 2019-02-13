@@ -49,7 +49,9 @@ export class MSTreeComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeSelected = node.nodeSelected;
+      if (removedNode.nodeAuthorized) {
+        removedNode.nodeSelected = node.nodeSelected;
+      }
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }

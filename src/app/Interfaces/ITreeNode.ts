@@ -10,8 +10,10 @@ export interface ITreeNode {
   //  ID of a node (unique positive integer for each node)
   nodeID: number;
 
+  //=============================================================
   //    parent 'p' of a node where: p ∈ {null, 1}
   //  nodeParent: ITreeNode;
+  //=============================================================
 
   //    children 'c' of a given node where: c ∈ Z+,
   nodeChildren: ITreeNode[];
@@ -33,4 +35,11 @@ export interface ITreeNode {
   //    false = node not vivited yet
 
   nodeVisited: boolean;
+
+  //    'nodeAuthorized' is used to designate if a given node 'n' is accessible to a given user/user group 'g'
+  //    The value of this variable is 'true' if the node is accessible by a user/user group
+  //    The value of this variable is 'false' if the node is not accessible by a user/user group
+  //    NOTE -> All children under an unauthorized node must also be unauthorized
+
+  nodeAuthorized: boolean;
 }
