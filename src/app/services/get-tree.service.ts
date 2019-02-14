@@ -155,6 +155,198 @@ export class GetTreeService {
           nodeID: 17,
           nodeSelected: false,
           nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "South Carolina",
+          nodeID: 18,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "North Dakota",
+          nodeID: 19,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "South Dakota",
+          nodeID: 20,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Florida",
+          nodeID: 21,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Washingtopn",
+          nodeID: 22,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Alabama",
+          nodeID: 23,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Alaska",
+          nodeID: 24,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Montana",
+          nodeID: 25,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "New Jersey",
+          nodeID: 26,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Ohio",
+          nodeID: 27,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Pennsylvania",
+          nodeID: 28,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Rhode Island",
+          nodeID: 29,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Wyoming",
+          nodeID: 30,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Wisconsin",
+          nodeID: 31,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Virginia",
+          nodeID: 32,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Tennessee",
+          nodeID: 33,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Texas",
+          nodeID: 34,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Oklahoma",
+          nodeID: 35,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "New Mexico",
+          nodeID: 36,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Nevada",
+          nodeID: 37,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Massachusetts",
+          nodeID: 38,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: false,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Maine",
+          nodeID: 39,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Louisiana",
+          nodeID: 40,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
+        },
+        {
+          nodeName: "Iowa",
+          nodeID: 41,
+          nodeSelected: false,
+          nodeVisited: false,
           nodeAuthorized: true,
           nodeChildren: []
         }
@@ -174,7 +366,7 @@ export class GetTreeService {
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
       if (!removedNode.nodeAuthorized) {
-        removedNode = this.denyAccessToNode(removedNode);
+        removedNode = this.denyNodeAccessToUser(removedNode);
         continue;
       }
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
@@ -182,7 +374,7 @@ export class GetTreeService {
     return [tree];
   }
 
-  private denyAccessToNode(node: ITreeNode): ITreeNode {
+  private denyNodeAccessToUser(node: ITreeNode): ITreeNode {
     let stack = new Stack();
 
     stack.pushStack(node);
