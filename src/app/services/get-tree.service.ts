@@ -19,7 +19,7 @@ export class GetTreeService {
           nodeID: 1,
           nodeSelected: false,
           nodeVisited: false,
-          nodeAuthorized: false,
+          nodeAuthorized: true,
           nodeChildren: [
             {
               nodeName: "Atlanta",
@@ -99,6 +99,64 @@ export class GetTreeService {
               ]
             }
           ]
+        },
+        {
+          nodeName: "California",
+          nodeID: 11,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: [
+            {
+              nodeName: "Los Angeles",
+              nodeID: 12,
+              nodeSelected: false,
+              nodeVisited: false,
+              nodeAuthorized: true,
+              nodeChildren: [
+                {
+                  nodeName: "Google Office",
+                  nodeID: 14,
+                  nodeSelected: false,
+                  nodeVisited: false,
+                  nodeAuthorized: true,
+                  nodeChildren: []
+                },
+                {
+                  nodeName: "Microsoft L.A. Office",
+                  nodeID: 16,
+                  nodeSelected: false,
+                  nodeVisited: false,
+                  nodeAuthorized: true,
+                  nodeChildren: []
+                }
+              ]
+            },
+            {
+              nodeName: "San Fransisco",
+              nodeID: 13,
+              nodeSelected: false,
+              nodeVisited: false,
+              nodeAuthorized: true,
+              nodeChildren: []
+            },
+            {
+              nodeName: "San Diego",
+              nodeID: 15,
+              nodeSelected: false,
+              nodeVisited: false,
+              nodeAuthorized: true,
+              nodeChildren: []
+            }
+          ]
+        },
+        {
+          nodeName: "North Carolina",
+          nodeID: 17,
+          nodeSelected: false,
+          nodeVisited: false,
+          nodeAuthorized: true,
+          nodeChildren: []
         }
       ]
     }

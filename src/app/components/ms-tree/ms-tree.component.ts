@@ -80,6 +80,6 @@ export class MSTreeComponent implements OnInit {
       }
     }
 
-    return this.searchBoxList;
+    return this.searchBoxList.sort();
   };
 }
