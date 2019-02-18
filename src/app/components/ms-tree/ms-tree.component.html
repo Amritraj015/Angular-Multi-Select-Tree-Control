@@ -1,50 +1,96 @@
-<mat-card>
-  <div class="search-container">
-    <mat-form-field>
-      <input
-        matInput
-        placeholder="Input"
-        type="text"
-        autofocus="autofocus"
-        aria-label="Number"
-        placeholder="Search"
-        matInput
-        [formControl]="searchControl"
-        [matAutocomplete]="auto"
-        (input)="searchTerm = $event.target.value"
-      />
-      <mat-icon matSuffix>search</mat-icon>
-      <mat-hint>Search User Group(s)</mat-hint>
+<div class="search-container">
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Input"
+      type="text"
+      autofocus="autofocus"
+      aria-label="Number"
+      placeholder="Search"
+      matInput
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+      (input)="searchTerm = $event.target.value"
+    />
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-hint>Search User Group(s)</mat-hint>
 
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let option of (filteredOptions | async)"
-          [value]="option"
-        >
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </div>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of (filteredOptions | async)"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
 
-  <mat-tab-group mat-align-tabs="center">
-    <!--  This is the "Show All" Tab  -->
-    <mat-tab label="Show All">
-      <mat-card class="tree-display">
-        <mat-tree
-          [dataSource]="dataSource"
-          [treeControl]="treeControl"
-          class="ms-tree"
-        >
-          <!-- This is the tree node template for leaf nodes -->
-          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-            <!--  This displays authorized leaf nodes   -->
-            <li
-              class="mat-tree-node"
-              *ngIf="node.nodeAuthorized; else unathorizedLeaf"
-            >
-              <!-- use of a disabled button to provide padding for tree leaf -->
-              <button mat-icon-button disabled></button>
+<mat-tab-group mat-align-tabs="center">
+  <!--  This is the "Show All" Tab  -->
+  <mat-tab label="Show All">
+    <mat-card class="tree-display">
+      <mat-tree
+        [dataSource]="dataSource"
+        [treeControl]="treeControl"
+        class="ms-tree"
+      >
+        <!-- This is the tree node template for leaf nodes -->
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+          <!--  This displays authorized leaf nodes   -->
+          <li
+            class="mat-tree-node"
+            *ngIf="node.nodeAuthorized; else unathorizedLeaf"
+          >
+            <!-- use of a disabled button to provide padding for tree leaf -->
+            <button mat-icon-button disabled></button>
+
+            <mat-checkbox
+              [checked]="node.nodeSelected"
+              (change)="isNodeSelected(node)"
+              color="warn"
+              ><div
+                class="tree-node"
+                [innerHTML]="node.nodeName | searchFilter: searchTerm"
+              ></div
+            ></mat-checkbox>
+          </li>
+
+          <!--  This displays unauthorized leaf nodes   -->
+          <ng-template #unathorizedLeaf>
+            <li class="mat-tree-node">
+              <!-- use of a disabled button to show unauthorized nodes -->
+              <button mat-icon-button disabled>
+                <mat-icon class="mat-icon-rtl-mirror">
+                  remove_circle
+                </mat-icon>
+              </button>
+
+              <div
+                class="tree-node-unauthorized"
+                [innerHTML]="node.nodeName | searchFilter: searchTerm"
+              ></div>
+            </li>
+          </ng-template>
+        </mat-tree-node>
+
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+          <li *ngIf="node.nodeAuthorized; else unauthorizedNode">
+            <div class="mat-tree-node">
+              <button
+                mat-icon-button
+                matTreeNodeToggle
+                [attr.aria-label]="'toggle ' + node.nodeName"
+              >
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{
+                    treeControl.isExpanded(node)
+                      ? "expand_more"
+                      : "chevron_right"
+                  }}
+                </mat-icon>
+              </button>
 
               <mat-checkbox
                 [checked]="node.nodeSelected"
@@ -55,130 +101,82 @@
                   [innerHTML]="node.nodeName | searchFilter: searchTerm"
                 ></div
               ></mat-checkbox>
-            </li>
+            </div>
 
-            <!--  This displays unauthorized leaf nodes   -->
-            <ng-template #unathorizedLeaf>
-              <li class="mat-tree-node">
-                <!-- use of a disabled button to show unauthorized nodes -->
-                <button mat-icon-button disabled>
-                  <mat-icon class="mat-icon-rtl-mirror">
-                    remove_circle
-                  </mat-icon>
-                </button>
+            <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
+              <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+          </li>
 
-                <div
-                  class="tree-node-unauthorized"
+          <ng-template #unauthorizedNode>
+            <div class="mat-tree-node">
+              <button mat-icon-button disabled>
+                <mat-icon class="mat-icon-rtl-mirror">
+                  remove_circle
+                </mat-icon>
+              </button>
+
+              <div
+                class="tree-node-unauthorized"
+                [innerHTML]="node.nodeName | searchFilter: searchTerm"
+              ></div>
+            </div>
+          </ng-template>
+        </mat-nested-tree-node>
+      </mat-tree>
+    </mat-card>
+  </mat-tab>
+
+  <!--  This is the "Show Selected" Tab  -->
+  <mat-tab label="Show Selected">
+    <mat-card class="tree-display">
+      <mat-tree
+        [dataSource]="dataSource"
+        [treeControl]="treeControl"
+        class="ms-tree"
+      >
+        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+          <li *ngIf="node.nodeAuthorized">
+            <div class="mat-tree-node">
+              <button
+                *ngIf="!checkChildren(node)"
+                mat-icon-button
+                matTreeNodeToggle
+                [attr.aria-label]="'toggle ' + node.nodeName"
+              >
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{
+                    treeControl.isExpanded(node)
+                      ? "expand_more"
+                      : "chevron_right"
+                  }}
+                </mat-icon>
+              </button>
+
+              <!-- Disabled button to provide padding to leaf nodes -->
+              <button
+                *ngIf="checkChildren(node)"
+                mat-icon-button
+                disabled
+              ></button>
+
+              <mat-checkbox
+                [checked]="node.nodeSelected"
+                (change)="isNodeSelected(node)"
+                color="warn"
+                ><div
+                  class="tree-node"
                   [innerHTML]="node.nodeName | searchFilter: searchTerm"
-                ></div>
-              </li>
-            </ng-template>
-          </mat-tree-node>
+                ></div
+              ></mat-checkbox>
+            </div>
 
-          <!-- This is the tree node template for expandable nodes -->
-          <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-            <li *ngIf="node.nodeAuthorized; else unauthorizedNode">
-              <div class="mat-tree-node">
-                <button
-                  mat-icon-button
-                  matTreeNodeToggle
-                  [attr.aria-label]="'toggle ' + node.nodeName"
-                >
-                  <mat-icon class="mat-icon-rtl-mirror">
-                    {{
-                      treeControl.isExpanded(node)
-                        ? "expand_more"
-                        : "chevron_right"
-                    }}
-                  </mat-icon>
-                </button>
-
-                <mat-checkbox
-                  [checked]="node.nodeSelected"
-                  (change)="isNodeSelected(node)"
-                  color="warn"
-                  ><div
-                    class="tree-node"
-                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
-                  ></div
-                ></mat-checkbox>
-              </div>
-
-              <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
-                <ng-container matTreeNodeOutlet></ng-container>
-              </ul>
-            </li>
-
-            <ng-template #unauthorizedNode>
-              <div class="mat-tree-node">
-                <button mat-icon-button disabled>
-                  <mat-icon class="mat-icon-rtl-mirror">
-                    remove_circle
-                  </mat-icon>
-                </button>
-
-                <div
-                  class="tree-node-unauthorized"
-                  [innerHTML]="node.nodeName | searchFilter: searchTerm"
-                ></div>
-              </div>
-            </ng-template>
-          </mat-nested-tree-node>
-        </mat-tree>
-      </mat-card>
-    </mat-tab>
-
-    <!--  This is the "Show Selected" Tab  -->
-    <mat-tab label="Show Selected">
-      <div class="tree-display">
-        <mat-tree
-          [dataSource]="dataSource"
-          [treeControl]="treeControl"
-          class="ms-tree"
-        >
-          <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-            <li *ngIf="node.nodeSelected">
-              <div class="mat-tree-node">
-                <button
-                  *ngIf="!checkChildren(node)"
-                  mat-icon-button
-                  matTreeNodeToggle
-                  [attr.aria-label]="'toggle ' + node.nodeName"
-                >
-                  <mat-icon class="mat-icon-rtl-mirror">
-                    {{
-                      treeControl.isExpanded(node)
-                        ? "expand_more"
-                        : "chevron_right"
-                    }}
-                  </mat-icon>
-                </button>
-
-                <!-- Disabled button to provide padding to leaf nodes -->
-                <button
-                  *ngIf="checkChildren(node)"
-                  mat-icon-button
-                  disabled
-                ></button>
-
-                <mat-checkbox
-                  [checked]="node.nodeSelected"
-                  (change)="isNodeSelected(node)"
-                  color="warn"
-                  ><div
-                    class="tree-node"
-                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
-                  ></div
-                ></mat-checkbox>
-              </div>
-
-              <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
-                <ng-container matTreeNodeOutlet></ng-container>
-              </ul>
-            </li>
-          </mat-nested-tree-node>
-        </mat-tree>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</mat-card>
+            <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
+              <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+          </li>
+        </mat-nested-tree-node>
+      </mat-tree>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

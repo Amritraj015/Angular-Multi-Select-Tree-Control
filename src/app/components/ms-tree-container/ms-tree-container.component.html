@@ -1,33 +1,27 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>User Group(s)</mat-card-title>
-  </mat-card-header>
+<mat-card
+  ><mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header (click)="renderTree()">
+        <mat-panel-title> User Group(s) </mat-panel-title>
+        <mat-panel-description>
+          <span
+            *ngIf="renderTreeDiv && count === 0"
+            class="badge badge-secondary p-2 mr-2"
+            >None</span
+          >
 
-  <mat-card-content>
-    <button
-      mat-raised-button
-      color="warn"
-      (click)="renderTree()"
-      class="flyout-button"
-    >
-      <span
-        *ngIf="renderTreeDiv && count === 0"
-        class="badge badge-secondary p-2"
-        >None</span
-      >
+          <span
+            *ngIf="renderTreeDiv && count > 0"
+            class="badge badge-warning p-1 mr-2"
+            >{{ count }}</span
+          >
 
-      <span
-        *ngIf="renderTreeDiv && count > 0"
-        class="badge badge-warning p-1"
-        >{{ count }}</span
-      >
-
-      {{ text }}
-    </button>
-
-    <ms-tree
-      *ngIf="renderTreeDiv"
-      (selectedCount)="updateSelectedCount($event)"
-    ></ms-tree>
-  </mat-card-content>
-</mat-card>
+          {{ text }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ms-tree
+        *ngIf="renderTreeDiv"
+        (selectedCount)="updateSelectedCount($event)"
+      ></ms-tree>
+    </mat-expansion-panel> </mat-accordion
+></mat-card>
