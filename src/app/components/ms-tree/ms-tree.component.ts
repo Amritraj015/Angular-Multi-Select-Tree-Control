@@ -38,6 +38,8 @@ export class MSTreeComponent implements OnInit {
   hasChild = (_: number, node: ITreeNode) =>
     !!node.nodeChildren && node.nodeChildren.length > 0;
 
+  checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
+
   isNodeSelected(node: ITreeNode): void {
     let stack = new Stack();
 
@@ -49,9 +51,9 @@ export class MSTreeComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized) {
+
+      if (removedNode.nodeAuthorized)
         removedNode.nodeSelected = node.nodeSelected;
-      }
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
@@ -74,10 +76,11 @@ export class MSTreeComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      this.searchBoxList.push(removedNode.nodeName);
-      for (let newNode of removedNode.nodeChildren) {
-        stack.pushStack(newNode);
-      }
+
+      if (removedNode.nodeAuthorized)
+        this.searchBoxList.push(removedNode.nodeName);
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
     return this.searchBoxList.sort();

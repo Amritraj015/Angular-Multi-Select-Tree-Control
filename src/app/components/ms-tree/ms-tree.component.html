@@ -136,31 +136,11 @@
           [treeControl]="treeControl"
           class="ms-tree"
         >
-          <!-- This is the tree node template for leaf nodes -->
-          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-            <li class="mat-tree-node" *ngIf="node.nodeSelected">
-              <!-- use of a disabled button to provide padding for tree leaf -->
-              <button mat-icon-button disabled></button>
-
-              <mat-checkbox
-                [checked]="node.nodeSelected"
-                (change)="isNodeSelected(node)"
-                color="warn"
-                ><div
-                  class="tree-node"
-                  [innerHTML]="node.nodeName | searchFilter: searchTerm"
-                ></div
-              ></mat-checkbox>
-            </li>
-
-            <!-- <ng-template #unselectedNode hidden></ng-template> -->
-          </mat-tree-node>
-
-          <!-- This is the tree node template for expandable nodes -->
           <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
             <li *ngIf="node.nodeSelected">
               <div class="mat-tree-node">
                 <button
+                  *ngIf="!checkChildren(node)"
                   mat-icon-button
                   matTreeNodeToggle
                   [attr.aria-label]="'toggle ' + node.nodeName"
@@ -173,6 +153,13 @@
                     }}
                   </mat-icon>
                 </button>
+
+                <!-- Disabled button to provide padding to leaf nodes -->
+                <button
+                  *ngIf="checkChildren(node)"
+                  mat-icon-button
+                  disabled
+                ></button>
 
                 <mat-checkbox
                   [checked]="node.nodeSelected"
