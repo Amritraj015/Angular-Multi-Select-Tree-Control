@@ -41,7 +41,119 @@ export class GetTreeService {
                       nodeSelected: false,
                       nodeVisited: false,
                       nodeAuthorized: true,
-                      nodeChildren: []
+                      nodeChildren: [
+                        {
+                          nodeName: "TQ Software Development",
+                          nodeID: 42,
+                          nodeSelected: false,
+                          nodeVisited: false,
+                          nodeAuthorized: true,
+                          nodeChildren: [
+                            {
+                              nodeName: "Cheif Technology Officer",
+                              nodeID: 43,
+                              nodeSelected: false,
+                              nodeVisited: false,
+                              nodeAuthorized: true,
+                              nodeChildren: [
+                                {
+                                  nodeName: "SD Director",
+                                  nodeID: 44,
+                                  nodeSelected: false,
+                                  nodeVisited: false,
+                                  nodeAuthorized: true,
+                                  nodeChildren: [
+                                    {
+                                      nodeName: "Team Lead 1",
+                                      nodeID: 45,
+                                      nodeSelected: false,
+                                      nodeVisited: false,
+                                      nodeAuthorized: true,
+                                      nodeChildren: [
+                                        {
+                                          nodeName: "Developer Team 1",
+                                          nodeID: 47,
+                                          nodeSelected: false,
+                                          nodeVisited: false,
+                                          nodeAuthorized: true,
+                                          nodeChildren: []
+                                        },
+                                        {
+                                          nodeName: "Quality Assurance Team 1",
+                                          nodeID: 49,
+                                          nodeSelected: false,
+                                          nodeVisited: false,
+                                          nodeAuthorized: true,
+                                          nodeChildren: []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      nodeName: "Team Lead 2",
+                                      nodeID: 46,
+                                      nodeSelected: false,
+                                      nodeVisited: false,
+                                      nodeAuthorized: true,
+                                      nodeChildren: [
+                                        {
+                                          nodeName: "Developer Team 2",
+                                          nodeID: 48,
+                                          nodeSelected: false,
+                                          nodeVisited: false,
+                                          nodeAuthorized: true,
+                                          nodeChildren: []
+                                        },
+                                        {
+                                          nodeName: "Quality Assurance Team 2",
+                                          nodeID: 50,
+                                          nodeSelected: false,
+                                          nodeVisited: false,
+                                          nodeAuthorized: true,
+                                          nodeChildren: []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          nodeName: "Client Success",
+                          nodeID: 51,
+                          nodeSelected: false,
+                          nodeVisited: false,
+                          nodeAuthorized: true,
+                          nodeChildren: [
+                            {
+                              nodeName: "Client Success Manager 1",
+                              nodeID: 52,
+                              nodeSelected: false,
+                              nodeVisited: false,
+                              nodeAuthorized: true,
+                              nodeChildren: [
+                                {
+                                  nodeName: "Client Success Specialist",
+                                  nodeID: 54,
+                                  nodeSelected: false,
+                                  nodeVisited: false,
+                                  nodeAuthorized: true,
+                                  nodeChildren: []
+                                }
+                              ]
+                            },
+                            {
+                              nodeName: "Client Success Manager 2",
+                              nodeID: 53,
+                              nodeSelected: false,
+                              nodeVisited: false,
+                              nodeAuthorized: true,
+                              nodeChildren: []
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
@@ -188,7 +300,42 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
-          nodeChildren: []
+          nodeChildren: [
+            {
+              nodeName: "Florida State University",
+              nodeID: 55,
+              nodeSelected: false,
+              nodeVisited: false,
+              nodeAuthorized: true,
+              nodeChildren: [
+                {
+                  nodeName: "College of Computing",
+                  nodeID: 56,
+                  nodeSelected: false,
+                  nodeVisited: false,
+                  nodeAuthorized: true,
+                  nodeChildren: [
+                    {
+                      nodeName: "BS in Computer Science",
+                      nodeID: 57,
+                      nodeSelected: false,
+                      nodeVisited: false,
+                      nodeAuthorized: true,
+                      nodeChildren: []
+                    }
+                  ]
+                },
+                {
+                  nodeName: "College of Arts",
+                  nodeID: 58,
+                  nodeSelected: false,
+                  nodeVisited: false,
+                  nodeAuthorized: true,
+                  nodeChildren: []
+                }
+              ]
+            }
+          ]
         },
         {
           nodeName: "Washingtopn",
