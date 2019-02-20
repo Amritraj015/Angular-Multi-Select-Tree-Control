@@ -1,5 +1,5 @@
-<mat-card class="ms-tree-container"
-  ><mat-accordion>
+<mat-card class="ms-tree-container">
+  <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header (click)="renderTree()">
         <mat-panel-title> User Group(s) </mat-panel-title>
@@ -23,5 +23,11 @@
         *ngIf="renderTreeDiv"
         (selectedCount)="updateSelectedCount($event)"
       ></ms-tree>
-    </mat-expansion-panel> </mat-accordion
-></mat-card>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- <button class="btn btn-primary" (click)="renderTree()"></button>
+  <ms-tree
+    *ngIf="renderTreeDiv"
+    (selectedCount)="updateSelectedCount($event)"
+  ></ms-tree> -->
+</mat-card>

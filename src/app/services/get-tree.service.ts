@@ -13,6 +13,7 @@ export class GetTreeService {
       nodeSelected: false,
       nodeVisited: false,
       nodeAuthorized: true,
+      nodeInactive: false,
       nodeChildren: [
         {
           nodeName: "Georgia",
@@ -20,6 +21,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: [
             {
               nodeName: "Atlanta",
@@ -27,6 +29,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: true,
+              nodeInactive: false,
               nodeChildren: [
                 {
                   nodeName: "Midtown",
@@ -34,6 +37,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: [
                     {
                       nodeName: "TalentQuest",
@@ -41,6 +45,7 @@ export class GetTreeService {
                       nodeSelected: false,
                       nodeVisited: false,
                       nodeAuthorized: true,
+                      nodeInactive: false,
                       nodeChildren: [
                         {
                           nodeName: "TQ Software Development",
@@ -48,6 +53,7 @@ export class GetTreeService {
                           nodeSelected: false,
                           nodeVisited: false,
                           nodeAuthorized: true,
+                          nodeInactive: false,
                           nodeChildren: [
                             {
                               nodeName: "Cheif Technology Officer",
@@ -55,6 +61,7 @@ export class GetTreeService {
                               nodeSelected: false,
                               nodeVisited: false,
                               nodeAuthorized: true,
+                              nodeInactive: false,
                               nodeChildren: [
                                 {
                                   nodeName: "SD Director",
@@ -62,6 +69,7 @@ export class GetTreeService {
                                   nodeSelected: false,
                                   nodeVisited: false,
                                   nodeAuthorized: true,
+                                  nodeInactive: false,
                                   nodeChildren: [
                                     {
                                       nodeName: "Team Lead 1",
@@ -69,6 +77,7 @@ export class GetTreeService {
                                       nodeSelected: false,
                                       nodeVisited: false,
                                       nodeAuthorized: true,
+                                      nodeInactive: false,
                                       nodeChildren: [
                                         {
                                           nodeName: "Developer Team 1",
@@ -76,6 +85,7 @@ export class GetTreeService {
                                           nodeSelected: false,
                                           nodeVisited: false,
                                           nodeAuthorized: true,
+                                          nodeInactive: false,
                                           nodeChildren: []
                                         },
                                         {
@@ -84,6 +94,7 @@ export class GetTreeService {
                                           nodeSelected: false,
                                           nodeVisited: false,
                                           nodeAuthorized: true,
+                                          nodeInactive: false,
                                           nodeChildren: []
                                         }
                                       ]
@@ -94,6 +105,7 @@ export class GetTreeService {
                                       nodeSelected: false,
                                       nodeVisited: false,
                                       nodeAuthorized: true,
+                                      nodeInactive: false,
                                       nodeChildren: [
                                         {
                                           nodeName: "Developer Team 2",
@@ -101,6 +113,7 @@ export class GetTreeService {
                                           nodeSelected: false,
                                           nodeVisited: false,
                                           nodeAuthorized: true,
+                                          nodeInactive: false,
                                           nodeChildren: []
                                         },
                                         {
@@ -109,6 +122,7 @@ export class GetTreeService {
                                           nodeSelected: false,
                                           nodeVisited: false,
                                           nodeAuthorized: true,
+                                          nodeInactive: false,
                                           nodeChildren: []
                                         }
                                       ]
@@ -125,6 +139,7 @@ export class GetTreeService {
                           nodeSelected: false,
                           nodeVisited: false,
                           nodeAuthorized: true,
+                          nodeInactive: false,
                           nodeChildren: [
                             {
                               nodeName: "Client Success Manager 1",
@@ -132,6 +147,7 @@ export class GetTreeService {
                               nodeSelected: false,
                               nodeVisited: false,
                               nodeAuthorized: true,
+                              nodeInactive: false,
                               nodeChildren: [
                                 {
                                   nodeName: "Client Success Specialist",
@@ -139,6 +155,7 @@ export class GetTreeService {
                                   nodeSelected: false,
                                   nodeVisited: false,
                                   nodeAuthorized: true,
+                                  nodeInactive: false,
                                   nodeChildren: []
                                 }
                               ]
@@ -149,6 +166,7 @@ export class GetTreeService {
                               nodeSelected: false,
                               nodeVisited: false,
                               nodeAuthorized: true,
+                              nodeInactive: false,
                               nodeChildren: []
                             }
                           ]
@@ -165,6 +183,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: false,
+              nodeInactive: false,
               nodeChildren: [
                 {
                   nodeName: "KSU",
@@ -172,6 +191,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: []
                 }
               ]
@@ -184,6 +204,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: [
             {
               nodeName: "NYC",
@@ -191,6 +212,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: false,
+              nodeInactive: false,
               nodeChildren: []
             },
             {
@@ -199,6 +221,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: true,
+              nodeInactive: false,
               nodeChildren: [
                 {
                   nodeName: "Downtown",
@@ -206,6 +229,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: []
                 }
               ]
@@ -218,6 +242,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: [
             {
               nodeName: "Los Angeles",
@@ -225,6 +250,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: true,
+              nodeInactive: false,
               nodeChildren: [
                 {
                   nodeName: "Google Office",
@@ -232,6 +258,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: []
                 },
                 {
@@ -240,6 +267,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: []
                 }
               ]
@@ -250,6 +278,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: true,
+              nodeInactive: false,
               nodeChildren: []
             },
             {
@@ -258,6 +287,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: true,
+              nodeInactive: false,
               nodeChildren: []
             }
           ]
@@ -268,6 +298,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -276,6 +307,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -284,6 +316,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -292,6 +325,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -300,6 +334,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: [
             {
               nodeName: "Florida State University",
@@ -307,6 +342,7 @@ export class GetTreeService {
               nodeSelected: false,
               nodeVisited: false,
               nodeAuthorized: true,
+              nodeInactive: true,
               nodeChildren: [
                 {
                   nodeName: "College of Computing",
@@ -314,6 +350,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: [
                     {
                       nodeName: "BS in Computer Science",
@@ -321,6 +358,7 @@ export class GetTreeService {
                       nodeSelected: false,
                       nodeVisited: false,
                       nodeAuthorized: true,
+                      nodeInactive: false,
                       nodeChildren: []
                     }
                   ]
@@ -331,6 +369,7 @@ export class GetTreeService {
                   nodeSelected: false,
                   nodeVisited: false,
                   nodeAuthorized: true,
+                  nodeInactive: false,
                   nodeChildren: []
                 }
               ]
@@ -343,6 +382,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -351,6 +391,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -359,6 +400,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -367,6 +409,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -375,6 +418,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -383,6 +427,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -391,6 +436,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -399,6 +445,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -407,6 +454,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -415,6 +463,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -423,6 +472,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -431,6 +481,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -439,6 +490,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -447,6 +499,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -455,6 +508,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -463,6 +517,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -471,6 +526,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: false,
+          nodeInactive: false,
           nodeChildren: []
         },
         {
@@ -479,6 +535,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -487,6 +544,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         },
         {
@@ -495,6 +553,7 @@ export class GetTreeService {
           nodeSelected: false,
           nodeVisited: false,
           nodeAuthorized: true,
+          nodeInactive: true,
           nodeChildren: []
         }
       ]

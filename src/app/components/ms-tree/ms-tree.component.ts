@@ -33,6 +33,9 @@ export class MSTreeComponent implements OnInit {
       startWith(""),
       map(value => this._filter(value))
     );
+
+    //  Automatically expand the first level children when the fly-out loads
+    this.treeControl.expand(this.dataSource.data[0]);
   }
 
   hasChild = (_: number, node: ITreeNode) =>
@@ -40,7 +43,7 @@ export class MSTreeComponent implements OnInit {
 
   checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
 
-  isNodeSelected(node: ITreeNode): void {
+  selectAndExpand(node: ITreeNode): void {
     let stack = new Stack();
 
     //  Toggle the checkbox for the current node
@@ -54,6 +57,9 @@ export class MSTreeComponent implements OnInit {
 
       if (removedNode.nodeAuthorized)
         removedNode.nodeSelected = node.nodeSelected;
+
+      //  Expand all the childre4n of a given node when 'selected'
+      if (removedNode.nodeSelected) this.treeControl.expand(removedNode);
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }

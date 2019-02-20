@@ -42,4 +42,10 @@ export interface ITreeNode {
   //    NOTE -> All children under an unauthorized node must also be unauthorized
 
   nodeAuthorized: boolean;
+
+  //    'nodeInactive' represents if a node is inactive
+  //    'true' => node is inactive
+  //    'false' => node is active
+
+  nodeInactive: boolean;
 }

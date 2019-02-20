@@ -2,9 +2,11 @@
 
 .tree-display {
   height: 300px;
-  width: 100%;
+  margin: 0 auto;
+  width: 99%;
+  white-space: nowrap;
+  overflow-x: auto;
   overflow: auto;
-  padding: 5px;
   border: 1px solid lightgrey;
 }
 
@@ -29,10 +31,18 @@
   width: 100%;
 }
 
-.tree-node:hover {
+.tree-node-active:hover {
   color: #8ad3e2;
 }
 
 .tree-node-unauthorized {
   color: grey;
+}
+
+.tree-node-inactive {
+  color: grey;
+}
+
+.tree-node-inactive:hover {
+  color: #8ad3e2;
 }
