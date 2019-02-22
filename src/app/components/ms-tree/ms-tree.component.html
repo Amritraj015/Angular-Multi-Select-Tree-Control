@@ -1,6 +1,7 @@
 <div class="search-container">
   <mat-form-field>
     <input
+      #searchBox
       matInput
       type="text"
       autofocus="autofocus"
@@ -10,7 +11,16 @@
       [matAutocomplete]="auto"
       (input)="searchTerm = $event.target.value"
     />
-    <mat-icon matSuffix>search</mat-icon>
+    <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
+    <mat-icon
+      *ngIf="searchBox.value.length > 0"
+      (click)="searchBox.value = null"
+      style="cursor: pointer"
+      matSuffix
+    >
+      clear
+    </mat-icon>
+
     <mat-hint>Search User Group(s)</mat-hint>
 
     <mat-autocomplete #auto="matAutocomplete">
@@ -52,6 +62,10 @@
                 class="tree-node-inactive"
                 [innerHTML]="node.nodeName | searchFilter: searchTerm"
               ></div>
+
+              <div class="inactive-text" *ngIf="node.nodeInactive">
+                &nbsp; &nbsp; (inactive)
+              </div>
 
               <div
                 *ngIf="!node.nodeInactive"
@@ -106,6 +120,10 @@
                   class="tree-node-inactive"
                   [innerHTML]="node.nodeName | searchFilter: searchTerm"
                 ></div>
+
+                <div class="inactive-text" *ngIf="node.nodeInactive">
+                  &nbsp; &nbsp; (inactive)
+                </div>
 
                 <div
                   *ngIf="!node.nodeInactive"
@@ -176,11 +194,23 @@
                 [checked]="node.nodeSelected"
                 (change)="selectAndExpand(node)"
                 color="warn"
-                ><div
-                  class="tree-node"
+              >
+                <div
+                  *ngIf="node.nodeInactive"
+                  class="tree-node-inactive"
                   [innerHTML]="node.nodeName | searchFilter: searchTerm"
-                ></div
-              ></mat-checkbox>
+                ></div>
+
+                <div class="inactive-text" *ngIf="node.nodeInactive">
+                  &nbsp; &nbsp; (inactive)
+                </div>
+
+                <div
+                  *ngIf="!node.nodeInactive"
+                  class="tree-node-active"
+                  [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                ></div>
+              </mat-checkbox>
             </div>
 
             <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">

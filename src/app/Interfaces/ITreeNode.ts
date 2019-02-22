@@ -4,18 +4,18 @@
 //  wherever the Multi-Select Tree control is being integrated.
 
 export interface ITreeNode {
-  //  name of the node
+  //    name of the node
   nodeName: string;
 
-  //  ID of a node (unique positive integer for each node)
+  //    ID of a node (unique positive integer for each node)
   nodeID: number;
 
   //=============================================================
   //    parent 'p' of a node where: p ∈ {null, 1}
-  //  nodeParent: ITreeNode;
+  //    nodeParent: ITreeNode;
   //=============================================================
 
-  //    children 'c' of a given node where: c ∈ Z+,
+  //    children of a given node where: Total number of children ∈ Z+,
   nodeChildren: ITreeNode[];
 
   //    boolean value to represent if a node is selected.
