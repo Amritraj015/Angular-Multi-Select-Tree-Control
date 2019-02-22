@@ -98,6 +98,7 @@
           <li *ngIf="node.nodeAuthorized; else unauthorizedNode">
             <div class="mat-tree-node">
               <button
+                class="expand-collapse-button"
                 mat-icon-button
                 matTreeNodeToggle
                 [attr.aria-label]="'toggle ' + node.nodeName"
@@ -169,6 +170,7 @@
           <li *ngIf="node.nodeAuthorized">
             <div class="mat-tree-node">
               <button
+                class="expand-collapse-button"
                 *ngIf="!checkChildren(node)"
                 mat-icon-button
                 matTreeNodeToggle
