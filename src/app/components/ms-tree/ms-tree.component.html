@@ -1,42 +1,8 @@
-<div class="search-container">
-  <mat-form-field>
-    <input
-      #searchBox
-      matInput
-      type="text"
-      autofocus="autofocus"
-      aria-label="Number"
-      placeholder="Search"
-      [formControl]="searchControl"
-      [matAutocomplete]="auto"
-      (input)="searchTerm = $event.target.value"
-    />
-    <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
-    <mat-icon
-      *ngIf="searchBox.value.length > 0"
-      (click)="searchBox.value = null"
-      style="cursor: pointer"
-      matSuffix
-    >
-      clear
-    </mat-icon>
-
-    <mat-hint>Search User Group(s)</mat-hint>
-
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option
-        *ngFor="let option of (filteredOptions | async)"
-        [value]="option"
-      >
-        {{ option }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-</div>
-
 <mat-tab-group mat-align-tabs="center">
   <!--  This is the "Show All" Tab  -->
   <mat-tab label="Show All">
+    <ms-search></ms-search>
+
     <mat-card class="tree-display">
       <mat-tree
         [dataSource]="dataSource"
@@ -160,6 +126,9 @@
 
   <!--  This is the "Show Selected" Tab  -->
   <mat-tab label="Show Selected">
+    <!-- <ms-search [treeData]="dataSource.data[0]"></ms-search> -->
+    <ms-search></ms-search>
+
     <mat-card class="tree-display">
       <mat-tree
         [dataSource]="dataSource"

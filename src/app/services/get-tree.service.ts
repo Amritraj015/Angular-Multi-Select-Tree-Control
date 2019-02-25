@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { ITreeNode } from "../Interfaces/ITreeNode";
 import { Stack } from "../classes/stackForDepthFirstSearch";
+import { MatTreeNestedDataSource } from "@angular/material";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
+  dataSource = new MatTreeNestedDataSource<ITreeNode>();
+
   tree: ITreeNode[] = [
     {
       nodeName: "USA",
@@ -562,6 +565,7 @@ export class GetTreeService {
 
   constructor() {
     this.tree = this.fixUnauthorizedNodeHierarchy(this.tree[0]);
+    this.dataSource.data = this.getTree();
   }
 
   private fixUnauthorizedNodeHierarchy(tree: ITreeNode): ITreeNode[] {

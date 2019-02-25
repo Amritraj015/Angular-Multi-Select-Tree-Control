@@ -1,12 +1,9 @@
 import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
-import { GetTreeService } from "src/app/services/get-tree.service";
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
-import { FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
+import { GetTreeService } from "src/app/services/get-tree.service";
 
 @Component({
   selector: "ms-tree",
@@ -15,25 +12,15 @@ import { startWith, map } from "rxjs/operators";
 })
 export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
-  dataSource = new MatTreeNestedDataSource<ITreeNode>();
-  @Output() selectedCount = new EventEmitter<ITreeNode>();
-  searchBoxList: string[] = [];
-  searchControl = new FormControl();
-  filteredOptions: Observable<string[]>;
+  dataSource: MatTreeNestedDataSource<ITreeNode>;
 
-  constructor(treeService: GetTreeService) {
-    this.dataSource.data = treeService.getTree();
-    this.searchBoxList = this.searchTreeWithDepthFirstSearch(
-      this.dataSource.data[0]
-    );
+  @Output() selectedCount = new EventEmitter<ITreeNode>();
+
+  constructor(treeInit: GetTreeService) {
+    this.dataSource = treeInit.dataSource;
   }
 
   ngOnInit() {
-    this.filteredOptions = this.searchControl.valueChanges.pipe(
-      startWith(""),
-      map(value => this._filter(value))
-    );
-
     //  Automatically expand the first level children when the fly-out loads
     this.treeControl.expand(this.dataSource.data[0]);
   }
@@ -66,29 +53,4 @@ export class MSTreeComponent implements OnInit {
 
     this.selectedCount.emit(this.dataSource.data[0]);
   }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.searchBoxList.filter(option =>
-      option.toLowerCase().includes(filterValue)
-    );
-  }
-
-  //  Initializes the search list for the auto-complete feature when searching
-  private searchTreeWithDepthFirstSearch = (node: ITreeNode) => {
-    let stack = new Stack();
-    stack.pushStack(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-
-      if (removedNode.nodeAuthorized)
-        this.searchBoxList.push(removedNode.nodeName);
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-
-    return this.searchBoxList.sort();
-  };
 }
