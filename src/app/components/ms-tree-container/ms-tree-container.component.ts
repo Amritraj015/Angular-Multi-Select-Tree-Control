@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 
@@ -7,7 +7,7 @@ import { Stack } from "src/app/classes/stackForDepthFirstSearch";
   templateUrl: "./ms-tree-container.component.html",
   styleUrls: ["./ms-tree-container.component.less"]
 })
-export class MSTreeContainerComponent implements OnInit {
+export class MSTreeContainerComponent {
   count: number;
   text: string;
   renderTreeDiv: boolean;
@@ -43,6 +43,4 @@ export class MSTreeContainerComponent implements OnInit {
     this.text = " Selected";
     return this.renderTreeDiv;
   }
-
-  ngOnInit() {}
 }

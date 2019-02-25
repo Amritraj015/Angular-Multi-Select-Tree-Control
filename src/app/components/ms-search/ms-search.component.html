@@ -9,7 +9,7 @@
       placeholder="Search"
       [formControl]="searchControl"
       [matAutocomplete]="auto"
-      (input)="searchTerm = $event.target.value"
+      (input)="highlight($event.target.value)"
     />
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon

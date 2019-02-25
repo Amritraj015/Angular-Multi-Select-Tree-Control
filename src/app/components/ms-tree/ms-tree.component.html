@@ -1,7 +1,7 @@
 <mat-tab-group mat-align-tabs="center">
   <!--  This is the "Show All" Tab  -->
   <mat-tab label="Show All">
-    <ms-search></ms-search>
+    <ms-search (searchTerm)="searchTerm = highlightNode($event)"></ms-search>
 
     <mat-card class="tree-display">
       <mat-tree
@@ -127,7 +127,7 @@
   <!--  This is the "Show Selected" Tab  -->
   <mat-tab label="Show Selected">
     <!-- <ms-search [treeData]="dataSource.data[0]"></ms-search> -->
-    <ms-search></ms-search>
+    <ms-search (searchTerm)="searchTerm = highlightNode($event)"></ms-search>
 
     <mat-card class="tree-display">
       <mat-tree

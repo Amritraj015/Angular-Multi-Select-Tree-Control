@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
@@ -15,6 +15,7 @@ export class MsSearchComponent implements OnInit {
   searchBoxList: string[] = [];
   searchControl = new FormControl();
   filteredOptions: Observable<string[]>;
+  @Output() searchTerm = new EventEmitter<string>();
 
   constructor(treeInit: GetTreeService) {
     this.searchBoxList = this.searchTreeWithDepthFirstSearch(
@@ -53,4 +54,8 @@ export class MsSearchComponent implements OnInit {
 
     return this.searchBoxList;
   };
+
+  highlight($searchEvent: string): void {
+    this.searchTerm.emit($searchEvent);
+  }
 }

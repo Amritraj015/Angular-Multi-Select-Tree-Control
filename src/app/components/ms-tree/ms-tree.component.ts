@@ -53,4 +53,8 @@ export class MSTreeComponent implements OnInit {
 
     this.selectedCount.emit(this.dataSource.data[0]);
   }
+
+  highlightNode($searchEvent: string): string {
+    return $searchEvent;
+  }
 }
