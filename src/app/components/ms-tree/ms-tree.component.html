@@ -127,7 +127,10 @@
   <!--  This is the "Show Selected" Tab  -->
   <mat-tab label="Show Selected">
     <!-- <ms-search [treeData]="dataSource.data[0]"></ms-search> -->
-    <ms-search (searchTerm)="searchTerm = highlightNode($event)"></ms-search>
+    <ms-search
+      [showSleectedTab]="true"
+      (searchTerm)="searchSelectedNode = highlightNode($event)"
+    ></ms-search>
 
     <mat-card class="tree-display">
       <mat-tree
@@ -169,7 +172,7 @@
                 <div
                   *ngIf="node.nodeInactive"
                   class="tree-node-inactive"
-                  [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                  [innerHTML]="node.nodeName | searchFilter: searchSelectedNode"
                 ></div>
 
                 <div class="inactive-text" *ngIf="node.nodeInactive">
@@ -179,7 +182,7 @@
                 <div
                   *ngIf="!node.nodeInactive"
                   class="tree-node-active"
-                  [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                  [innerHTML]="node.nodeName | searchFilter: searchSelectedNode"
                 ></div>
               </mat-checkbox>
             </div>

@@ -1,5 +1,5 @@
 <div class="search-container">
-  <mat-form-field>
+  <mat-form-field *ngIf="!showSleectedTab">
     <input
       #searchBox
       matInput
@@ -11,10 +11,11 @@
       [matAutocomplete]="auto"
       (input)="highlight($event.target.value)"
     />
+
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
-      (click)="searchBox.value = null"
+      (click)="searchBox.value = null; highlight(searchBox.value)"
       style="cursor: pointer"
       matSuffix
     >
@@ -23,7 +24,53 @@
 
     <mat-hint>Search User Group(s)</mat-hint>
 
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete
+      (optionSelected)="highlight(searchBox.value)"
+      #auto="matAutocomplete"
+    >
+      <mat-option
+        *ngFor="let option of (filteredOptions | async)"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field
+    (load)="
+      InitAllAutoCompleteList(treeInit.dataSource.data[0], showSleectedTab)
+    "
+    *ngIf="showSleectedTab"
+  >
+    <input
+      #searchBox
+      matInput
+      type="text"
+      autofocus="autofocus"
+      aria-label="Number"
+      placeholder="Search"
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+      (input)="highlight($event.target.value)"
+    />
+
+    <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
+    <mat-icon
+      *ngIf="searchBox.value.length > 0"
+      (click)="searchBox.value = null; highlight(searchBox.value)"
+      style="cursor: pointer"
+      matSuffix
+    >
+      clear
+    </mat-icon>
+
+    <mat-hint>Search Selected User Group(s)</mat-hint>
+
+    <mat-autocomplete
+      (optionSelected)="highlight(searchBox.value)"
+      #auto="matAutocomplete"
+    >
       <mat-option
         *ngFor="let option of (filteredOptions | async)"
         [value]="option"

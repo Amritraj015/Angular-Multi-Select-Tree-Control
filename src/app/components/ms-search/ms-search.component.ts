@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
@@ -16,9 +16,10 @@ export class MsSearchComponent implements OnInit {
   searchControl = new FormControl();
   filteredOptions: Observable<string[]>;
   @Output() searchTerm = new EventEmitter<string>();
+  @Input() showSleectedTab: boolean;
 
-  constructor(treeInit: GetTreeService) {
-    this.searchBoxList = this.searchTreeWithDepthFirstSearch(
+  constructor(public treeInit: GetTreeService) {
+    this.searchBoxList = this.InitAllAutoCompleteList(
       treeInit.dataSource.data[0]
     );
   }
@@ -38,24 +39,56 @@ export class MsSearchComponent implements OnInit {
     );
   }
 
-  //  Initializes the search list for the auto-complete feature when searching
-  private searchTreeWithDepthFirstSearch = (node: ITreeNode) => {
+  //  Initializes the search list for the auto-complete feature when searching on teh Show All Tab
+  InitAllAutoCompleteList(
+    tree: ITreeNode = this.treeInit.dataSource.data[0],
+    showSleectedTab: boolean = false
+  ): string[] {
+    if (!showSleectedTab) {
+      let stack = new Stack();
+      stack.pushStack(tree);
+
+      while (stack.stack.length > 0) {
+        let removedNode: ITreeNode = stack.popStack();
+
+        if (removedNode.nodeAuthorized)
+          this.searchBoxList.push(removedNode.nodeName);
+
+        for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+      }
+    } else {
+      this.searchBoxList = this.InitSelectedAutoComplete(tree);
+    }
+
+    return this.searchBoxList;
+  }
+
+  //  Initializes the search list for the auto-complete feature when searching on teh Show Selected Tab
+  private InitSelectedAutoComplete(
+    tree: ITreeNode = this.treeInit.dataSource.data[0]
+  ): string[] {
+    this.searchBoxList = [];
+
     let stack = new Stack();
-    stack.pushStack(node);
+    stack.pushStack(tree);
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
 
-      if (removedNode.nodeAuthorized)
+      if (removedNode.nodeAuthorized && removedNode.nodeSelected)
         this.searchBoxList.push(removedNode.nodeName);
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
     return this.searchBoxList;
-  };
+  }
 
   highlight($searchEvent: string): void {
-    this.searchTerm.emit($searchEvent);
+    if ($searchEvent.length > 1) this.searchTerm.emit($searchEvent);
+    else {
+      $searchEvent = null;
+      this.searchTerm.emit($searchEvent);
+    }
   }
 }
