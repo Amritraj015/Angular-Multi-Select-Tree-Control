@@ -1,17 +1,17 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
+import { GetTreeService } from "src/app/services/get-tree.service";
 import { startWith, map } from "rxjs/operators";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
-import { GetTreeService } from "src/app/services/get-tree.service";
 
 @Component({
-  selector: "ms-search",
-  templateUrl: "./ms-search.component.html",
-  styleUrls: ["./ms-search.component.less"]
+  selector: "ms-show-selected",
+  templateUrl: "./ms-show-selected.component.html",
+  styleUrls: ["./ms-show-selected.component.less"]
 })
-export class MsSearchComponent implements OnInit {
+export class MsShowSelectedComponent implements OnInit {
   searchBoxList: string[] = [];
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
@@ -46,7 +46,7 @@ export class MsSearchComponent implements OnInit {
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
 
-      if (removedNode.nodeAuthorized)
+      if (removedNode.nodeAuthorized && removedNode.nodeSelected)
         this.searchBoxList.push(removedNode.nodeName);
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);

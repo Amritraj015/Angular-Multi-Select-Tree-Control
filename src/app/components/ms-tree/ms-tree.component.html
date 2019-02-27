@@ -127,12 +127,10 @@
 
   <!--  This is the "Show Selected" Tab  -->
   <mat-tab label="Show Selected">
-    <ng-template matTabContent
-      ><ms-search
+    <ng-template matTabContent>
+      <ms-show-selected
         (searchTerm)="searchSelectedNode = highlightNode($event)"
-        [selectedTab]="true"
-      ></ms-search>
-
+      ></ms-show-selected>
       <mat-card class="tree-display">
         <mat-tree
           [dataSource]="dataSource"
