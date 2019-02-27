@@ -13,10 +13,11 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 })
 export class MsSearchComponent implements OnInit {
   searchBoxList: string[] = [];
-  searchControl = new FormControl();
+  selectedAutoCompleteList: string[] = [];
   filteredOptions: Observable<string[]>;
+  searchControl = new FormControl();
   @Output() searchTerm = new EventEmitter<string>();
-  @Input() showSleectedTab: boolean;
+  @Input() selectedTab: boolean = false;
 
   constructor(public treeInit: GetTreeService) {
     this.searchBoxList = this.InitAllAutoCompleteList(
@@ -40,48 +41,37 @@ export class MsSearchComponent implements OnInit {
   }
 
   //  Initializes the search list for the auto-complete feature when searching on teh Show All Tab
-  InitAllAutoCompleteList(
-    tree: ITreeNode = this.treeInit.dataSource.data[0],
-    showSleectedTab: boolean = false
-  ): string[] {
-    if (!showSleectedTab) {
-      let stack = new Stack();
-      stack.pushStack(tree);
-
-      while (stack.stack.length > 0) {
-        let removedNode: ITreeNode = stack.popStack();
-
-        if (removedNode.nodeAuthorized)
-          this.searchBoxList.push(removedNode.nodeName);
-
-        for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-      }
-    } else {
-      this.searchBoxList = this.InitSelectedAutoComplete(tree);
-    }
-
-    return this.searchBoxList;
-  }
-
-  //  Initializes the search list for the auto-complete feature when searching on teh Show Selected Tab
-  private InitSelectedAutoComplete(
-    tree: ITreeNode = this.treeInit.dataSource.data[0]
-  ): string[] {
-    this.searchBoxList = [];
-
+  private InitAllAutoCompleteList(tree: ITreeNode): string[] {
     let stack = new Stack();
     stack.pushStack(tree);
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
 
-      if (removedNode.nodeAuthorized && removedNode.nodeSelected)
+      if (removedNode.nodeAuthorized)
         this.searchBoxList.push(removedNode.nodeName);
 
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
     return this.searchBoxList;
+  }
+
+  private InitSelectedAutoCompleteList(tree: ITreeNode): string[] {
+    let stack = new Stack();
+    stack.pushStack(tree);
+    this.selectedAutoCompleteList = [];
+
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+
+      if (removedNode.nodeAuthorized)
+        this.selectedAutoCompleteList.push(removedNode.nodeName);
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    }
+
+    return this.selectedAutoCompleteList;
   }
 
   highlight($searchEvent: string): void {

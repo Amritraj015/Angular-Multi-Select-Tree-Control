@@ -1,5 +1,5 @@
 <div class="search-container">
-  <mat-form-field *ngIf="!showSleectedTab">
+  <mat-form-field *ngIf="!selectedTab">
     <input
       #searchBox
       matInput
@@ -25,6 +25,7 @@
     <mat-hint>Search User Group(s)</mat-hint>
 
     <mat-autocomplete
+      autoActiveFirstOption="true"
       (optionSelected)="highlight(searchBox.value)"
       #auto="matAutocomplete"
     >
@@ -37,12 +38,7 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field
-    (load)="
-      InitAllAutoCompleteList(treeInit.dataSource.data[0], showSleectedTab)
-    "
-    *ngIf="showSleectedTab"
-  >
+  <mat-form-field *ngIf="selectedTab">
     <input
       #searchBox
       matInput
@@ -68,6 +64,7 @@
     <mat-hint>Search Selected User Group(s)</mat-hint>
 
     <mat-autocomplete
+      autoActiveFirstOption="true"
       (optionSelected)="highlight(searchBox.value)"
       #auto="matAutocomplete"
     >
