@@ -13,11 +13,14 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   dataSource: MatTreeNestedDataSource<ITreeNode>;
-  checkSelected: boolean = false;
+  checkSelected: boolean;
+  currentTabIndex: number;
   @Output() selectedCount = new EventEmitter<ITreeNode>();
 
   //  call service to get the tree
   constructor(public treeInit: GetTreeService) {
+    this.checkSelected = false;
+    this.currentTabIndex = 0;
     this.dataSource = treeInit.dataSource;
   }
 
@@ -53,8 +56,11 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
+  //  Checks if any node is selected in the tree
+  //  Used for conditional rendering of "None Selected" if no tree niodes have been selected
   checkNodeSelection($event): boolean {
     this.checkSelected = false;
+    this.currentTabIndex = $event;
 
     if ($event === 1) {
       let stack = new Stack();
@@ -73,6 +79,22 @@ export class MSTreeComponent implements OnInit {
     return this.checkSelected;
   }
 
+  testFunction(): void {
+    let stack = new Stack();
+    let stack1 = new Stack();
+    stack.pushStack(this.treeInit.dataSource.data[0]);
+
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+      if (removedNode.nodeAuthorized) stack1.pushStack(removedNode);
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    }
+
+    console.log(stack1);
+  }
+
+  //  Used to highlight the search results
   highlightNode($searchEvent: string): string {
     return $searchEvent;
   }

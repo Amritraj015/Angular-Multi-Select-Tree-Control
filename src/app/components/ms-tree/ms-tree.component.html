@@ -6,7 +6,7 @@
   <mat-tab label="Show All">
     <ms-search (searchTerm)="searchTerm = highlightNode($event)"></ms-search>
 
-    <mat-card class="tree-display">
+    <mat-card (click)="testFunction()" class="tree-display">
       <mat-tree
         [dataSource]="dataSource"
         [treeControl]="treeControl"
@@ -201,7 +201,10 @@
         </mat-tree>
       </mat-card>
 
-      <div *ngIf="!checkSelected" class="none-selected-div">
+      <div
+        *ngIf="!checkSelected && currentTabIndex === 1"
+        class="none-selected-div"
+      >
         None Selected
       </div>
     </ng-template>
