@@ -13,10 +13,11 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   dataSource: MatTreeNestedDataSource<ITreeNode>;
+  checkSelected: boolean = false;
   @Output() selectedCount = new EventEmitter<ITreeNode>();
 
   //  call service to get the tree
-  constructor(treeInit: GetTreeService) {
+  constructor(public treeInit: GetTreeService) {
     this.dataSource = treeInit.dataSource;
   }
 
@@ -50,6 +51,26 @@ export class MSTreeComponent implements OnInit {
     }
 
     this.selectedCount.emit(this.dataSource.data[0]);
+  }
+
+  checkNodeSelection($event): boolean {
+    this.checkSelected = false;
+
+    if ($event === 1) {
+      let stack = new Stack();
+      stack.pushStack(this.treeInit.dataSource.data[0]);
+
+      while (stack.stack.length > 0) {
+        let removedNode: ITreeNode = stack.popStack();
+        if (removedNode.nodeSelected) {
+          this.checkSelected = true;
+          break;
+        }
+        for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+      }
+    }
+
+    return this.checkSelected;
   }
 
   highlightNode($searchEvent: string): string {
