@@ -4,6 +4,7 @@ import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { GetTreeService } from "src/app/services/get-tree.service";
+import { nodeChildrenAsMap } from "@angular/router/src/utils/tree";
 
 @Component({
   selector: "ms-tree",
@@ -36,23 +37,24 @@ export class MSTreeComponent implements OnInit {
   //  check if a node has children
   checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
 
-  //  Toggle the checkbox for the current node
-  //  Toggle the checkbox for a node's children
-  //  Expand all the childre4n of a given node when 'selected'
+  //  Toggle the checkbox for the current node and its descendants
+  //  Expand all descendants of a node when 'Selected'
   selectAndExpand(node: ITreeNode): void {
     let stack = new Stack();
 
     node.nodeSelected = !node.nodeSelected;
     stack.pushStack(node);
 
+    if (node.nodeSelected) this.treeControl.expandDescendants(node);
+
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
       if (removedNode.nodeAuthorized)
         removedNode.nodeSelected = node.nodeSelected;
-      if (removedNode.nodeSelected) this.treeControl.expand(removedNode);
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
+    //  Event emission to ms-tree-container to update selection count
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
@@ -81,17 +83,37 @@ export class MSTreeComponent implements OnInit {
 
   testFunction(): void {
     let stack = new Stack();
-    let stack1 = new Stack();
+    let allNodes: ITreeNode[] = [];
+    let leafNodes: ITreeNode[] = [];
+
     stack.pushStack(this.treeInit.dataSource.data[0]);
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized) stack1.pushStack(removedNode);
 
+      allNodes.push(removedNode);
+      if (this.checkChildren(removedNode)) leafNodes.push(removedNode);
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
-    console.log(stack1);
+    this.SelectedNodesOnBranch(allNodes, leafNodes);
+  }
+
+  private SelectedNodesOnBranch(allNodes: ITreeNode[], leafNodes: ITreeNode[]) {
+    for (let leaf of leafNodes) {
+      console.log("helooooooooooooo");
+
+      while (leaf.nodeParentID !== NaN) {
+        console.log("test");
+
+        for (let node of allNodes) {
+          if (leaf.nodeParentID === node.nodeID) {
+            console.log("======================");
+            leaf = node;
+          }
+        }
+      }
+    }
   }
 
   //  Used to highlight the search results

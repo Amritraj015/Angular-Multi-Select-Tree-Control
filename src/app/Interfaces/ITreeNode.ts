@@ -10,10 +10,8 @@ export interface ITreeNode {
   //    ID of a node (unique positive integer for each node)
   nodeID: number;
 
-  //=============================================================
   //    parent 'p' of a node where: p ∈ {null, 1}
-  //    nodeParent: ITreeNode;
-  //=============================================================
+  nodeParentID: number;
 
   //    children of a given node where: Total number of children ∈ Z+,
   nodeChildren: ITreeNode[];
@@ -22,7 +20,6 @@ export interface ITreeNode {
   //
   //    true = node is selected
   //    false = node is not selected
-
   nodeSelected: boolean;
 
   //    'nodeVisisted' is used for the Depth-First Search Algorithm to track if a given
@@ -33,19 +30,16 @@ export interface ITreeNode {
   //
   //    true = node visited already
   //    false = node not vivited yet
-
-  nodeVisited: boolean;
+  nodeDescendantSelected: boolean;
 
   //    'nodeAuthorized' is used to designate if a given node 'n' is accessible to a given user/user group 'g'
   //    The value of this variable is 'true' if the node is accessible by a user/user group
   //    The value of this variable is 'false' if the node is not accessible by a user/user group
   //    NOTE -> All children under an unauthorized node must also be unauthorized
-
   nodeAuthorized: boolean;
 
   //    'nodeInactive' represents if a node is inactive
   //    'true' => node is inactive
   //    'false' => node is active
-
   nodeInactive: boolean;
 }
