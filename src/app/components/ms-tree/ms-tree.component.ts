@@ -4,7 +4,6 @@ import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { GetTreeService } from "src/app/services/get-tree.service";
-import { nodeChildrenAsMap } from "@angular/router/src/utils/tree";
 
 @Component({
   selector: "ms-tree",
@@ -60,7 +59,7 @@ export class MSTreeComponent implements OnInit {
 
   //  Checks if any node is selected in the tree
   //  Used for conditional rendering of "None Selected" if no tree niodes have been selected
-  checkNodeSelection($event): boolean {
+  checkNodeSelection($event): void {
     this.checkSelected = false;
     this.currentTabIndex = $event;
 
@@ -76,12 +75,12 @@ export class MSTreeComponent implements OnInit {
         }
         for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
       }
-    }
 
-    return this.checkSelected;
+      this.CheckDescendantsSelection();
+    }
   }
 
-  testFunction(): void {
+  private CheckDescendantsSelection(): void {
     let stack = new Stack();
     let allNodes: ITreeNode[] = [];
     let leafNodes: ITreeNode[] = [];
@@ -91,8 +90,12 @@ export class MSTreeComponent implements OnInit {
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
 
-      allNodes.push(removedNode);
-      if (this.checkChildren(removedNode)) leafNodes.push(removedNode);
+      removedNode.nodeDescendantSelected = false;
+
+      this.checkChildren(removedNode) && removedNode.nodeAuthorized
+        ? leafNodes.push(removedNode)
+        : allNodes.push(removedNode);
+
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
@@ -100,15 +103,21 @@ export class MSTreeComponent implements OnInit {
   }
 
   private SelectedNodesOnBranch(allNodes: ITreeNode[], leafNodes: ITreeNode[]) {
-    for (let leaf of leafNodes) {
-      console.log("helooooooooooooo");
+    if (this.grtcheckSelected())
+      this.dataSource.data[0].nodeDescendantSelected = true;
 
-      while (leaf.nodeParentID !== NaN) {
-        console.log("test");
+    for (let leaf of leafNodes) {
+      let oldLeaf: ITreeNode = leaf;
+      while (!isNaN(leaf.nodeParentID)) {
+        if (leaf.nodeSelected) leaf.nodeDescendantSelected = true;
+        else {
+          if (oldLeaf.nodeDescendantSelected)
+            leaf.nodeDescendantSelected = true;
+        }
 
         for (let node of allNodes) {
           if (leaf.nodeParentID === node.nodeID) {
-            console.log("======================");
+            oldLeaf = leaf;
             leaf = node;
           }
         }
@@ -116,8 +125,33 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
+  selectOnShowSelectedTab(node: ITreeNode): void {
+    let stack = new Stack();
+
+    node.nodeSelected = !node.nodeSelected;
+    stack.pushStack(node);
+
+    if (node.nodeSelected) this.treeControl.expandDescendants(node);
+
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+      if (removedNode.nodeAuthorized)
+        removedNode.nodeSelected = node.nodeSelected;
+
+      if (node.nodeSelected) removedNode.nodeDescendantSelected = true;
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    }
+
+    //  Event emission to ms-tree-container to update selection count
+    this.selectedCount.emit(this.dataSource.data[0]);
+  }
+
   //  Used to highlight the search results
   highlightNode($searchEvent: string): string {
     return $searchEvent;
+  }
+
+  grtcheckSelected(): boolean {
+    return this.checkSelected;
   }
 }
