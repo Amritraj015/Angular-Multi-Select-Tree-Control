@@ -3,8 +3,9 @@
     <input
       #searchBox
       matInput
+      (focus)="searchBoxFocus()"
+      (blur)="searchBoxBlur()"
       type="text"
-      autofocus="autofocus"
       aria-label="Number"
       placeholder="Search"
       [formControl]="searchControl"

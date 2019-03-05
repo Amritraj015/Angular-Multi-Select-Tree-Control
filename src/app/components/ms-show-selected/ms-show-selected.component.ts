@@ -45,14 +45,12 @@ export class MsShowSelectedComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-
       if (removedNode.nodeAuthorized && removedNode.nodeSelected)
         this.searchBoxList.push(removedNode.nodeName);
-
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
-    return this.searchBoxList;
+    return this.searchBoxList.sort();
   }
 
   highlight($searchEvent: string): void {

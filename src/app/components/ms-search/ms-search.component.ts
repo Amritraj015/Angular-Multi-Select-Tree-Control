@@ -16,8 +16,11 @@ export class MsSearchComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
   @Output() searchTerm = new EventEmitter<string>();
+  searchBoxInFocus: boolean;
+  @Output() searchFocusEmitter = new EventEmitter<boolean>();
 
   constructor(public treeInit: GetTreeService) {
+    this.searchBoxInFocus = false;
     this.searchBoxList = this.InitAllAutoCompleteList(
       treeInit.dataSource.data[0]
     );
@@ -45,14 +48,22 @@ export class MsSearchComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-
       if (removedNode.nodeAuthorized)
         this.searchBoxList.push(removedNode.nodeName);
-
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
-    return this.searchBoxList;
+    return this.searchBoxList.sort();
+  }
+
+  searchBoxFocus(): void {
+    this.searchBoxInFocus = true;
+    this.searchFocusEmitter.emit(this.searchBoxInFocus);
+  }
+
+  searchBoxBlur(): void {
+    this.searchBoxInFocus = false;
+    this.searchFocusEmitter.emit(this.searchBoxInFocus);
   }
 
   highlight($searchEvent: string): void {

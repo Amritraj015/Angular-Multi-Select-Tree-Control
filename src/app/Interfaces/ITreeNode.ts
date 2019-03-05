@@ -7,10 +7,15 @@ export interface ITreeNode {
   //    name of the node
   nodeName: string;
 
-  //    ID of a node (unique positive integer for each node)
+  //    ID of a node (unique number which ∈ Z+ for each node)
   nodeID: number;
 
-  //    parent 'p' of a node where: p ∈ {null, 1}
+  //    Parent's ID number for a given node.
+  //    Each node can have one and only one parent.
+  //    Multiple nodes can have the same parent.
+  //
+  //    nodeParentID ∈ Z+
+  //    nodeParentID = NaN (for root node)
   nodeParentID: number;
 
   //    children of a given node where: Total number of children ∈ Z+,

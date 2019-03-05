@@ -146,6 +146,10 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
+  searchBoxInFocus(focus: boolean): void {
+    console.log(focus);
+  }
+
   //  Used to highlight the search results
   highlightNode($searchEvent: string): string {
     return $searchEvent;
