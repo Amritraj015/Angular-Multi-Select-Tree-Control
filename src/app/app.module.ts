@@ -21,7 +21,8 @@ import { MSTreeComponent } from "./components/ms-tree/ms-tree.component";
 import { GetTreeService } from "./services/get-tree.service";
 import { SearchFilterPipe } from "./pipes/search-filter.pipe";
 import { MsSearchComponent } from "./components/ms-search/ms-search.component";
-import { MsShowSelectedComponent } from './components/ms-show-selected/ms-show-selected.component';
+import { MsShowSelectedComponent } from "./components/ms-show-selected/ms-show-selected.component";
+import { MsSearchedNodeComponent } from "./components/ms-searched-node/ms-searched-node.component";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MsShowSelectedComponent } from './components/ms-show-selected/ms-show-s
     MSTreeComponent,
     MsSearchComponent,
     SearchFilterPipe,
-    MsShowSelectedComponent
+    MsShowSelectedComponent,
+    MsSearchedNodeComponent
   ],
   imports: [
     BrowserModule,

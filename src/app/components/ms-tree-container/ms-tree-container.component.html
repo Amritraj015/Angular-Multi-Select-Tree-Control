@@ -1,28 +1,28 @@
 <mat-card class="ms-tree-container">
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header (click)="renderTree()">
-        <mat-panel-title> User Group(s) </mat-panel-title>
-        <mat-panel-description>
-          <span
-            *ngIf="renderTreeDiv && count === 0"
-            class="badge badge-secondary p-2 mr-2"
-            >None
-          </span>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header (click)="renderTree()">
+      <mat-panel-title> User Group(s) </mat-panel-title>
+      <mat-panel-description>
+        <span
+          *ngIf="renderTreeDiv && count === 0"
+          class="badge badge-secondary p-2 mr-2"
+          >None
+        </span>
 
-          <span
-            *ngIf="renderTreeDiv && count > 0"
-            class="badge badge-warning p-2 mr-2"
-            >{{ count }}
-          </span>
+        <span
+          *ngIf="renderTreeDiv && count > 0"
+          class="badge badge-warning p-2 mr-2"
+          >{{ count }}
+        </span>
 
-          {{ text }}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
+        {{ text }}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
       <ms-tree
         *ngIf="renderTreeDiv"
         (selectedCount)="updateSelectedCount($event)"
       ></ms-tree>
-    </mat-expansion-panel>
-  </mat-accordion>
+    </ng-template>
+  </mat-expansion-panel>
 </mat-card>

@@ -5,12 +5,15 @@
   <!--  This is the "Show All" Tab  -->
   <mat-tab label="Show All">
     <ms-search
-      (searchFocusEmitter)="searchBoxInFocus($event)"
+      (searchFocusEmitter)="focus = searchBoxInFocus($event)"
       (searchTerm)="searchTerm = highlightNode($event)"
     ></ms-search>
 
     <mat-card class="tree-display">
+      <ms-searched-node *ngIf="searching"></ms-searched-node>
+
       <mat-tree
+        *ngIf="!searching"
         [dataSource]="dataSource"
         [treeControl]="treeControl"
         class="ms-tree"

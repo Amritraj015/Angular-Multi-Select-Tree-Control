@@ -15,13 +15,17 @@ export class MSTreeComponent implements OnInit {
   dataSource: MatTreeNestedDataSource<ITreeNode>;
   checkSelected: boolean;
   currentTabIndex: number;
+  searching: boolean;
+  renderNodesOnSearch: ITreeNode[];
   @Output() selectedCount = new EventEmitter<ITreeNode>();
 
   //  call service to get the tree
   constructor(public treeInit: GetTreeService) {
+    this.searching = true;
     this.checkSelected = false;
     this.currentTabIndex = 0;
     this.dataSource = treeInit.dataSource;
+    this.renderNodesOnSearch = [];
   }
 
   //  Automatically expand the first level children when the fly-out loads
@@ -107,17 +111,17 @@ export class MSTreeComponent implements OnInit {
       this.dataSource.data[0].nodeDescendantSelected = true;
 
     for (let leaf of leafNodes) {
-      let oldLeaf: ITreeNode = leaf;
+      let oldNode: ITreeNode = leaf;
       while (!isNaN(leaf.nodeParentID)) {
         if (leaf.nodeSelected) leaf.nodeDescendantSelected = true;
         else {
-          if (oldLeaf.nodeDescendantSelected)
+          if (oldNode.nodeDescendantSelected)
             leaf.nodeDescendantSelected = true;
         }
 
         for (let node of allNodes) {
           if (leaf.nodeParentID === node.nodeID) {
-            oldLeaf = leaf;
+            oldNode = leaf;
             leaf = node;
           }
         }
@@ -146,13 +150,35 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
-  searchBoxInFocus(focus: boolean): void {
-    console.log(focus);
+  searchBoxInFocus(focus: string): string {
+    return focus;
   }
 
   //  Used to highlight the search results
-  highlightNode($searchEvent: string): string {
-    return $searchEvent;
+  highlightNode($searchString: string): string {
+    return $searchString;
+  }
+
+  searchNode(searchTerm: string, node: ITreeNode): boolean {
+    let stack = new Stack();
+    stack.pushStack(this.dataSource.data[0]);
+    this.renderNodesOnSearch = [];
+    console.log(searchTerm);
+    console.log(node);
+
+    while (stack.stack.length !== 0) {
+      let removedNode: ITreeNode = stack.popStack();
+
+      for (let node of removedNode.nodeChildren) {
+        if (node.nodeName === searchTerm) {
+          this.renderNodesOnSearch.push(removedNode);
+          return true;
+        }
+      }
+
+      for (let node of removedNode.nodeChildren) stack.pushStack(node);
+    }
+    return false;
   }
 
   grtcheckSelected(): boolean {
