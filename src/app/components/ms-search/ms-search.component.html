@@ -3,8 +3,8 @@
     <input
       #searchBox
       matInput
-      (focus)="searchBoxFocus()"
-      (blur)="searchBoxBlur()"
+      (focus)="searchBoxFocus($event.type)"
+      (blur)="searchBoxFocus($event.type)"
       type="text"
       aria-label="Number"
       placeholder="Search"
