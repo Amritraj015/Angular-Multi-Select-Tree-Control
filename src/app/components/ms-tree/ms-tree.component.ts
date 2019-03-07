@@ -16,7 +16,6 @@ export class MSTreeComponent implements OnInit {
   checkSelected: boolean;
   currentTabIndex: number;
   searching: boolean;
-  renderNodesOnSearch: ITreeNode[];
   @Output() selectedCount = new EventEmitter<ITreeNode>();
 
   //  call service to get the tree
@@ -25,7 +24,6 @@ export class MSTreeComponent implements OnInit {
     this.checkSelected = false;
     this.currentTabIndex = 0;
     this.dataSource = treeInit.dataSource;
-    this.renderNodesOnSearch = [];
   }
 
   //  Automatically expand the first level children when the fly-out loads
@@ -61,9 +59,13 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
+  grtcheckSelected(): boolean {
+    return this.checkSelected;
+  }
+
   //  Checks if any node is selected in the tree
   //  Used for conditional rendering of "None Selected" if no tree niodes have been selected
-  checkNodeSelection($event): void {
+  checkNodeSelection($event: number): void {
     this.checkSelected = false;
     this.currentTabIndex = $event;
 
@@ -150,8 +152,8 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
-  searchBoxInFocus(focus: string): string {
-    return focus;
+  searchBoxInFocus(focus: string): boolean {
+    return focus === "focus";
   }
 
   //  Used to highlight the search results
@@ -159,29 +161,74 @@ export class MSTreeComponent implements OnInit {
     return $searchString;
   }
 
-  searchNode(searchTerm: string, node: ITreeNode): boolean {
+  extractNodes($searchString: string): void {
     let stack = new Stack();
-    stack.pushStack(this.dataSource.data[0]);
-    this.renderNodesOnSearch = [];
-    console.log(searchTerm);
-    console.log(node);
+    let allNodes: ITreeNode[] = [];
+    let leafNodes: ITreeNode[] = [];
 
-    while (stack.stack.length !== 0) {
+    stack.pushStack(this.treeInit.dataSource.data[0]);
+
+    while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
 
-      for (let node of removedNode.nodeChildren) {
-        if (node.nodeName === searchTerm) {
-          this.renderNodesOnSearch.push(removedNode);
-          return true;
-        }
-      }
+      removedNode.nodeDescendantSelected = false;
 
-      for (let node of removedNode.nodeChildren) stack.pushStack(node);
+      this.checkChildren(removedNode) && removedNode.nodeAuthorized
+        ? leafNodes.push(removedNode)
+        : allNodes.push(removedNode);
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
-    return false;
+
+    this.searchNode(allNodes, leafNodes, $searchString);
   }
 
-  grtcheckSelected(): boolean {
-    return this.checkSelected;
+  private searchNode(
+    allNodes: ITreeNode[],
+    leafNodes: ITreeNode[],
+    $searchString: string
+  ) {
+    if ($searchString !== null)
+      this.dataSource.data[0].nodeSearchBreanch = true;
+
+    for (let leaf of leafNodes) {
+      let oldNode: ITreeNode = leaf;
+      while (!isNaN(leaf.nodeParentID)) {
+        if (leaf.nodeName === $searchString) {
+          leaf.nodeSearchBreanch = true;
+          this.treeControl.expandDescendants(this.dataSource.data[0]);
+        } else {
+          if (oldNode.nodeSearchBreanch) leaf.nodeSearchBreanch = true;
+        }
+
+        for (let node of allNodes) {
+          if (leaf.nodeParentID === node.nodeID) {
+            oldNode = leaf;
+            leaf = node;
+          }
+        }
+      }
+    }
+  }
+
+  selectOnSearch(node: ITreeNode): void {
+    let stack = new Stack();
+
+    node.nodeSelected = !node.nodeSelected;
+    stack.pushStack(node);
+
+    if (node.nodeSelected) this.treeControl.expandDescendants(node);
+
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+      if (removedNode.nodeAuthorized)
+        removedNode.nodeSelected = node.nodeSelected;
+
+      if (node.nodeSelected) removedNode.nodeSearchBreanch = true;
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    }
+
+    //  Event emission to ms-tree-container to update selection count
+    this.selectedCount.emit(this.dataSource.data[0]);
   }
 }

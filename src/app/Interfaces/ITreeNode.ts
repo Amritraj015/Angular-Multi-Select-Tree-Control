@@ -47,4 +47,7 @@ export interface ITreeNode {
   //    'true' => node is inactive
   //    'false' => node is active
   nodeInactive: boolean;
+
+  //    'true' if the node lies on the branch of a searched node else 'false'
+  nodeSearchBreanch: boolean;
 }

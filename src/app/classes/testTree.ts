@@ -11,6 +11,7 @@ export class TestTree {
         nodeParentID: NaN,
         nodeSelected: false,
         nodeDescendantSelected: false,
+        nodeSearchBreanch: false,
         nodeAuthorized: true,
         nodeInactive: false,
         nodeChildren: [
@@ -20,6 +21,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: [
@@ -29,6 +31,7 @@ export class TestTree {
                 nodeParentID: 1,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: true,
                 nodeInactive: false,
                 nodeChildren: [
@@ -38,6 +41,7 @@ export class TestTree {
                     nodeParentID: 3,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: [
@@ -47,6 +51,7 @@ export class TestTree {
                         nodeParentID: 5,
                         nodeSelected: false,
                         nodeDescendantSelected: false,
+                        nodeSearchBreanch: false,
                         nodeAuthorized: true,
                         nodeInactive: false,
                         nodeChildren: [
@@ -56,6 +61,7 @@ export class TestTree {
                             nodeParentID: 6,
                             nodeSelected: false,
                             nodeDescendantSelected: false,
+                            nodeSearchBreanch: false,
                             nodeAuthorized: true,
                             nodeInactive: false,
                             nodeChildren: [
@@ -65,6 +71,7 @@ export class TestTree {
                                 nodeParentID: 42,
                                 nodeSelected: false,
                                 nodeDescendantSelected: false,
+                                nodeSearchBreanch: false,
                                 nodeAuthorized: true,
                                 nodeInactive: false,
                                 nodeChildren: [
@@ -74,6 +81,7 @@ export class TestTree {
                                     nodeParentID: 43,
                                     nodeSelected: false,
                                     nodeDescendantSelected: false,
+                                    nodeSearchBreanch: false,
                                     nodeAuthorized: true,
                                     nodeInactive: false,
                                     nodeChildren: [
@@ -83,6 +91,7 @@ export class TestTree {
                                         nodeParentID: 44,
                                         nodeSelected: false,
                                         nodeDescendantSelected: false,
+                                        nodeSearchBreanch: false,
                                         nodeAuthorized: true,
                                         nodeInactive: false,
                                         nodeChildren: [
@@ -92,6 +101,7 @@ export class TestTree {
                                             nodeParentID: 45,
                                             nodeSelected: false,
                                             nodeDescendantSelected: false,
+                                            nodeSearchBreanch: false,
                                             nodeAuthorized: true,
                                             nodeInactive: false,
                                             nodeChildren: []
@@ -103,6 +113,7 @@ export class TestTree {
                                             nodeParentID: 45,
                                             nodeSelected: false,
                                             nodeDescendantSelected: false,
+                                            nodeSearchBreanch: false,
                                             nodeAuthorized: true,
                                             nodeInactive: false,
                                             nodeChildren: []
@@ -115,6 +126,7 @@ export class TestTree {
                                         nodeParentID: 44,
                                         nodeSelected: false,
                                         nodeDescendantSelected: false,
+                                        nodeSearchBreanch: false,
                                         nodeAuthorized: true,
                                         nodeInactive: false,
                                         nodeChildren: [
@@ -124,6 +136,7 @@ export class TestTree {
                                             nodeParentID: 46,
                                             nodeSelected: false,
                                             nodeDescendantSelected: false,
+                                            nodeSearchBreanch: false,
                                             nodeAuthorized: true,
                                             nodeInactive: false,
                                             nodeChildren: []
@@ -135,6 +148,7 @@ export class TestTree {
                                             nodeParentID: 46,
                                             nodeSelected: false,
                                             nodeDescendantSelected: false,
+                                            nodeSearchBreanch: false,
                                             nodeAuthorized: true,
                                             nodeInactive: false,
                                             nodeChildren: []
@@ -153,6 +167,7 @@ export class TestTree {
                             nodeParentID: 6,
                             nodeSelected: false,
                             nodeDescendantSelected: false,
+                            nodeSearchBreanch: false,
                             nodeAuthorized: true,
                             nodeInactive: false,
                             nodeChildren: [
@@ -162,6 +177,7 @@ export class TestTree {
                                 nodeParentID: 51,
                                 nodeSelected: false,
                                 nodeDescendantSelected: false,
+                                nodeSearchBreanch: false,
                                 nodeAuthorized: true,
                                 nodeInactive: false,
                                 nodeChildren: [
@@ -171,6 +187,7 @@ export class TestTree {
                                     nodeParentID: 52,
                                     nodeSelected: false,
                                     nodeDescendantSelected: false,
+                                    nodeSearchBreanch: false,
                                     nodeAuthorized: true,
                                     nodeInactive: false,
                                     nodeChildren: []
@@ -183,6 +200,7 @@ export class TestTree {
                                 nodeParentID: 51,
                                 nodeSelected: false,
                                 nodeDescendantSelected: false,
+                                nodeSearchBreanch: false,
                                 nodeAuthorized: true,
                                 nodeInactive: false,
                                 nodeChildren: []
@@ -201,6 +219,7 @@ export class TestTree {
                 nodeParentID: 1,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: false,
                 nodeInactive: false,
                 nodeChildren: [
@@ -210,6 +229,7 @@ export class TestTree {
                     nodeParentID: 4,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: []
@@ -224,6 +244,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: [
@@ -233,6 +254,7 @@ export class TestTree {
                 nodeParentID: 2,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: false,
                 nodeInactive: false,
                 nodeChildren: []
@@ -243,6 +265,7 @@ export class TestTree {
                 nodeParentID: 2,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: true,
                 nodeInactive: false,
                 nodeChildren: [
@@ -252,6 +275,7 @@ export class TestTree {
                     nodeParentID: 8,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: []
@@ -266,6 +290,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: [
@@ -275,6 +300,7 @@ export class TestTree {
                 nodeParentID: 11,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: true,
                 nodeInactive: false,
                 nodeChildren: [
@@ -284,6 +310,7 @@ export class TestTree {
                     nodeParentID: 12,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: []
@@ -294,6 +321,7 @@ export class TestTree {
                     nodeParentID: 12,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: []
@@ -306,6 +334,7 @@ export class TestTree {
                 nodeParentID: 11,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: true,
                 nodeInactive: false,
                 nodeChildren: []
@@ -316,6 +345,7 @@ export class TestTree {
                 nodeParentID: 11,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: true,
                 nodeInactive: false,
                 nodeChildren: []
@@ -328,6 +358,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -338,6 +369,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -348,6 +380,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -358,6 +391,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: true,
             nodeChildren: []
@@ -368,6 +402,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: [
@@ -377,6 +412,7 @@ export class TestTree {
                 nodeParentID: 21,
                 nodeSelected: false,
                 nodeDescendantSelected: false,
+                nodeSearchBreanch: false,
                 nodeAuthorized: true,
                 nodeInactive: true,
                 nodeChildren: [
@@ -386,6 +422,7 @@ export class TestTree {
                     nodeParentID: 55,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: [
@@ -395,6 +432,7 @@ export class TestTree {
                         nodeParentID: 56,
                         nodeSelected: false,
                         nodeDescendantSelected: false,
+                        nodeSearchBreanch: false,
                         nodeAuthorized: true,
                         nodeInactive: false,
                         nodeChildren: []
@@ -407,6 +445,7 @@ export class TestTree {
                     nodeParentID: 55,
                     nodeSelected: false,
                     nodeDescendantSelected: false,
+                    nodeSearchBreanch: false,
                     nodeAuthorized: true,
                     nodeInactive: false,
                     nodeChildren: []
@@ -421,6 +460,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -431,6 +471,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -441,6 +482,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
@@ -451,6 +493,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -461,6 +504,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: true,
             nodeChildren: []
@@ -471,6 +515,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -481,6 +526,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -491,6 +537,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
@@ -501,6 +548,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -511,6 +559,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
@@ -521,6 +570,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -531,6 +581,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
@@ -541,6 +592,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -551,6 +603,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -561,6 +614,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -571,6 +625,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: false,
             nodeChildren: []
@@ -581,6 +636,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: false,
             nodeInactive: false,
             nodeChildren: []
@@ -591,6 +647,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
@@ -601,6 +658,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
@@ -611,6 +669,7 @@ export class TestTree {
             nodeParentID: 0,
             nodeSelected: false,
             nodeDescendantSelected: false,
+            nodeSearchBreanch: false,
             nodeAuthorized: true,
             nodeInactive: true,
             nodeChildren: []
