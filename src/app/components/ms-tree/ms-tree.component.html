@@ -9,8 +9,6 @@
     ></ms-search>
 
     <mat-card class="tree-display">
-      <!-- <ms-searched-node *ngIf="focus"></ms-searched-node> -->
-
       <mat-tree
         *ngIf="searching"
         [dataSource]="dataSource"
@@ -198,12 +196,14 @@
   <mat-tab label="Show Selected">
     <ng-template matTabContent>
       <ms-show-selected
-        (searchTerm)="searchSelectedNode = highlightNode($event)"
+        (searchTerm)="
+          searchSelectedNode = highlightNode($event); extractNodes($event)
+        "
       ></ms-show-selected>
 
       <mat-card *ngIf="checkSelected" class="tree-display">
         <mat-tree
-          *ngIf="searchingSelected"
+          *ngIf="searchingSelected; else selected"
           [dataSource]="dataSource"
           [treeControl]="treeControl"
           class="ms-tree"
@@ -242,7 +242,9 @@
                   <div
                     *ngIf="node.nodeInactive"
                     class="tree-node-inactive"
-                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                    [innerHTML]="
+                      node.nodeName | searchFilter: searchSelectedNode
+                    "
                   ></div>
 
                   <div class="inactive-text" *ngIf="node.nodeInactive">
@@ -252,7 +254,9 @@
                   <div
                     *ngIf="!node.nodeInactive"
                     class="tree-node-active"
-                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                    [innerHTML]="
+                      node.nodeName | searchFilter: searchSelectedNode
+                    "
                   ></div>
                 </mat-checkbox>
               </div>
@@ -265,6 +269,7 @@
         </mat-tree>
 
         <mat-tree
+          #selected
           *ngIf="!searchingSelected"
           [dataSource]="dataSource"
           [treeControl]="treeControl"

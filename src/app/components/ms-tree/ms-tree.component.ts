@@ -169,14 +169,7 @@ export class MSTreeComponent implements OnInit {
     let allNodes: ITreeNode[] = [];
     let leafNodes: ITreeNode[] = [];
 
-    if ($searchString !== null) {
-      if ($searchString.length > 1) this.searching = true;
-    } else {
-      this.searching = false;
-      this.treeControl.collapseAll();
-      this.treeControl.expand(this.dataSource.data[0]);
-    }
-
+    this.isSearchInProgress($searchString);
     stack.pushStack(this.treeInit.dataSource.data[0]);
 
     while (stack.stack.length > 0) {
@@ -194,16 +187,31 @@ export class MSTreeComponent implements OnInit {
     this.searchNode(allNodes, leafNodes, $searchString);
   }
 
+  private isSearchInProgress($searchString: string): void {
+    if ($searchString !== null) {
+      this.dataSource.data[0].nodeSearchBreanch = true;
+
+      if ($searchString.length > 1) {
+        this.searching = true;
+        this.searchingSelected = true;
+      }
+    } else {
+      this.searching = false;
+      this.searchingSelected = false;
+
+      this.treeControl.collapseAll();
+      this.treeControl.expand(this.dataSource.data[0]);
+    }
+  }
+
   private searchNode(
     allNodes: ITreeNode[],
     leafNodes: ITreeNode[],
     $searchString: string
   ) {
-    if ($searchString !== null)
-      this.dataSource.data[0].nodeSearchBreanch = true;
-
     for (let leaf of leafNodes) {
       let oldNode: ITreeNode = leaf;
+
       while (!isNaN(leaf.nodeParentID)) {
         if (leaf.nodeName === $searchString) {
           leaf.nodeSearchBreanch = true;

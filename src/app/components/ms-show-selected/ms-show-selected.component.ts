@@ -5,6 +5,7 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 import { startWith, map } from "rxjs/operators";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
+import { NestedTreeControl } from "@angular/cdk/tree";
 
 @Component({
   selector: "ms-show-selected",
@@ -12,6 +13,7 @@ import { Stack } from "src/app/classes/stackForDepthFirstSearch";
   styleUrls: ["./ms-show-selected.component.less"]
 })
 export class MsShowSelectedComponent implements OnInit {
+  treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   searchBoxList: string[] = [];
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
@@ -28,6 +30,7 @@ export class MsShowSelectedComponent implements OnInit {
       startWith(""),
       map(value => this._filter(value))
     );
+    this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
   private _filter(value: string): string[] {
@@ -59,6 +62,10 @@ export class MsShowSelectedComponent implements OnInit {
       $searchEvent = null;
       this.searchTerm.emit($searchEvent);
     }
+  }
+
+  backToTop(): void {
+    this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
   fixDataSource(): void {
