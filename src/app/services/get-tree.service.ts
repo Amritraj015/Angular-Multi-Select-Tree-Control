@@ -12,18 +12,19 @@ export class GetTreeService {
 
   constructor() {
     this.dataSource.data = this.getTree();
-    this.dataSource.data = this.fixUnauthorizedNodeHierarchy(
-      this.dataSource.data[0]
-    );
+    this.dataSource.data = this.fixTreeDataSource(this.dataSource.data[0]);
   }
 
-  private fixUnauthorizedNodeHierarchy(tree: ITreeNode): ITreeNode[] {
+  private fixTreeDataSource(tree: ITreeNode): ITreeNode[] {
     let stack = new Stack();
 
     stack.pushStack(tree);
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
+      removedNode.nodeDescendantSelected = false;
+      removedNode.nodeSearchBreanch = false;
+      removedNode.nodeSelected = false;
       if (!removedNode.nodeAuthorized) {
         removedNode = this.denyNodeAccessToUser(removedNode);
         continue;

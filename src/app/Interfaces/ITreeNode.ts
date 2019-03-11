@@ -49,5 +49,6 @@ export interface ITreeNode {
   nodeInactive: boolean;
 
   //    'true' if the node lies on the branch of a searched node else 'false'
+  //    nodeSearchBreanch = false (by default), when being fed to the control
   nodeSearchBreanch: boolean;
 }

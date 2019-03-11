@@ -20,7 +20,7 @@ export class MSTreeComponent implements OnInit {
 
   //  call service to get the tree
   constructor(public treeInit: GetTreeService) {
-    this.searching = true;
+    this.searching = false;
     this.checkSelected = false;
     this.currentTabIndex = 0;
     this.dataSource = treeInit.dataSource;
@@ -59,7 +59,7 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.dataSource.data[0]);
   }
 
-  grtcheckSelected(): boolean {
+  getcheckSelected(): boolean {
     return this.checkSelected;
   }
 
@@ -109,7 +109,7 @@ export class MSTreeComponent implements OnInit {
   }
 
   private SelectedNodesOnBranch(allNodes: ITreeNode[], leafNodes: ITreeNode[]) {
-    if (this.grtcheckSelected())
+    if (this.getcheckSelected())
       this.dataSource.data[0].nodeDescendantSelected = true;
 
     for (let leaf of leafNodes) {
@@ -165,6 +165,9 @@ export class MSTreeComponent implements OnInit {
     let stack = new Stack();
     let allNodes: ITreeNode[] = [];
     let leafNodes: ITreeNode[] = [];
+
+    if ($searchString.length > 1) this.searching = true;
+    else this.searching = false;
 
     stack.pushStack(this.treeInit.dataSource.data[0]);
 
