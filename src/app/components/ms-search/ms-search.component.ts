@@ -16,7 +16,6 @@ export class MsSearchComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
   @Output() searchTerm = new EventEmitter<string>();
-  @Output() searchFocusEmitter = new EventEmitter<string>();
 
   constructor(public treeInit: GetTreeService) {
     this.searchBoxList = this.InitAllAutoCompleteList(
@@ -52,10 +51,6 @@ export class MsSearchComponent implements OnInit {
     }
 
     return this.searchBoxList.sort();
-  }
-
-  searchBoxFocus(focusType: string): void {
-    this.searchFocusEmitter.emit(focusType);
   }
 
   highlight($searchEvent: string): void {

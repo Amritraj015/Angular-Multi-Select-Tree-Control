@@ -3,8 +3,6 @@
     <input
       #searchBox
       matInput
-      (focus)="searchBoxFocus($event.type, $event.target.value)"
-      (blur)="searchBoxFocus($event.type, $event.target.value)"
       type="text"
       aria-label="Number"
       placeholder="Search"
@@ -32,9 +30,7 @@
 
     <mat-autocomplete
       autoActiveFirstOption="true"
-      (optionSelected)="
-        highlight(searchBox.value); searchBoxFocus(searchBox.focus)
-      "
+      (optionSelected)="highlight(searchBox.value)"
       #auto="matAutocomplete"
     >
       <mat-option

@@ -14,7 +14,12 @@
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
-      (click)="searchBox.value = null; highlight(searchBox.value)"
+      (click)="
+        searchBox.value = null;
+        highlight(searchBox.value);
+        fixDataSource();
+        ngOnInit()
+      "
       style="cursor: pointer"
       matSuffix
     >
@@ -32,7 +37,7 @@
         *ngFor="let option of (filteredOptions | async)"
         [value]="option"
       >
-        {{ option }}
+        <div [innerHTML]="option | searchFilter: searchBox.value"></div>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

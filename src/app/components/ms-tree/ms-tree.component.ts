@@ -16,11 +16,13 @@ export class MSTreeComponent implements OnInit {
   checkSelected: boolean;
   currentTabIndex: number;
   searching: boolean;
+  searchingSelected: boolean;
   @Output() selectedCount = new EventEmitter<ITreeNode>();
 
   //  call service to get the tree
   constructor(public treeInit: GetTreeService) {
     this.searching = false;
+    this.searchingSelected = false;
     this.checkSelected = false;
     this.currentTabIndex = 0;
     this.dataSource = treeInit.dataSource;
@@ -50,8 +52,9 @@ export class MSTreeComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized)
+      if (removedNode.nodeAuthorized) {
         removedNode.nodeSelected = node.nodeSelected;
+      }
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
@@ -166,8 +169,13 @@ export class MSTreeComponent implements OnInit {
     let allNodes: ITreeNode[] = [];
     let leafNodes: ITreeNode[] = [];
 
-    if ($searchString.length > 1) this.searching = true;
-    else this.searching = false;
+    if ($searchString !== null) {
+      if ($searchString.length > 1) this.searching = true;
+    } else {
+      this.searching = false;
+      this.treeControl.collapseAll();
+      this.treeControl.expand(this.dataSource.data[0]);
+    }
 
     stack.pushStack(this.treeInit.dataSource.data[0]);
 
@@ -220,16 +228,17 @@ export class MSTreeComponent implements OnInit {
     node.nodeSelected = !node.nodeSelected;
     stack.pushStack(node);
 
-    if (node.nodeSelected) this.treeControl.expandDescendants(node);
-
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized)
+      if (removedNode.nodeAuthorized) {
         removedNode.nodeSelected = node.nodeSelected;
+        removedNode.nodeSearchBreanch = true;
+      }
 
-      if (node.nodeSelected) removedNode.nodeSearchBreanch = true;
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
+
+    this.treeControl.expandDescendants(node);
 
     //  Event emission to ms-tree-container to update selection count
     this.selectedCount.emit(this.dataSource.data[0]);

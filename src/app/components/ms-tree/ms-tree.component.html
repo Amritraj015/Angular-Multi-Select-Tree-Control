@@ -5,7 +5,6 @@
   <!--  This is the "Show All" Tab  -->
   <mat-tab label="Show All">
     <ms-search
-      (searchFocusEmitter)="focus = searchBoxInFocus($event)"
       (searchTerm)="searchTerm = highlightNode($event); extractNodes($event)"
     ></ms-search>
 
@@ -204,6 +203,69 @@
 
       <mat-card *ngIf="checkSelected" class="tree-display">
         <mat-tree
+          *ngIf="searchingSelected"
+          [dataSource]="dataSource"
+          [treeControl]="treeControl"
+          class="ms-tree"
+        >
+          <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+            <li *ngIf="node.nodeSearchBreanch">
+              <div class="mat-tree-node">
+                <button
+                  class="expand-collapse-button"
+                  *ngIf="!checkChildren(node)"
+                  mat-icon-button
+                  matTreeNodeToggle
+                  [attr.aria-label]="'toggle ' + node.nodeName"
+                >
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{
+                      treeControl.isExpanded(node)
+                        ? "expand_more"
+                        : "chevron_right"
+                    }}
+                  </mat-icon>
+                </button>
+
+                <!-- Disabled button to provide padding to leaf nodes -->
+                <button
+                  *ngIf="checkChildren(node)"
+                  mat-icon-button
+                  disabled
+                ></button>
+
+                <mat-checkbox
+                  [checked]="node.nodeSelected"
+                  (change)="selectOnSearch(node)"
+                  color="warn"
+                >
+                  <div
+                    *ngIf="node.nodeInactive"
+                    class="tree-node-inactive"
+                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                  ></div>
+
+                  <div class="inactive-text" *ngIf="node.nodeInactive">
+                    &nbsp; &nbsp; (inactive)
+                  </div>
+
+                  <div
+                    *ngIf="!node.nodeInactive"
+                    class="tree-node-active"
+                    [innerHTML]="node.nodeName | searchFilter: searchTerm"
+                  ></div>
+                </mat-checkbox>
+              </div>
+
+              <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
+                <ng-container matTreeNodeOutlet></ng-container>
+              </ul>
+            </li>
+          </mat-nested-tree-node>
+        </mat-tree>
+
+        <mat-tree
+          *ngIf="!searchingSelected"
           [dataSource]="dataSource"
           [treeControl]="treeControl"
           class="ms-tree"

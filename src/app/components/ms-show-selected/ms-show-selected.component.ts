@@ -60,4 +60,17 @@ export class MsShowSelectedComponent implements OnInit {
       this.searchTerm.emit($searchEvent);
     }
   }
+
+  fixDataSource(): void {
+    let stack = new Stack();
+
+    stack.pushStack(this.treeInit.dataSource.data[0]);
+
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+      removedNode.nodeSearchBreanch = false;
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    }
+  }
 }
