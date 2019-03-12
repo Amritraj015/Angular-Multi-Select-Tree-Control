@@ -38,7 +38,8 @@ export class MsSearchComponent implements OnInit {
     );
   }
 
-  //  Initializes the search list for the auto-complete feature when searching on teh Show All Tab
+  //===========================================================================================
+  //  Initializes the search list for the auto-complete feature when searching on the "Show All" Tab
   private InitAllAutoCompleteList(tree: ITreeNode): string[] {
     let stack = new Stack();
     stack.pushStack(tree);
@@ -53,6 +54,8 @@ export class MsSearchComponent implements OnInit {
     return this.searchBoxList.sort();
   }
 
+  //===========================================================================================
+  //  Emit the search term for the "highlight on search" feature on the "Shoe All" Tab
   highlight($searchEvent: string): void {
     if ($searchEvent.length > 1) this.searchTerm.emit($searchEvent);
     else {
@@ -61,6 +64,9 @@ export class MsSearchComponent implements OnInit {
     }
   }
 
+  //===========================================================================================
+  //  Fixes the tree data source by resetting the "nodeSearchBreanch" of all nodes to false
+  //  once the "clear" button has been clicked on the input field
   fixDataSource(): void {
     let stack = new Stack();
 

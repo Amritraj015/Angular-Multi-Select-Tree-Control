@@ -3,13 +3,21 @@
   animationDuration="100"
   mat-align-tabs="center"
 >
-  <!--  This is the "Show All" Tab  -->
+  <!-- ======================================================================= -->
+  <!-- ====================== This is the "Show All" Tab ===================== -->
+  <!-- ======================================================================= -->
+
   <mat-tab label="Show All">
+    <!-- =================== Search component for the "Show All" Tab =================== -->
+
     <ms-search
-      (searchTerm)="searchTerm = highlightNode($event); extractNodes($event)"
+      (searchTerm)="searchTerm = $event; extractNodes($event)"
     ></ms-search>
 
     <mat-card class="tree-display">
+      <!-- ============================================================================== -->
+      <!-- This tree is rendered when a node is being searched on the "Show All" Tab -->
+
       <mat-tree
         *ngIf="searching"
         [dataSource]="treeInit.dataSource"
@@ -72,13 +80,15 @@
         </mat-nested-tree-node>
       </mat-tree>
 
+      <!-- ============================================================================== -->
+      <!-- This tree is rendered the "Show All" Tab initially loads -->
       <mat-tree
         *ngIf="!searching"
         [dataSource]="treeInit.dataSource"
         [treeControl]="treeControl"
         class="ms-tree"
       >
-        <!-- This is the tree node template for leaf nodes -->
+        <!-- Leaf tree nodes -->
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
           <!--  This displays authorized leaf nodes   -->
           <li
@@ -128,7 +138,7 @@
           </ng-template>
         </mat-tree-node>
 
-        <!-- This is the tree node template for expandable nodes -->
+        <!-- Expandable Tree nodes -->
         <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
           <li *ngIf="node.nodeAuthorized; else unauthorizedNode">
             <div class="mat-tree-node">
@@ -193,16 +203,26 @@
     </mat-card>
   </mat-tab>
 
-  <!--  This is the "Show Selected" Tab  -->
+  <!-- ======================================================================= -->
+  <!-- =================== This is the "Show Selected" Tab =================== -->
+  <!-- ======================================================================= -->
+
   <mat-tab label="Show Selected">
+    <!-- ****************************************** -->
+    <!-- The "Show Selected" Tab is "Lazily loaded" -->
+    <!-- ****************************************** -->
+
     <ng-template matTabContent>
+      <!-- =================== Search component for the "Show Selected" Tab =================== -->
+
       <ms-show-selected
-        (searchTerm)="
-          searchSelectedNode = highlightNode($event); extractNodes($event)
-        "
+        (searchTerm)="searchSelectedNode = $event; extractNodesSelected($event)"
       ></ms-show-selected>
 
       <mat-card *ngIf="checkSelected" class="tree-display">
+        <!-- ============================================================================== -->
+        <!-- This tree is rendered when a node is being searched on the "Show Selected" Tab -->
+
         <mat-tree
           *ngIf="searchingSelected"
           [dataSource]="treeInit.dataSource"
@@ -210,7 +230,7 @@
           class="ms-tree"
         >
           <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-            <li *ngIf="node.nodeSearchBreanch">
+            <li *ngIf="node.nodeSearchBreanch && node.nodeDescendantSelected">
               <div class="mat-tree-node">
                 <button
                   class="expand-collapse-button"
@@ -268,6 +288,9 @@
             </li>
           </mat-nested-tree-node>
         </mat-tree>
+
+        <!-- =========================================================================== -->
+        <!-- This tree is rendered to show all selected nodes on the "Show Selected" Tab -->
 
         <mat-tree
           *ngIf="!searchingSelected"
@@ -336,6 +359,8 @@
         </mat-tree>
       </mat-card>
 
+      <!-- =========================================================================== -->
+      <!-- This div is displayed when no nodes have been selected -->
       <div
         *ngIf="!checkSelected && currentTabIndex === 1"
         class="none-selected-div"

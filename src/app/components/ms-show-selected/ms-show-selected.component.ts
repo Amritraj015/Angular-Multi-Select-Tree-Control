@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { GetTreeService } from "src/app/services/get-tree.service";
@@ -41,7 +41,8 @@ export class MsShowSelectedComponent implements OnInit {
     );
   }
 
-  //  Initializes the search list for the auto-complete feature when searching on teh Show All Tab
+  //===========================================================================================
+  //  Initializes the search list for the auto-complete feature when searching on the "Show Selected" Tab
   private InitAllAutoCompleteList(tree: ITreeNode): string[] {
     let stack = new Stack();
     stack.pushStack(tree);
@@ -56,26 +57,13 @@ export class MsShowSelectedComponent implements OnInit {
     return this.searchBoxList.sort();
   }
 
+  //===========================================================================================
+  //  Emit the search term for the "highlight on search" feature on the "Shoe Selected" Tab
   highlight($searchEvent: string): void {
     if ($searchEvent.length > 1) this.searchTerm.emit($searchEvent);
     else {
       $searchEvent = null;
       this.searchTerm.emit($searchEvent);
-    }
-  }
-
-  backToTop(): void {
-    let stack = new Stack();
-
-    stack.pushStack(this.treeInit.dataSource.data[0]);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      // if (removedNode.nodeAuthorized) {
-      //   removedNode.nodeSearchBreanch = true;
-      //   console.log(removedNode.nodeSearchBreanch);
-      // }
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
   }
 }

@@ -17,6 +17,7 @@ export class MSTreeComponent implements OnInit {
   searchingSelected: boolean;
   @Output() selectedCount = new EventEmitter<ITreeNode>();
 
+  //===========================================================================================
   //  call service to get the tree
   constructor(public treeInit: GetTreeService) {
     this.searching = false;
@@ -25,18 +26,22 @@ export class MSTreeComponent implements OnInit {
     this.currentTabIndex = 0;
   }
 
+  //===========================================================================================
   //  Automatically expand the first level children when the fly-out loads
   ngOnInit() {
     this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
+  //===========================================================================================
   //  check if a node has children
   hasChild = (_: number, node: ITreeNode) =>
     !!node.nodeChildren && node.nodeChildren.length > 0;
 
+  //===========================================================================================
   //  check if a node has children
   checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
 
+  //===========================================================================================
   //  Toggle the checkbox for the current node and its descendants
   //  Expand all descendants of a node when 'Selected'
   selectAndExpand(node: ITreeNode): void {
@@ -59,12 +64,15 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 
+  //===========================================================================================
+  //  Returns true if at least one node is selected in the tree, else returns false
   getcheckSelected(): boolean {
     return this.checkSelected;
   }
 
+  //===========================================================================================
   //  Checks if any node is selected in the tree
-  //  Used for conditional rendering of "None Selected" if no tree niodes have been selected
+  //  Used for conditional rendering of "None Selected" if no tree nodes have been selected
   checkNodeSelection($event: number): void {
     this.checkSelected = false;
     this.currentTabIndex = $event;
@@ -92,6 +100,9 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
+  //===========================================================================================
+  //  Functions to initialize "nodeDescendantSelected" property to display Selected nodes
+  //  on "Show Selected" Tab
   private CheckDescendantsSelection(): void {
     let stack = new Stack();
     let allNodes: ITreeNode[] = [];
@@ -137,6 +148,8 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
+  //===========================================================================================
+  //  Selection feature on the "Show Selected" Tab
   selectOnShowSelectedTab(node: ITreeNode): void {
     let stack = new Stack();
 
@@ -158,11 +171,8 @@ export class MSTreeComponent implements OnInit {
     this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 
-  //  Used to highlight the search results
-  highlightNode($searchString: string): string {
-    return $searchString;
-  }
-
+  //===========================================================================================
+  //  Search functions for the "Show Selected" Tab
   extractNodes($searchString: string): void {
     let stack = new Stack();
     let allNodes: ITreeNode[] = [];
@@ -192,11 +202,9 @@ export class MSTreeComponent implements OnInit {
 
       if ($searchString.length > 1) {
         this.searching = true;
-        this.searchingSelected = true;
       }
     } else {
       this.searching = false;
-      this.searchingSelected = false;
 
       this.treeControl.collapseAll();
       this.treeControl.expand(this.treeInit.dataSource.data[0]);
@@ -229,6 +237,70 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
+  //===========================================================================================
+  //  Search functions for the "Show Selected" Tab
+  extractNodesSelected($searchString: string): void {
+    let stack = new Stack();
+    let allNodes: ITreeNode[] = [];
+    let leafNodes: ITreeNode[] = [];
+
+    this.isSearchInProgressSelected($searchString);
+    stack.pushStack(this.treeInit.dataSource.data[0]);
+
+    while (stack.stack.length > 0) {
+      let removedNode: ITreeNode = stack.popStack();
+
+      removedNode.nodeSearchBreanch = false;
+
+      this.checkChildren(removedNode) && removedNode.nodeAuthorized
+        ? leafNodes.push(removedNode)
+        : allNodes.push(removedNode);
+
+      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    }
+
+    this.searchNodeSelected(allNodes, leafNodes, $searchString);
+  }
+
+  private isSearchInProgressSelected($searchString: string): void {
+    if ($searchString !== null && $searchString.length > 1) {
+      this.searchingSelected = true;
+    } else {
+      this.searchingSelected = false;
+      this.treeControl.collapseAll();
+      this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
+    }
+  }
+
+  private searchNodeSelected(
+    allNodes: ITreeNode[],
+    leafNodes: ITreeNode[],
+    $searchString: string
+  ) {
+    this.treeInit.dataSource.data[0].nodeSearchBreanch = true;
+
+    for (let leaf of leafNodes) {
+      let oldNode: ITreeNode = leaf;
+
+      while (!isNaN(leaf.nodeParentID)) {
+        if (leaf.nodeName === $searchString) {
+          leaf.nodeSearchBreanch = true;
+        } else {
+          if (oldNode.nodeSearchBreanch) leaf.nodeSearchBreanch = true;
+        }
+
+        for (let newNode of allNodes) {
+          if (newNode.nodeID === leaf.nodeParentID) {
+            oldNode = leaf;
+            leaf = newNode;
+          }
+        }
+      }
+    }
+  }
+
+  //===========================================================================================
+  //  Select Functionality while searching tree nodes
   selectOnSearch(node: ITreeNode): void {
     let stack = new Stack();
 
