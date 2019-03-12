@@ -65,18 +65,16 @@ export class MsShowSelectedComponent implements OnInit {
   }
 
   backToTop(): void {
-    this.treeControl.expand(this.treeInit.dataSource.data[0]);
-  }
-
-  fixDataSource(): void {
     let stack = new Stack();
 
     stack.pushStack(this.treeInit.dataSource.data[0]);
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeSearchBreanch = false;
-
+      // if (removedNode.nodeAuthorized) {
+      //   removedNode.nodeSearchBreanch = true;
+      //   console.log(removedNode.nodeSearchBreanch);
+      // }
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
   }

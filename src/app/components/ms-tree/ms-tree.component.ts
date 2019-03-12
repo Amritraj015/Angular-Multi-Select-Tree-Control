@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { NestedTreeControl } from "@angular/cdk/tree";
-import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { GetTreeService } from "src/app/services/get-tree.service";
 
@@ -12,7 +11,6 @@ import { GetTreeService } from "src/app/services/get-tree.service";
 })
 export class MSTreeComponent implements OnInit {
   treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
-  dataSource: MatTreeNestedDataSource<ITreeNode>;
   checkSelected: boolean;
   currentTabIndex: number;
   searching: boolean;
@@ -25,12 +23,11 @@ export class MSTreeComponent implements OnInit {
     this.searchingSelected = false;
     this.checkSelected = false;
     this.currentTabIndex = 0;
-    this.dataSource = treeInit.dataSource;
   }
 
   //  Automatically expand the first level children when the fly-out loads
   ngOnInit() {
-    this.treeControl.expand(this.dataSource.data[0]);
+    this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
   //  check if a node has children
@@ -59,7 +56,7 @@ export class MSTreeComponent implements OnInit {
     }
 
     //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.dataSource.data[0]);
+    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 
   getcheckSelected(): boolean {
@@ -73,6 +70,9 @@ export class MSTreeComponent implements OnInit {
     this.currentTabIndex = $event;
 
     if ($event === 1) {
+      this.treeControl.collapseAll();
+      this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
+
       let stack = new Stack();
       stack.pushStack(this.treeInit.dataSource.data[0]);
 
@@ -86,6 +86,9 @@ export class MSTreeComponent implements OnInit {
       }
 
       this.CheckDescendantsSelection();
+    } else {
+      this.treeControl.collapseAll();
+      this.treeControl.expand(this.treeInit.dataSource.data[0]);
     }
   }
 
@@ -113,7 +116,7 @@ export class MSTreeComponent implements OnInit {
 
   private SelectedNodesOnBranch(allNodes: ITreeNode[], leafNodes: ITreeNode[]) {
     if (this.getcheckSelected())
-      this.dataSource.data[0].nodeDescendantSelected = true;
+      this.treeInit.dataSource.data[0].nodeDescendantSelected = true;
 
     for (let leaf of leafNodes) {
       let oldNode: ITreeNode = leaf;
@@ -152,11 +155,7 @@ export class MSTreeComponent implements OnInit {
     }
 
     //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.dataSource.data[0]);
-  }
-
-  searchBoxInFocus(focus: string): boolean {
-    return focus === "focus";
+    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 
   //  Used to highlight the search results
@@ -189,7 +188,7 @@ export class MSTreeComponent implements OnInit {
 
   private isSearchInProgress($searchString: string): void {
     if ($searchString !== null) {
-      this.dataSource.data[0].nodeSearchBreanch = true;
+      this.treeInit.dataSource.data[0].nodeSearchBreanch = true;
 
       if ($searchString.length > 1) {
         this.searching = true;
@@ -200,7 +199,7 @@ export class MSTreeComponent implements OnInit {
       this.searchingSelected = false;
 
       this.treeControl.collapseAll();
-      this.treeControl.expand(this.dataSource.data[0]);
+      this.treeControl.expand(this.treeInit.dataSource.data[0]);
     }
   }
 
@@ -215,7 +214,7 @@ export class MSTreeComponent implements OnInit {
       while (!isNaN(leaf.nodeParentID)) {
         if (leaf.nodeName === $searchString) {
           leaf.nodeSearchBreanch = true;
-          this.treeControl.expandDescendants(this.dataSource.data[0]);
+          this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
         } else {
           if (oldNode.nodeSearchBreanch) leaf.nodeSearchBreanch = true;
         }
@@ -249,6 +248,6 @@ export class MSTreeComponent implements OnInit {
     this.treeControl.expandDescendants(node);
 
     //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.dataSource.data[0]);
+    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 }

@@ -1,5 +1,6 @@
 <mat-tab-group
   (selectedIndexChange)="checkNodeSelection($event)"
+  animationDuration="100"
   mat-align-tabs="center"
 >
   <!--  This is the "Show All" Tab  -->
@@ -11,7 +12,7 @@
     <mat-card class="tree-display">
       <mat-tree
         *ngIf="searching"
-        [dataSource]="dataSource"
+        [dataSource]="treeInit.dataSource"
         [treeControl]="treeControl"
         class="ms-tree"
       >
@@ -73,7 +74,7 @@
 
       <mat-tree
         *ngIf="!searching"
-        [dataSource]="dataSource"
+        [dataSource]="treeInit.dataSource"
         [treeControl]="treeControl"
         class="ms-tree"
       >
@@ -203,8 +204,8 @@
 
       <mat-card *ngIf="checkSelected" class="tree-display">
         <mat-tree
-          *ngIf="searchingSelected; else selected"
-          [dataSource]="dataSource"
+          *ngIf="searchingSelected"
+          [dataSource]="treeInit.dataSource"
           [treeControl]="treeControl"
           class="ms-tree"
         >
@@ -269,9 +270,8 @@
         </mat-tree>
 
         <mat-tree
-          #selected
           *ngIf="!searchingSelected"
-          [dataSource]="dataSource"
+          [dataSource]="treeInit.dataSource"
           [treeControl]="treeControl"
           class="ms-tree"
         >
