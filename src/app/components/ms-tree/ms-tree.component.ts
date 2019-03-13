@@ -192,13 +192,9 @@ export class MSTreeComponent implements OnInit {
   }
 
   private isSearchInProgress($searchString: string): void {
-    if ($searchString !== null) {
-      this.treeInit.dataSource.data[0].nodeSearchBreanch = true;
-
-      if ($searchString.length > 1) {
-        if (this.currentTabIndex === 0) this.searching = true;
-        else this.searchingSelected = true;
-      }
+    if ($searchString !== null && $searchString.length > 1) {
+      if (this.currentTabIndex === 0) this.searching = true;
+      else this.searchingSelected = true;
     } else {
       if (this.currentTabIndex === 0) {
         this.searching = false;

@@ -66,4 +66,10 @@ export class MsShowSelectedComponent implements OnInit {
       this.searchTerm.emit($searchEvent);
     }
   }
+
+  //===========================================================================================
+  //  Emit an empty search term event to return to the top of the tree on "Show All" Tab
+  backToTopTree($searchEvent: string): void {
+    if ($searchEvent === null || "") this.searchTerm.emit($searchEvent);
+  }
 }

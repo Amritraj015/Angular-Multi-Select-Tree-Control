@@ -65,18 +65,8 @@ export class MsSearchComponent implements OnInit {
   }
 
   //===========================================================================================
-  //  Fixes the tree data source by resetting the "nodeSearchBreanch" of all nodes to false
-  //  once the "clear" button has been clicked on the input field
-  fixDataSource(): void {
-    let stack = new Stack();
-
-    stack.pushStack(this.treeInit.dataSource.data[0]);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeSearchBreanch = false;
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
+  //  Emit an empty search term event to return to the top of the tree on "Show All" Tab
+  backToTopTree($searchEvent: string): void {
+    if ($searchEvent.length === 0) this.searchTerm.emit($searchEvent);
   }
 }

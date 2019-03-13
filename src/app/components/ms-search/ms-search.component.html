@@ -13,19 +13,14 @@
       placeholder="Search"
       [formControl]="searchControl"
       [matAutocomplete]="auto"
-      (input)="highlight($event.target.value)"
+      (input)="backToTopTree($event.target.value)"
     />
 
     <!-- "Search" and "Clear" icons that toggle depending on the input field "value" -->
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
-      (click)="
-        searchBox.value = null;
-        highlight(searchBox.value);
-        fixDataSource();
-        ngOnInit()
-      "
+      (click)="searchBox.value = null; highlight(searchBox.value); ngOnInit()"
       style="cursor: pointer"
       matSuffix
     >

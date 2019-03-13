@@ -13,7 +13,7 @@
       placeholder="Search"
       [formControl]="searchControl"
       [matAutocomplete]="auto"
-      (input)="highlight($event.target.value)"
+      (input)="backToTopTree($event.target.value)"
     />
 
     <!-- "Search" and "Clear" icons that toggle depending on the input field "value" -->
