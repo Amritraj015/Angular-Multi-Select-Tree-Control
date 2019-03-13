@@ -11,6 +11,7 @@
     <!-- =================== Search component for the "Show All" Tab =================== -->
 
     <ms-search
+      [tabIndex]="currentTabIndex"
       (searchTerm)="searchTerm = $event; extractNodes($event)"
     ></ms-search>
 

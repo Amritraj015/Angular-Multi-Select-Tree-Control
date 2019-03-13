@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
@@ -16,6 +16,7 @@ export class MsSearchComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
   @Output() searchTerm = new EventEmitter<string>();
+  @Input() tabIndex: number;
 
   constructor(public treeInit: GetTreeService) {
     this.searchBoxList = this.InitAllAutoCompleteList(
@@ -67,6 +68,7 @@ export class MsSearchComponent implements OnInit {
   //===========================================================================================
   //  Emit an empty search term event to return to the top of the tree on "Show All" Tab
   backToTopTree($searchEvent: string): void {
+    //if (this.tabIndex === 0) $searchEvent === null;
     if ($searchEvent.length === 0) this.searchTerm.emit($searchEvent);
   }
 }
