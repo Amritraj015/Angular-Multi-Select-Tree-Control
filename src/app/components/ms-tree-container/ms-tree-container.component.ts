@@ -18,6 +18,9 @@ export class MSTreeContainerComponent {
     this.renderTreeDiv = false;
   }
 
+  //==========================================================================
+  //  Calculates the total number of selected nodes everytime
+  //  nodes are selected/un-selected
   updateSelectedCount(treeObject: ITreeNode): void {
     let stack = new Stack();
     stack.pushStack(treeObject);
@@ -34,6 +37,8 @@ export class MSTreeContainerComponent {
     this.renderTree(true);
   }
 
+  //==========================================================================
+  //  Renders the Selected Count on the expansion pannel header
   renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
     if (!firedFromUpdateSelectedCount) {
       this.text = !this.renderTreeDiv ? " Selected" : "Select User Groups";

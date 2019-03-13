@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ITreeNode } from "../Interfaces/ITreeNode";
 import { Stack } from "../classes/stackForDepthFirstSearch";
 import { MatTreeNestedDataSource } from "@angular/material";
-import { TestTree } from "../classes/testTree";
+import { TestTree } from "../testData/testTree";
 
 @Injectable({
   providedIn: "root"

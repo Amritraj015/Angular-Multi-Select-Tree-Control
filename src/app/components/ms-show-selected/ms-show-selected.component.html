@@ -1,9 +1,14 @@
+<!-- ============================================================= -->
+<!-- This div contains the search form for the "Show Selected Tab" -->
+<!-- ============================================================= -->
+
 <div class="search-container">
   <mat-form-field>
+    <!-- Search Field -->
     <input
       #searchBox
       matInput
-      type="text"
+      type="search"
       aria-label="Number"
       placeholder="Search"
       [formControl]="searchControl"
@@ -11,6 +16,7 @@
       (input)="highlight($event.target.value)"
     />
 
+    <!-- "Search" and "Clear" icons that toggle depending on the input field "value" -->
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
@@ -23,6 +29,7 @@
 
     <mat-hint>Search Selected User Group(s)</mat-hint>
 
+    <!-- Auto-complete feature -->
     <mat-autocomplete
       autoActiveFirstOption="true"
       (optionSelected)="highlight(searchBox.value)"
