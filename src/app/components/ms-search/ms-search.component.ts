@@ -88,9 +88,4 @@ export class MsSearchComponent implements OnInit {
   backToTopTree($searchEvent: string): void {
     if ($searchEvent.length === 0) this.searchTerm.emit($searchEvent);
   }
-
-  resetInputValue(): string {
-    console.log();
-    if (this.tabIndex === 1) return "hello";
-  }
 }
