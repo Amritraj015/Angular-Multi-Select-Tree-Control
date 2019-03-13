@@ -1,4 +1,13 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  ElementRef,
+  Input
+} from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { GetTreeService } from "src/app/services/get-tree.service";
@@ -17,7 +26,9 @@ export class MsShowSelectedComponent implements OnInit {
   searchBoxList: string[] = [];
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
+  @Input() tabIndex: number;
   @Output() searchTerm = new EventEmitter<string>();
+  @ViewChild("searchBox") inputValue: ElementRef;
 
   constructor(public treeInit: GetTreeService) {
     this.searchBoxList = this.InitAllAutoCompleteList(
@@ -31,6 +42,13 @@ export class MsShowSelectedComponent implements OnInit {
       map(value => this._filter(value))
     );
     this.treeControl.expand(this.treeInit.dataSource.data[0]);
+  }
+
+  ngOnChanges(tabChange: SimpleChanges): void {
+    if (tabChange["tabIndex"].currentValue === 0) {
+      this.inputValue.nativeElement.value = null;
+      this.searchTerm.emit(this.inputValue.nativeElement.value);
+    }
   }
 
   private _filter(value: string): string[] {

@@ -217,6 +217,7 @@
       <!-- =================== Search component for the "Show Selected" Tab =================== -->
 
       <ms-show-selected
+        [tabIndex]="currentTabIndex"
         (searchTerm)="searchSelectedNode = $event; extractNodes($event)"
       ></ms-show-selected>
 

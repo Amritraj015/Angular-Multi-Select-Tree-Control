@@ -1,4 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  SimpleChanges,
+  ViewChild,
+  ElementRef
+} from "@angular/core";
 import { Observable } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { startWith, map } from "rxjs/operators";
@@ -17,6 +26,7 @@ export class MsSearchComponent implements OnInit {
   searchControl = new FormControl();
   @Output() searchTerm = new EventEmitter<string>();
   @Input() tabIndex: number;
+  @ViewChild("searchBox") inputValue: ElementRef;
 
   constructor(public treeInit: GetTreeService) {
     this.searchBoxList = this.InitAllAutoCompleteList(
@@ -24,11 +34,19 @@ export class MsSearchComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filteredOptions = this.searchControl.valueChanges.pipe(
       startWith(""),
       map(value => this._filter(value))
     );
+  }
+
+  ngOnChanges(tabChange: SimpleChanges): void {
+    if (tabChange["tabIndex"].currentValue === 1) {
+      this.inputValue.nativeElement.value = null;
+      this.searchTerm.emit(this.inputValue.nativeElement.value);
+      this.ngOnInit();
+    }
   }
 
   private _filter(value: string): string[] {
@@ -68,7 +86,6 @@ export class MsSearchComponent implements OnInit {
   //===========================================================================================
   //  Emit an empty search term event to return to the top of the tree on "Show All" Tab
   backToTopTree($searchEvent: string): void {
-    //if (this.tabIndex === 0) $searchEvent === null;
     if ($searchEvent.length === 0) this.searchTerm.emit($searchEvent);
   }
 }
