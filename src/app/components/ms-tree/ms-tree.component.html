@@ -216,7 +216,7 @@
       <!-- =================== Search component for the "Show Selected" Tab =================== -->
 
       <ms-show-selected
-        (searchTerm)="searchSelectedNode = $event; extractNodesSelected($event)"
+        (searchTerm)="searchSelectedNode = $event; extractNodes($event)"
       ></ms-show-selected>
 
       <mat-card *ngIf="checkSelected" class="tree-display">
