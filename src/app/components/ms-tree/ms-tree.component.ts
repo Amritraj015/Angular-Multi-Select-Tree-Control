@@ -29,7 +29,7 @@ export class MSTreeComponent implements OnInit {
 
   //===========================================================================================
   //  Automatically expand the first level children when the fly-out loads
-  ngOnInit() {
+  ngOnInit(): void {
     this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
@@ -41,12 +41,6 @@ export class MSTreeComponent implements OnInit {
   //===========================================================================================
   //  check if a node has children
   checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
-
-  //===========================================================================================
-  //  Returns true if at least one node is selected in the tree, else returns false
-  getcheckSelected(): boolean {
-    return this.checkSelected;
-  }
 
   //===========================================================================================
   //  Toggle the checkbox for the current node and its descendants
