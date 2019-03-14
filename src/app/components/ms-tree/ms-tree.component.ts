@@ -61,9 +61,13 @@ export class MSTreeComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized) {
+
+      if (removedNode.nodeAuthorized)
         removedNode.nodeSelected = node.nodeSelected;
-      }
+
+      if (node.nodeSelected && this.currentTabIndex === 1)
+        removedNode.nodeDescendantSelected = true;
+
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
@@ -74,13 +78,12 @@ export class MSTreeComponent implements OnInit {
   //===========================================================================================
   //  Checks if any node is selected in the tree
   //  Used for conditional rendering of "None Selected" if no tree nodes have been selected
-  checkNodeSelection($event: number): void {
+  checkNodeSelection($tabIndex: number): void {
     this.checkSelected = false;
-    this.currentTabIndex = $event;
+    this.currentTabIndex = $tabIndex;
 
-    if ($event === 1) {
+    if ($tabIndex === 1) {
       this.searchingSelected = false;
-      this.treeControl.collapseAll();
       this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
 
       let stack = new Stack();
@@ -146,29 +149,6 @@ export class MSTreeComponent implements OnInit {
 
       for (let newNode of removedNode.nodeChildren) queue.Enqueue(newNode);
     }
-  }
-
-  //===========================================================================================
-  //  Selection feature on the "Show Selected" Tab
-  selectOnShowSelectedTab(node: ITreeNode): void {
-    let stack = new Stack();
-
-    node.nodeSelected = !node.nodeSelected;
-    stack.pushStack(node);
-
-    if (node.nodeSelected) this.treeControl.expandDescendants(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized)
-        removedNode.nodeSelected = node.nodeSelected;
-
-      if (node.nodeSelected) removedNode.nodeDescendantSelected = true;
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-
-    //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 
   //===========================================================================================
