@@ -61,9 +61,13 @@ export class MSTreeComponent implements OnInit {
 
     while (stack.stack.length > 0) {
       let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized) {
+
+      if (removedNode.nodeAuthorized)
         removedNode.nodeSelected = node.nodeSelected;
-      }
+
+      if (node.nodeSelected && this.currentTabIndex === 1)
+        removedNode.nodeDescendantSelected = true;
+
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
 
@@ -146,29 +150,6 @@ export class MSTreeComponent implements OnInit {
 
       for (let newNode of removedNode.nodeChildren) queue.Enqueue(newNode);
     }
-  }
-
-  //===========================================================================================
-  //  Selection feature on the "Show Selected" Tab
-  selectOnShowSelectedTab(node: ITreeNode): void {
-    let stack = new Stack();
-
-    node.nodeSelected = !node.nodeSelected;
-    stack.pushStack(node);
-
-    if (node.nodeSelected) this.treeControl.expandDescendants(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized)
-        removedNode.nodeSelected = node.nodeSelected;
-
-      if (node.nodeSelected) removedNode.nodeDescendantSelected = true;
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-
-    //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
   }
 
   //===========================================================================================
