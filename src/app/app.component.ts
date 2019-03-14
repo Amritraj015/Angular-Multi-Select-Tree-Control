@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 @Component({
-  selector: "ms-main",
+  selector: "ms-tree-control",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.less"]
 })
