@@ -44,19 +44,21 @@ export class MsShowSelectedComponent implements OnInit {
     this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
-  ngOnChanges(tabChange: SimpleChanges): void {
-    if (tabChange["tabIndex"].currentValue === 0) {
-      this.inputValue.nativeElement.value = null;
-      this.searchTerm.emit(this.inputValue.nativeElement.value);
-    }
-  }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.searchBoxList.filter(option =>
       option.toLowerCase().includes(filterValue)
     );
+  }
+
+  //===========================================================================================
+  //  Clears the input search field on Tab change
+  ngOnChanges(tabChange: SimpleChanges): void {
+    if (tabChange["tabIndex"].currentValue === 0) {
+      this.inputValue.nativeElement.value = null;
+      this.searchTerm.emit(this.inputValue.nativeElement.value);
+    }
   }
 
   //===========================================================================================

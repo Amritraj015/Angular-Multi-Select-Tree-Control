@@ -41,20 +41,22 @@ export class MsSearchComponent implements OnInit {
     );
   }
 
-  ngOnChanges(tabChange: SimpleChanges): void {
-    if (tabChange["tabIndex"].currentValue === 1) {
-      this.inputValue.nativeElement.value = null;
-      this.searchTerm.emit(this.inputValue.nativeElement.value);
-      this.ngOnInit();
-    }
-  }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.searchBoxList.filter(option =>
       option.toLowerCase().includes(filterValue)
     );
+  }
+
+  //===========================================================================================
+  //  Clears the input search field on Tab change
+  ngOnChanges(tabChange: SimpleChanges): void {
+    if (tabChange["tabIndex"].currentValue === 1) {
+      this.inputValue.nativeElement.value = null;
+      this.searchTerm.emit(this.inputValue.nativeElement.value);
+      this.ngOnInit();
+    }
   }
 
   //===========================================================================================
