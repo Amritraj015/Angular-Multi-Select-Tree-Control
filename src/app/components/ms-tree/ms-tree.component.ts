@@ -78,13 +78,12 @@ export class MSTreeComponent implements OnInit {
   //===========================================================================================
   //  Checks if any node is selected in the tree
   //  Used for conditional rendering of "None Selected" if no tree nodes have been selected
-  checkNodeSelection($event: number): void {
+  checkNodeSelection($tabIndex: number): void {
     this.checkSelected = false;
-    this.currentTabIndex = $event;
+    this.currentTabIndex = $tabIndex;
 
-    if ($event === 1) {
+    if ($tabIndex === 1) {
       this.searchingSelected = false;
-      this.treeControl.collapseAll();
       this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
 
       let stack = new Stack();
