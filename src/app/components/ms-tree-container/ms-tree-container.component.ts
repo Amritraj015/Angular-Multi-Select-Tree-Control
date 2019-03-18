@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input, Output } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 
@@ -11,6 +11,7 @@ export class MSTreeContainerComponent {
   count: number;
   text: string;
   renderTreeDiv: boolean;
+  @Input() treeIsSearchable: boolean;
 
   constructor() {
     this.count = 0;

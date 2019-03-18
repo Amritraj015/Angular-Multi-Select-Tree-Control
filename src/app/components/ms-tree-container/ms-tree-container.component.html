@@ -30,6 +30,7 @@
     <ng-template matExpansionPanelContent>
       <ms-tree
         *ngIf="renderTreeDiv"
+        [treeIsSearchable]="treeIsSearchable"
         (selectedCount)="updateSelectedCount($event)"
       ></ms-tree>
     </ng-template>

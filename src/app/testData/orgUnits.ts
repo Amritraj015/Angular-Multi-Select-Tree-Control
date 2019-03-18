@@ -1,4 +1,4 @@
-let OrgUnits = [
+let orgUnits = [
     {
         "companyid": "100235",
         "companyname": "NRT LLC",
@@ -10435,3 +10435,5 @@ let OrgUnits = [
         "parentid": "101474"
     }
 ];
+
+console.log(typeof JSON.stringify(orgUnits));
