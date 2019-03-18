@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
@@ -17,6 +17,7 @@ export class MSTreeComponent implements OnInit {
   searching: boolean;
   searchingSelected: boolean;
   @Output() selectedCount = new EventEmitter<ITreeNode>();
+  @Input() treeIsSearchable: boolean;
 
   //===========================================================================================
   //  call service to get the tree
@@ -31,6 +32,7 @@ export class MSTreeComponent implements OnInit {
   //  Automatically expand the first level children when the fly-out loads
   ngOnInit(): void {
     this.treeControl.expand(this.treeInit.dataSource.data[0]);
+    console.log(this.treeIsSearchable);
   }
 
   //===========================================================================================

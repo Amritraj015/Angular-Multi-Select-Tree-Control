@@ -21,10 +21,12 @@ import { GetTreeService } from "./services/get-tree.service";
 import { SearchFilterPipe } from "./pipes/search-filter.pipe";
 import { MsSearchComponent } from "./components/ms-search/ms-search.component";
 import { MsShowSelectedComponent } from "./components/ms-show-selected/ms-show-selected.component";
+import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree-container.component";
 
 @NgModule({
   declarations: [
     MSMainComponent,
+    MSTreeContainerComponent,
     MSTreeComponent,
     MsSearchComponent,
     SearchFilterPipe,

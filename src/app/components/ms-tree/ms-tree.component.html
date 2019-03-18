@@ -11,6 +11,7 @@
     <!-- =================== Search component for the "Show All" Tab =================== -->
 
     <ms-search
+      *ngIf="treeIsSearchable"
       [tabIndex]="currentTabIndex"
       (searchTerm)="searchTerm = $event; extractNodes($event)"
     ></ms-search>
@@ -217,6 +218,7 @@
       <!-- =================== Search component for the "Show Selected" Tab =================== -->
 
       <ms-show-selected
+        *ngIf="treeIsSearchable"
         [tabIndex]="currentTabIndex"
         (searchTerm)="searchSelectedNode = $event; extractNodes($event)"
       ></ms-show-selected>
