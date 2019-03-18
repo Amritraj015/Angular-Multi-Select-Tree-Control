@@ -16,7 +16,6 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MSMainComponent } from "./app.component";
-import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree-container.component";
 import { MSTreeComponent } from "./components/ms-tree/ms-tree.component";
 import { GetTreeService } from "./services/get-tree.service";
 import { SearchFilterPipe } from "./pipes/search-filter.pipe";
@@ -26,7 +25,6 @@ import { MsShowSelectedComponent } from "./components/ms-show-selected/ms-show-s
 @NgModule({
   declarations: [
     MSMainComponent,
-    MSTreeContainerComponent,
     MSTreeComponent,
     MsSearchComponent,
     SearchFilterPipe,
