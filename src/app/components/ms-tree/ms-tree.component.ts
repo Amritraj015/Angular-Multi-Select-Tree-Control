@@ -32,7 +32,6 @@ export class MSTreeComponent implements OnInit {
   //  Automatically expand the first level children when the fly-out loads
   ngOnInit(): void {
     this.treeControl.expand(this.treeInit.dataSource.data[0]);
-    console.log(this.treeIsSearchable);
   }
 
   //===========================================================================================
