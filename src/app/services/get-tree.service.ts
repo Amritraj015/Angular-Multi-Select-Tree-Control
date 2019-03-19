@@ -3,6 +3,8 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
 import { Stack } from "../classes/stackForDepthFirstSearch";
 import { MatTreeNestedDataSource } from "@angular/material";
 import { TestTree } from "../testData/testTree";
+import { OrgUnitsDataSet } from "../testData/orgUnits";
+import { Queue } from "../classes/queueForBreadthFirstSearch";
 
 @Injectable({
   providedIn: "root"
@@ -25,28 +27,10 @@ export class GetTreeService {
       removedNode.nodeDescendantSelected = false;
       removedNode.nodeSearchBreanch = false;
       removedNode.nodeSelected = false;
-      if (!removedNode.nodeAuthorized) {
-        removedNode = this.denyNodeAccessToUser(removedNode);
-        continue;
-      }
+
       for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
     return [tree];
-  }
-
-  private denyNodeAccessToUser(node: ITreeNode): ITreeNode {
-    let stack = new Stack();
-
-    stack.pushStack(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeAuthorized = false;
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-
-    return node;
   }
 
   //    This method will make a request to a server
@@ -58,4 +42,6 @@ export class GetTreeService {
     let test = new TestTree();
     return test.getTreeData();
   }
+
+  //==============================================================================
 }

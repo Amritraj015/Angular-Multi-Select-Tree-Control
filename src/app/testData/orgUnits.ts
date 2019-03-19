@@ -1,5 +1,7 @@
+import { ITreeNode } from '../Interfaces/ITreeNode';
+
 export class OrgUnitsDataSet {
-    orgUnits: any = [
+  orgUnits: any = [
           {
             companyid: "100235",
             companyname: "NRT LLC",
@@ -10437,5 +10439,8 @@ export class OrgUnitsDataSet {
           }
         ];
   
-}
 
+       
+      }
+
+      
