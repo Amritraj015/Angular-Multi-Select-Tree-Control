@@ -3,7 +3,7 @@
 //  This interface will need to be implemented appropriately
 //  wherever the Multi-Select Tree control is being integrated.
 
-export interface ITreeNode {
+export class ITreeNode {
   //    name of the node
   nodeName: string;
 
@@ -57,4 +57,9 @@ export interface ITreeNode {
   //
   //    Initial default value must be "false"
   nodeSearchBreanch: boolean;
+
+  //======================================================================
+  level: number;
+  expandable: boolean;
+  isLoading: boolean;
 }

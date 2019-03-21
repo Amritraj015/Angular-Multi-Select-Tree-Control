@@ -26,7 +26,10 @@ export class TreeMap {
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSearchBreanch: false,
-        nodeChildren: []
+        nodeChildren: [],
+        level: 1,
+        expandable: false,
+        isLoading: false
       };
 
       allNodes.push(newNode);
