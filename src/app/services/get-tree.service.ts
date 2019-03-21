@@ -3,7 +3,6 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
 import { MatTreeNestedDataSource } from "@angular/material";
 import { OrgUnitsDataSet } from "../testData/medium_dataset";
 import { TreeMap } from "../classes/treeMap";
-import { FlatTreeNode } from "../classes/flatTreeNode";
 import { FlatTreeControl } from "@angular/cdk/tree";
 import { BehaviorSubject, Observable, merge } from "rxjs";
 import { CollectionViewer, SelectionChange } from "@angular/cdk/collections";
@@ -109,7 +108,7 @@ export class GetTreeService {
 
     setTimeout(() => {
       if (expand) {
-        const nodes = children.map(name => new ITreeNode());
+        const nodes = children.map(ID => new ITreeNode());
         this.data.splice(index + 1, 0, ...nodes);
       } else {
         let count = 0;
