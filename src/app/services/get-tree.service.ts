@@ -1,18 +1,25 @@
 import { Injectable } from "@angular/core";
 import { ITreeNode } from "../Interfaces/ITreeNode";
 import { MatTreeNestedDataSource } from "@angular/material";
-import { TestTree } from "../testData/testTree";
-import { OrgUnitsDataSet } from "../testData/orgUnits";
+import { OrgUnitsDataSet } from "../testData/medium_dataset";
+import { TreeMap } from "../classes/treeMap";
+import { FlatTreeNode } from "../classes/flatTreeNode";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { BehaviorSubject, Observable, merge } from "rxjs";
+import { CollectionViewer, SelectionChange } from "@angular/cdk/collections";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
-  rootLevelNode: number;
+  private treeControl: FlatTreeControl<FlatTreeNode>;
+  private database: TreeMap;
 
   constructor() {
     this.dataSource.data = this.getTree();
+    let treeMap = new TreeMap();
   }
 
   //    This method will make a request to a server
@@ -21,16 +28,6 @@ export class GetTreeService {
   //    one and only one nested tree object ***
 
   getTree(): ITreeNode[] {
-    //=====================================================
-    //  SMALL SIZE DATASET
-    //=====================================================
-    // let test = new TestTree();
-    // return test.getTreeData();
-    //=====================================================
-
-    //=====================================================
-    //  MEDIUM SIZE DATASET
-    //=====================================================
     let tree = new OrgUnitsDataSet();
     let allNodes: ITreeNode[] = [];
 
@@ -50,52 +47,87 @@ export class GetTreeService {
       allNodes.push(newNode);
     }
 
-    let treeMap = new Map<number, number[]>();
-    treeMap.set(allNodes[0].nodeID, []);
-    let count = 0;
-    for (let node of allNodes) {
-      for (let i = allNodes.indexOf(node); i < allNodes.length; i++) {
-        if (treeMap.has(node.nodeID)) {
-          if (node.nodeID === allNodes[i].nodeParentID) {
-            let children = treeMap.get(node.nodeID);
-            children.push(allNodes[i].nodeID);
-            treeMap.set(node.nodeID, children);
-          }
-        } else {
-          treeMap.set(node.nodeID, []);
-        }
-      }
-      count += treeMap.get(node.nodeID).length;
-      if (treeMap.get(node.nodeID).length === 0) treeMap.delete(node.nodeID);
-    }
-    this.rootLevelNode = allNodes[0].nodeID;
-
-    console.log(this.rootLevelNode);
-    console.log(count);
-    console.log(treeMap);
-
-    // let stack = new Stack();
-    // stack.pushStack(newTree);
-
-    // for (let node of allNodes) {
-    //   stack.popStack();
-    //   for (let newNode of allNodes) {
-    //     if (newNode.nodeParentID === node.nodeID) {
-    //       node.nodeChildren.push(newNode);
-    //       stack.pushStack(newNode);
-    //     }
-    //   }
-    // }
-
-    // console.log(newTree);
     let newTree: ITreeNode = allNodes[0];
     return [newTree];
-    //=====================================================
+  }
 
-    //=====================================================
-    //  LARGE SIZE DATASET
-    //=====================================================
+  //======================================================================================
 
-    //=====================================================
+  dataChange = new BehaviorSubject<FlatTreeNode[]>([]);
+
+  get data(): FlatTreeNode[] {
+    return this.dataChange.value;
+  }
+  set data(value: FlatTreeNode[]) {
+    this.treeControl.dataNodes = value;
+    this.dataChange.next(value);
+  }
+
+  connect(collectionViewer: CollectionViewer): Observable<FlatTreeNode[]> {
+    this.treeControl.expansionModel.onChange.subscribe(change => {
+      if (
+        (change as SelectionChange<FlatTreeNode>).added ||
+        (change as SelectionChange<FlatTreeNode>).removed
+      ) {
+        this.handleTreeControl(change as SelectionChange<FlatTreeNode>);
+      }
+    });
+
+    return merge(collectionViewer.viewChange, this.dataChange).pipe(
+      map(() => this.data)
+    );
+  }
+
+  /** Handle expand/collapse behaviors */
+  handleTreeControl(change: SelectionChange<FlatTreeNode>) {
+    if (change.added) {
+      change.added.forEach(node => this.toggleNode(node, true));
+    }
+    if (change.removed) {
+      change.removed
+        .slice()
+        .reverse()
+        .forEach(node => this.toggleNode(node, false));
+    }
+  }
+
+  /**
+   * Toggle the node, remove from display list
+   */
+  toggleNode(node: FlatTreeNode, expand: boolean) {
+    const children = this.database.getChildren(node.nodeID);
+    const index = this.data.indexOf(node);
+    if (!children || index < 0) {
+      // If no children, or cannot find the node, no op
+      return;
+    }
+
+    node.isLoading = true;
+
+    setTimeout(() => {
+      if (expand) {
+        const nodes = children.map(
+          name =>
+            new FlatTreeNode(
+              name,
+              node.level + 1,
+              this.database.isExpandable(name)
+            )
+        );
+        this.data.splice(index + 1, 0, ...nodes);
+      } else {
+        let count = 0;
+        for (
+          let i = index + 1;
+          i < this.data.length && this.data[i].level > node.level;
+          i++, count++
+        ) {}
+        this.data.splice(index + 1, count);
+      }
+
+      // notify the change
+      this.dataChange.next(this.data);
+      node.isLoading = false;
+    }, 1000);
   }
 }
