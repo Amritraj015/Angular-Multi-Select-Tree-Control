@@ -25,6 +25,8 @@ export interface ITreeNode {
   //
   //    true = node is selected
   //    false = node is not selected
+  //
+  //    Initial default value must be "false"
   nodeSelected: boolean;
 
   //    'nodeVisisted' is used for the Depth-First Search Algorithm to track if a given
@@ -35,6 +37,8 @@ export interface ITreeNode {
   //
   //    true = node visited already
   //    false = node not vivited yet
+  //
+  //    Initial default value must be "false"
   nodeDescendantSelected: boolean;
 
   //    'nodeAuthorized' is used to designate if a given node 'n' is accessible to a given user/user group 'g'
@@ -50,5 +54,7 @@ export interface ITreeNode {
 
   //    'true' if the node lies on the branch of a searched node else 'false'
   //    nodeSearchBreanch = false (by default), when being fed to the control
+  //
+  //    Initial default value must be "false"
   nodeSearchBreanch: boolean;
 }

@@ -1,17 +1,17 @@
 class ITreeNode {
-  nodeName: string;
-  nodeID: number;
-  nodeParentID: number;
-  nodeChildren: ITreeNode[];
-  nodeSelected: boolean;
-  nodeDescendantSelected: boolean;
-  nodeAuthorized: boolean;
-  nodeInactive: boolean;
-  nodeSearchBreanch: boolean;
+  nodeName;
+  nodeID;
+  nodeParentID;
+  nodeChildren;
+  nodeSelected;
+  nodeDescendantSelected;
+  nodeAuthorized;
+  nodeInactive;
+  nodeSearchBreanch;
 }
 
 class Hello {
-  orgUnits: any = [
+  orgUnits = [
     {
       companyid: "114776",
       companyname: "NRT PbZ Ohio",
@@ -43,5 +43,5 @@ class Hello {
   }
 }
 
-// let x = new Hello();
-// x.buildTreeMap();
+let x = new Hello();
+x.buildTreeMap();

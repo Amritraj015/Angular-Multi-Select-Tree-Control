@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
 import { ITreeNode } from "../Interfaces/ITreeNode";
-import { Stack } from "../classes/stackForDepthFirstSearch";
 import { MatTreeNestedDataSource } from "@angular/material";
 import { TestTree } from "../testData/testTree";
 import { OrgUnitsDataSet } from "../testData/orgUnits";
-import { Queue } from "../classes/queueForBreadthFirstSearch";
+import { Stack } from "../classes/stackForDepthFirstSearch";
 
 @Injectable({
   providedIn: "root"
@@ -14,23 +13,6 @@ export class GetTreeService {
 
   constructor() {
     this.dataSource.data = this.getTree();
-    this.dataSource.data = this.fixTreeDataSource(this.dataSource.data[0]);
-  }
-
-  private fixTreeDataSource(tree: ITreeNode): ITreeNode[] {
-    let stack = new Stack();
-
-    stack.pushStack(tree);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeDescendantSelected = false;
-      removedNode.nodeSearchBreanch = false;
-      removedNode.nodeSelected = false;
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-    return [tree];
   }
 
   //    This method will make a request to a server
@@ -39,9 +21,64 @@ export class GetTreeService {
   //    one and only one nested tree object ***
 
   getTree(): ITreeNode[] {
-    let test = new TestTree();
-    return test.getTreeData();
-  }
+    //=====================================================
+    //  SMALL SIZE DATASET
+    //=====================================================
+    // let test = new TestTree();
+    // return test.getTreeData();
+    //=====================================================
 
-  //==============================================================================
+    //=====================================================
+    //  MEDIUM SIZE DATASET
+    //=====================================================
+    let tree = new OrgUnitsDataSet();
+    let allNodes: ITreeNode[] = [];
+
+    for (let org of tree.orgUnits) {
+      var newNode: ITreeNode = {
+        nodeName: org.companyname,
+        nodeID: parseInt(org.companyid),
+        nodeParentID: parseInt(org.parentid),
+        nodeSelected: false,
+        nodeDescendantSelected: false,
+        nodeAuthorized: true,
+        nodeInactive: false,
+        nodeSearchBreanch: false,
+        nodeChildren: []
+      };
+
+      allNodes.push(newNode);
+    }
+
+    let newTree: ITreeNode = allNodes[0];
+
+    let treeMap = new Map<ITreeNode, ITreeNode[]>();
+
+    for (let node of allNodes) {
+      // if(tree)
+    }
+
+    // let stack = new Stack();
+    // stack.pushStack(newTree);
+
+    // for (let node of allNodes) {
+    //   stack.popStack();
+    //   for (let newNode of allNodes) {
+    //     if (newNode.nodeParentID === node.nodeID) {
+    //       node.nodeChildren.push(newNode);
+    //       stack.pushStack(newNode);
+    //     }
+    //   }
+    // }
+
+    // console.log(newTree);
+    return [newTree];
+    //=====================================================
+
+    //=====================================================
+    //  LARGE SIZE DATASET
+    //=====================================================
+
+    //=====================================================
+  }
 }

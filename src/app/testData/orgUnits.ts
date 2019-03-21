@@ -1,4 +1,3 @@
-import { ITreeNode } from '../Interfaces/ITreeNode';
 
 export class OrgUnitsDataSet {
   orgUnits: any = [
@@ -10438,9 +10437,5 @@ export class OrgUnitsDataSet {
             parentid: "101474"
           }
         ];
-  
-
-       
       }
 
-      
