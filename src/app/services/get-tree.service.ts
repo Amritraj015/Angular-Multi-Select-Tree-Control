@@ -3,13 +3,13 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
 import { MatTreeNestedDataSource } from "@angular/material";
 import { TestTree } from "../testData/testTree";
 import { OrgUnitsDataSet } from "../testData/orgUnits";
-import { Stack } from "../classes/stackForDepthFirstSearch";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
+  rootLevelNode: number;
 
   constructor() {
     this.dataSource.data = this.getTree();
@@ -50,13 +50,29 @@ export class GetTreeService {
       allNodes.push(newNode);
     }
 
-    let newTree: ITreeNode = allNodes[0];
-
-    let treeMap = new Map<ITreeNode, ITreeNode[]>();
-
+    let treeMap = new Map<number, number[]>();
+    treeMap.set(allNodes[0].nodeID, []);
+    let count = 0;
     for (let node of allNodes) {
-      // if(tree)
+      for (let i = allNodes.indexOf(node); i < allNodes.length; i++) {
+        if (treeMap.has(node.nodeID)) {
+          if (node.nodeID === allNodes[i].nodeParentID) {
+            let children = treeMap.get(node.nodeID);
+            children.push(allNodes[i].nodeID);
+            treeMap.set(node.nodeID, children);
+          }
+        } else {
+          treeMap.set(node.nodeID, []);
+        }
+      }
+      count += treeMap.get(node.nodeID).length;
+      if (treeMap.get(node.nodeID).length === 0) treeMap.delete(node.nodeID);
     }
+    this.rootLevelNode = allNodes[0].nodeID;
+
+    console.log(this.rootLevelNode);
+    console.log(count);
+    console.log(treeMap);
 
     // let stack = new Stack();
     // stack.pushStack(newTree);
@@ -72,6 +88,7 @@ export class GetTreeService {
     // }
 
     // console.log(newTree);
+    let newTree: ITreeNode = allNodes[0];
     return [newTree];
     //=====================================================
 
