@@ -8,7 +8,8 @@ import {
   MatInputModule,
   MatTabsModule,
   MatCardModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatProgressBarModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -46,7 +47,8 @@ import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree
     MatAutocompleteModule,
     MatTabsModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressBarModule
   ],
   providers: [GetTreeService],
   bootstrap: [MSMainComponent]

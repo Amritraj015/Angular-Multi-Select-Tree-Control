@@ -7,18 +7,22 @@ import { FlatTreeControl } from "@angular/cdk/tree";
 import { BehaviorSubject, Observable, merge } from "rxjs";
 import { CollectionViewer, SelectionChange } from "@angular/cdk/collections";
 import { map } from "rxjs/operators";
+import { FlatTreeNode } from "../classes/flatTreeNode";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
-  private treeControl: FlatTreeControl<ITreeNode>;
-  private database: TreeMap;
+  // private treeControl: FlatTreeControl<FlatTreeNode>;
+  // private database: TreeMap;
 
-  constructor() {
+  constructor(
+    private treeControl: FlatTreeControl<FlatTreeNode>,
+    private database: TreeMap
+  ) {
     this.dataSource.data = this.getTree();
-    let treeMap = new TreeMap();
+    //let treeMap = new TreeMap();
   }
 
   //    This method will make a request to a server
@@ -40,10 +44,7 @@ export class GetTreeService {
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSearchBreanch: false,
-        nodeChildren: [],
-        level: 1,
-        expandable: false,
-        isLoading: false
+        nodeChildren: []
       };
 
       allNodes.push(newNode);
@@ -55,23 +56,23 @@ export class GetTreeService {
 
   //======================================================================================
 
-  dataChange = new BehaviorSubject<ITreeNode[]>([]);
+  dataChange = new BehaviorSubject<FlatTreeNode[]>([]);
 
-  get data(): ITreeNode[] {
+  get data(): FlatTreeNode[] {
     return this.dataChange.value;
   }
-  set data(value: ITreeNode[]) {
+  set data(value: FlatTreeNode[]) {
     this.treeControl.dataNodes = value;
     this.dataChange.next(value);
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<ITreeNode[]> {
+  connect(collectionViewer: CollectionViewer): Observable<FlatTreeNode[]> {
     this.treeControl.expansionModel.onChange.subscribe(change => {
       if (
-        (change as SelectionChange<ITreeNode>).added ||
-        (change as SelectionChange<ITreeNode>).removed
+        (change as SelectionChange<FlatTreeNode>).added ||
+        (change as SelectionChange<FlatTreeNode>).removed
       ) {
-        this.handleTreeControl(change as SelectionChange<ITreeNode>);
+        this.handleTreeControl(change as SelectionChange<FlatTreeNode>);
       }
     });
 
@@ -81,7 +82,7 @@ export class GetTreeService {
   }
 
   /** Handle expand/collapse behaviors */
-  handleTreeControl(change: SelectionChange<ITreeNode>) {
+  handleTreeControl(change: SelectionChange<FlatTreeNode>) {
     if (change.added) {
       change.added.forEach(node => this.toggleNode(node, true));
     }
@@ -96,8 +97,8 @@ export class GetTreeService {
   /**
    * Toggle the node, remove from display list
    */
-  toggleNode(node: ITreeNode, expand: boolean) {
-    const children = this.database.getChildren(node.nodeID);
+  toggleNode(node: FlatTreeNode, expand: boolean) {
+    const children = this.database.getChildren(node.node);
     const index = this.data.indexOf(node);
     if (!children || index < 0) {
       // If no children, or cannot find the node, no op
@@ -108,7 +109,14 @@ export class GetTreeService {
 
     setTimeout(() => {
       if (expand) {
-        const nodes = children.map(ID => new ITreeNode());
+        const nodes = children.map(
+          newNode =>
+            new FlatTreeNode(
+              newNode,
+              node.level + 1,
+              this.database.isExpandable(newNode)
+            )
+        );
         this.data.splice(index + 1, 0, ...nodes);
       } else {
         let count = 0;

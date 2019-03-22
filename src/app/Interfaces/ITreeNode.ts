@@ -57,9 +57,4 @@ export class ITreeNode {
   //
   //    Initial default value must be "false"
   nodeSearchBreanch: boolean;
-
-  //======================================================================
-  level: number;
-  expandable: boolean;
-  isLoading: boolean;
 }
