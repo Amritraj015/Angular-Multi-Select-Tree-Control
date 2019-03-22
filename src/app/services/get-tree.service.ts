@@ -1,7 +1,4 @@
 import { Injectable } from "@angular/core";
-import { ITreeNode } from "../Interfaces/ITreeNode";
-import { MatTreeNestedDataSource } from "@angular/material";
-import { OrgUnitsDataSet } from "../testData/medium_dataset";
 import { TreeMap } from "../classes/treeMap";
 import { FlatTreeControl } from "@angular/cdk/tree";
 import { BehaviorSubject, Observable, merge } from "rxjs";
@@ -60,7 +57,7 @@ export class GetTreeService {
    * Toggle the node, remove from display list
    */
   toggleNode(node: FlatTreeNode, expand: boolean) {
-    const children = this.database.getChildren(node.nodeID);
+    const children = this.database.getChildren(node.node);
     const index = this.data.indexOf(node);
     if (!children || index < 0) {
       // If no children, or cannot find the node, no op
