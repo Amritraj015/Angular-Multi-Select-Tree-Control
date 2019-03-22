@@ -13,50 +13,12 @@ import { FlatTreeNode } from "../classes/flatTreeNode";
   providedIn: "root"
 })
 export class GetTreeService {
-  dataSource = new MatTreeNestedDataSource<ITreeNode>();
-  // private treeControl: FlatTreeControl<FlatTreeNode>;
-  // private database: TreeMap;
+  dataChange = new BehaviorSubject<FlatTreeNode[]>([]);
 
   constructor(
     private treeControl: FlatTreeControl<FlatTreeNode>,
     private database: TreeMap
-  ) {
-    this.dataSource.data = this.getTree();
-    //let treeMap = new TreeMap();
-  }
-
-  //    This method will make a request to a server
-  //    to deliver an array with the tree object.
-  //    *** Since, this is a nested tree control, the array must have
-  //    one and only one nested tree object ***
-
-  getTree(): ITreeNode[] {
-    let tree = new OrgUnitsDataSet();
-    let allNodes: ITreeNode[] = [];
-
-    for (let org of tree.orgUnits) {
-      var newNode: ITreeNode = {
-        nodeName: org.companyname,
-        nodeID: parseInt(org.companyid),
-        nodeParentID: parseInt(org.parentid),
-        nodeSelected: false,
-        nodeDescendantSelected: false,
-        nodeAuthorized: true,
-        nodeInactive: false,
-        nodeSearchBreanch: false,
-        nodeChildren: []
-      };
-
-      allNodes.push(newNode);
-    }
-
-    let newTree: ITreeNode = allNodes[0];
-    return [newTree];
-  }
-
-  //======================================================================================
-
-  dataChange = new BehaviorSubject<FlatTreeNode[]>([]);
+  ) {}
 
   get data(): FlatTreeNode[] {
     return this.dataChange.value;
@@ -98,7 +60,7 @@ export class GetTreeService {
    * Toggle the node, remove from display list
    */
   toggleNode(node: FlatTreeNode, expand: boolean) {
-    const children = this.database.getChildren(node.node);
+    const children = this.database.getChildren(node.nodeID);
     const index = this.data.indexOf(node);
     if (!children || index < 0) {
       // If no children, or cannot find the node, no op
@@ -110,11 +72,11 @@ export class GetTreeService {
     setTimeout(() => {
       if (expand) {
         const nodes = children.map(
-          newNode =>
+          nodeID =>
             new FlatTreeNode(
-              newNode,
+              nodeID,
               node.level + 1,
-              this.database.isExpandable(newNode)
+              this.database.isExpandable(nodeID)
             )
         );
         this.data.splice(index + 1, 0, ...nodes);

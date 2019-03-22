@@ -11,14 +11,14 @@ import { FlatTreeControl } from "@angular/cdk/tree";
   providers: [TreeMap]
 })
 export class MSTreeComponent implements OnInit {
-  constructor(database: TreeMap) {
+  constructor(treeMapData: TreeMap) {
     this.treeControl = new FlatTreeControl<FlatTreeNode>(
       this.getLevel,
       this.isExpandable
     );
-    this.dataSource = new GetTreeService(this.treeControl, database);
+    this.dataSource = new GetTreeService(this.treeControl, treeMapData);
 
-    this.dataSource.data = database.initialTreeNode();
+    this.dataSource.data = treeMapData.initialTreeNode();
   }
 
   ngOnInit(): void {}

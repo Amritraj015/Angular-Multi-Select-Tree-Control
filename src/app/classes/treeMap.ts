@@ -4,17 +4,18 @@ import { FlatTreeNode } from "./flatTreeNode";
 import { map } from "rxjs/operators";
 
 export class TreeMap {
-  treeMap = new Map<ITreeNode, ITreeNode[]>();
-  rootLevelNode: ITreeNode[];
+  treeMap = new Map<number, number[]>();
+  rootLevelNode: number[];
+  allNodes: ITreeNode[];
 
   constructor() {
+    this.allNodes = [];
     this.rootLevelNode = [];
-    this.treeMap = this.getTree();
+    this.getTree();
   }
 
   getTree(): any {
     let tree = new OrgUnitsDataSet();
-    let allNodes: ITreeNode[] = [];
 
     for (let org of tree.orgUnits) {
       const newNode: ITreeNode = {
@@ -29,31 +30,32 @@ export class TreeMap {
         nodeChildren: []
       };
 
-      allNodes.push(newNode);
+      this.allNodes.push(newNode);
     }
-    this.rootLevelNode.push(allNodes[0]);
+    this.rootLevelNode.push(this.allNodes[0].nodeID);
 
-    this.buildTreeMap(allNodes);
+    this.buildTreeMap(this.allNodes);
   }
 
   buildTreeMap(allNodes: ITreeNode[]): void {
-    this.treeMap.set(allNodes[0], []);
+    this.treeMap.set(allNodes[0].nodeID, []);
 
     for (let node of allNodes) {
       for (let i = allNodes.indexOf(node); i < allNodes.length; i++) {
-        if (this.treeMap.has(node)) {
+        if (this.treeMap.has(node.nodeID)) {
           if (node.nodeID === allNodes[i].nodeParentID) {
-            let children = this.treeMap.get(node);
-            children.push(allNodes[i]);
+            let children = this.treeMap.get(node.nodeID);
+            children.push(allNodes[i].nodeID);
 
-            this.treeMap.set(node, children);
+            this.treeMap.set(node.nodeID, children);
           }
         } else {
-          this.treeMap.set(node, []);
+          this.treeMap.set(node.nodeID, []);
         }
       }
 
-      if (this.treeMap.get(node).length === 0) this.treeMap.delete(node);
+      if (this.treeMap.get(node.nodeID).length === 0)
+        this.treeMap.delete(node.nodeID);
     }
 
     console.log(this.rootLevelNode[0]);
@@ -64,11 +66,12 @@ export class TreeMap {
     return this.rootLevelNode.map(node => new FlatTreeNode(node, 0, true));
   }
 
-  getChildren(node: ITreeNode): ITreeNode[] | undefined {
-    return this.treeMap.get(node);
+  getChildren(nodeID: number): number[] | undefined {
+    console.log(this.treeMap);
+    return this.treeMap.get(nodeID);
   }
 
-  isExpandable(node: ITreeNode): boolean {
-    return this.treeMap.has(node);
+  isExpandable(nodeID: number): boolean {
+    return this.treeMap.has(nodeID);
   }
 }
