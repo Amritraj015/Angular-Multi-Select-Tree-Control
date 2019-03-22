@@ -6,18 +6,19 @@ import { map } from "rxjs/operators";
 export class TreeMap {
   treeMap = new Map<number, number[]>();
   rootLevelNode: number[];
+  allNodes: ITreeNode[];
 
   constructor() {
+    this.allNodes = [];
     this.rootLevelNode = [];
-    this.treeMap = this.getTree();
+    this.getTree();
   }
 
   getTree(): any {
     let tree = new OrgUnitsDataSet();
-    let allNodes: ITreeNode[] = [];
 
     for (let org of tree.orgUnits) {
-      var newNode: ITreeNode = {
+      const newNode: ITreeNode = {
         nodeName: org.companyname,
         nodeID: parseInt(org.companyid),
         nodeParentID: parseInt(org.parentid),
@@ -29,27 +30,30 @@ export class TreeMap {
         nodeChildren: []
       };
 
-      allNodes.push(newNode);
+      this.allNodes.push(newNode);
     }
-    this.rootLevelNode.push(allNodes[0].nodeID);
+    this.rootLevelNode.push(this.allNodes[0].nodeID);
 
-    this.buildTreeMap(allNodes);
+    this.buildTreeMap(this.allNodes);
   }
 
   buildTreeMap(allNodes: ITreeNode[]): void {
     this.treeMap.set(allNodes[0].nodeID, []);
+
     for (let node of allNodes) {
       for (let i = allNodes.indexOf(node); i < allNodes.length; i++) {
         if (this.treeMap.has(node.nodeID)) {
           if (node.nodeID === allNodes[i].nodeParentID) {
             let children = this.treeMap.get(node.nodeID);
             children.push(allNodes[i].nodeID);
+
             this.treeMap.set(node.nodeID, children);
           }
         } else {
           this.treeMap.set(node.nodeID, []);
         }
       }
+
       if (this.treeMap.get(node.nodeID).length === 0)
         this.treeMap.delete(node.nodeID);
     }
@@ -59,10 +63,11 @@ export class TreeMap {
   }
 
   initialTreeNode(): FlatTreeNode[] {
-    return this.rootLevelNode.map(nodeID => new FlatTreeNode(nodeID, 0, true));
+    return this.rootLevelNode.map(node => new FlatTreeNode(node, 0, true));
   }
 
   getChildren(nodeID: number): number[] | undefined {
+    console.log(this.treeMap.get(nodeID));
     return this.treeMap.get(nodeID);
   }
 

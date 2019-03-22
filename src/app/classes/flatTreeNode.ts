@@ -1,3 +1,5 @@
+import { ITreeNode } from "../Interfaces/ITreeNode";
+
 export class FlatTreeNode {
   constructor(
     public nodeID: number,
