@@ -67,7 +67,7 @@ export class TreeMap {
   }
 
   getChildren(nodeID: number): number[] | undefined {
-    console.log(this.treeMap);
+    console.log(this.treeMap.get(nodeID));
     return this.treeMap.get(nodeID);
   }
 
