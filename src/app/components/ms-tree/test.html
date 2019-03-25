@@ -1,7 +1,14 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+<mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl">
   <mat-tree-node *matTreeNodeDef="let treeNode" matTreeNodePadding>
     <button mat-icon-button disabled></button>
-    {{ treeNode.node.nodeName }}
+
+    <mat-checkbox
+      class="tree-node-active"
+      [checked]="treeNode.node.nodeSelected"
+      color="warn"
+    >
+      {{ treeNode.node.nodeName }}
+    </mat-checkbox>
   </mat-tree-node>
 
   <mat-tree-node
@@ -9,15 +16,28 @@
     matTreeNodePadding
   >
     <button
+      class="expand-collapse-button"
       mat-icon-button
       [attr.aria-label]="'toggle ' + treeNode.node.nodeName"
       matTreeNodeToggle
     >
       <mat-icon class="mat-icon-rtl-mirror">
-        {{ treeControl.isExpanded(treeNode) ? "expand_more" : "chevron_right" }}
+        {{
+          treeControl.isExpanded(treeNode.node)
+            ? "expand_more"
+            : "chevron_right"
+        }}
       </mat-icon>
     </button>
-    {{ treeNode.node.nodeName }}
+
+    <mat-checkbox
+      class="tree-node-active"
+      [checked]="treeNode.node.nodeSelected"
+      color="warn"
+    >
+      {{ treeNode.node.nodeName }}
+    </mat-checkbox>
+
     <mat-progress-bar
       *ngIf="treeNode.isLoading"
       mode="indeterminate"
@@ -25,3 +45,40 @@
     ></mat-progress-bar>
   </mat-tree-node>
 </mat-tree>
+
+<!-- <mat-tree
+  [dataSource]="treeInit.dataSource"
+  [treeControl]="treeControl"
+  class="ms-tree"
+>
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+    <li>
+      <div class="mat-tree-node">
+        <button
+          class="expand-collapse-button"
+          *ngIf="!checkChildren(node)"
+          mat-icon-button
+          matTreeNodeToggle
+          [attr.aria-label]="'toggle ' + node.nodeName"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button>
+
+        <button *ngIf="checkChildren(node)" mat-icon-button disabled></button>
+
+        <mat-checkbox [checked]="node.nodeSelected" color="warn">
+          <div
+            class="tree-node-active"
+            [innerHTML]="node.nodeName | searchFilter: searchTerm"
+          ></div>
+        </mat-checkbox>
+      </div>
+
+      <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
+        <ng-container matTreeNodeOutlet></ng-container>
+      </ul>
+    </li>
+  </mat-nested-tree-node>
+</mat-tree> -->

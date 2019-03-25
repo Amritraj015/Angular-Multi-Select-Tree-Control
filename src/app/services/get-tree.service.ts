@@ -5,16 +5,28 @@ import { BehaviorSubject, Observable, merge } from "rxjs";
 import { CollectionViewer, SelectionChange } from "@angular/cdk/collections";
 import { map } from "rxjs/operators";
 import { FlatTreeNode } from "../classes/flatTreeNode";
+import { MatTreeNestedDataSource } from "@angular/material";
+import { ITreeNode } from "../Interfaces/ITreeNode";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
+  dataSource = new MatTreeNestedDataSource<ITreeNode>();
+
+  // constructor() {
+  //   let database = new TreeMap();
+  //   this.dataSource.data = database.nestedTree;
+  // }
+
+  //================================================================================
+  //  FLAT TREE NODES
+
   dataChange = new BehaviorSubject<FlatTreeNode[]>([]);
 
   constructor(
     private treeControl: FlatTreeControl<FlatTreeNode>,
-    private database: TreeMap
+    public database: TreeMap
   ) {}
 
   get data(): FlatTreeNode[] {
@@ -92,4 +104,5 @@ export class GetTreeService {
       node.isLoading = false;
     });
   }
+  //================================================================================
 }
