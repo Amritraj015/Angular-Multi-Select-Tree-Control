@@ -1,5 +1,5 @@
 
-export const orgUnits: any = [
+export let orgUnits: any = [
           {
             companyid: "100235",
             companyname: "NRT LLC",

@@ -43,10 +43,15 @@ export class MSTreeComponent implements OnInit {
   hasChild = (_: number, _nodeData: FlatTreeNode) => _nodeData.expandable;
 
   ngAfterViewInit() {
-    // console.log(this.dataSource.database.treeMap);
+    this.dataSource.data[0].isLoading = true;
+    console.log(this.dataSource.data[0]);
+    console.log(this.dataSource.data[0].isLoading);
+
+    this.tree.treeControl.expand(this.dataSource.data[0]);
+    console.log(this.dataSource.data[0]);
   }
 
-  selectAndExpand(node): void {
+  selectAndExpand(node: FlatTreeNode): void {
     let stack = new Stack();
 
     stack.pushStack(this.dataSource.database.rootLevelNode[0]);
