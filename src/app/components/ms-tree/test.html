@@ -22,11 +22,7 @@
       matTreeNodeToggle
     >
       <mat-icon class="mat-icon-rtl-mirror">
-        {{
-          treeControl.isExpanded(treeNode.node)
-            ? "expand_more"
-            : "chevron_right"
-        }}
+        {{ treeControl.isExpanded(treeNode) ? "expand_more" : "chevron_right" }}
       </mat-icon>
     </button>
 
