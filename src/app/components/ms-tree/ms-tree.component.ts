@@ -20,6 +20,7 @@ import { ITreeNode } from "src/app/Interfaces/ITreeNode";
   providers: [TreeMap]
 })
 export class MSTreeComponent implements OnInit {
+  //==============================================================================
   treeControl: FlatTreeControl<FlatTreeNode>;
   dataSource: GetTreeService;
   @ViewChild("tree") tree;
@@ -36,6 +37,8 @@ export class MSTreeComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngAfterViewInit() {}
+
   getLevel = (node: FlatTreeNode) => node.level;
 
   isExpandable = (node: FlatTreeNode) => node.expandable;
@@ -47,7 +50,9 @@ export class MSTreeComponent implements OnInit {
 
     stack.pushStack(treeNode.node);
     treeNode.node.nodeSelected = !treeNode.node.nodeSelected;
-    this.treeControl.expand(treeNode);
+
+    if (treeNode.node.nodeSelected)
+      this.treeControl.expandDescendants(treeNode);
 
     while (stack.stack.length !== 0) {
       let removedNode = stack.popStack();
@@ -61,16 +66,15 @@ export class MSTreeComponent implements OnInit {
     }
   }
   //==============================================================================
-  //  NESTED TREE
-  // treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
-
-  // constructor(public treeInit: GetTreeService) {}
-
-  // hasChild = (_: number, node: ITreeNode) =>
-  //   !!node.nodeChildren && node.nodeChildren.length > 0;
-
-  // checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
-
-  // ngOnInit(): void {}
-  //==============================================================================
 }
+// //==============================================================================
+// treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
+
+// constructor(public treeInit: GetTreeService) {}
+// ngOnInit(): void {}
+
+// hasChild = (_: number, node: ITreeNode) =>
+//   !!node.nodeChildren && node.nodeChildren.length > 0;
+
+// checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
+// //==============================================================================

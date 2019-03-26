@@ -20,7 +20,11 @@
 
         <button *ngIf="checkChildren(node)" mat-icon-button disabled></button>
 
-        <mat-checkbox [checked]="node.nodeSelected" color="warn">
+        <mat-checkbox
+          [checked]="node.nodeSelected"
+          (change)="selectAndExpand(node)"
+          color="warn"
+        >
           <div
             class="tree-node-active"
             [innerHTML]="node.nodeName | searchFilter: searchTerm"
