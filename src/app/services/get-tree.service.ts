@@ -38,6 +38,8 @@ export class GetTreeService {
       }
     });
 
+    console.log(collectionViewer.viewChange);
+
     return merge(collectionViewer.viewChange, this.dataChange).pipe(
       map(() => this.data)
     );

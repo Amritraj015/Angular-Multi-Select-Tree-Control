@@ -37,6 +37,7 @@ export class TreeMap {
     this.buildTreeMap(this.allNodes);
   }
 
+  /** Biuld the Tree Map */
   buildTreeMap(allNodes: ITreeNode[]): void {
     this.treeMap.set(allNodes[0].nodeID, []);
 
@@ -57,9 +58,6 @@ export class TreeMap {
       if (this.treeMap.get(node.nodeID).length === 0)
         this.treeMap.delete(node.nodeID);
     }
-
-    console.log(this.rootLevelNode[0]);
-    console.log(this.treeMap);
   }
 
   initialTreeNode(): FlatTreeNode[] {
@@ -67,7 +65,6 @@ export class TreeMap {
   }
 
   getChildren(nodeID: number): number[] | undefined {
-    console.log(this.treeMap.get(nodeID));
     return this.treeMap.get(nodeID);
   }
 
