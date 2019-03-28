@@ -47,6 +47,8 @@ export class GetTreeService {
       }
     });
 
+    console.log(collectionViewer.viewChange);
+
     return merge(collectionViewer.viewChange, this.dataChange).pipe(
       map(() => this.data)
     );
@@ -65,9 +67,7 @@ export class GetTreeService {
     }
   }
 
-  /**
-   * Toggle the node, remove from display list
-   */
+  /** Toggle the node, remove from display list */
   toggleNode(node: FlatTreeNode, expand: boolean) {
     const children = this.database.getChildren(node.node);
     const index = this.data.indexOf(node);
@@ -81,11 +81,11 @@ export class GetTreeService {
     setTimeout(() => {
       if (expand) {
         const nodes = children.map(
-          nodeID =>
+          newNode =>
             new FlatTreeNode(
-              nodeID,
+              newNode,
               node.level + 1,
-              this.database.isExpandable(nodeID)
+              this.database.isExpandable(newNode)
             )
         );
         this.data.splice(index + 1, 0, ...nodes);
