@@ -51,8 +51,7 @@ export class MSTreeComponent implements OnInit {
     stack.pushStack(treeNode.node);
     treeNode.node.nodeSelected = !treeNode.node.nodeSelected;
 
-    if (treeNode.node.nodeSelected)
-      this.treeControl.expandDescendants(treeNode);
+    if (treeNode.node.nodeSelected) this.treeControl.expand(treeNode);
 
     while (stack.stack.length !== 0) {
       let removedNode = stack.popStack();
