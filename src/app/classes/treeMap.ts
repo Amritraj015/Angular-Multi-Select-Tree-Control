@@ -1,21 +1,23 @@
 import { ITreeNode } from "../Interfaces/ITreeNode";
-import { OrgUnitsDataSet } from "../testData/medium_dataset";
+import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { FlatTreeNode } from "./flatTreeNode";
+import { Stack } from "./stackForDepthFirstSearch";
 
 export class TreeMap {
   treeMap = new Map<ITreeNode, ITreeNode[]>();
   rootLevelNode: ITreeNode[];
+  nestedTree: ITreeNode[];
 
   constructor() {
     this.rootLevelNode = [];
+    this.nestedTree = [];
     this.getTree();
   }
 
   getTree(): any {
-    let tree = new OrgUnitsDataSet();
     let allNodes: ITreeNode[] = [];
 
-    for (let org of tree.orgUnits) {
+    for (let org of flatTreeNodes) {
       const newNode: ITreeNode = {
         nodeName: org.companyname,
         nodeID: parseInt(org.companyid),
@@ -30,9 +32,27 @@ export class TreeMap {
 
       allNodes.push(newNode);
     }
-    this.rootLevelNode.push(allNodes[0]);
 
+    this.rootLevelNode.push(allNodes[0]);
     this.buildTreeMap(allNodes);
+    this.buildNestedTree(allNodes);
+  }
+
+  buildNestedTree(allNodes: ITreeNode[]): void {
+    let stack = new Stack();
+    this.nestedTree[0] = allNodes[0];
+    stack.pushStack(this.nestedTree[0]);
+
+    for (let node of allNodes) {
+      stack.popStack();
+      for (let newNode of allNodes) {
+        if (newNode.nodeParentID === node.nodeID) {
+          node.nodeChildren.push(newNode);
+          stack.pushStack(newNode);
+        }
+      }
+    }
+    console.log(this.nestedTree);
   }
 
   buildTreeMap(allNodes: ITreeNode[]): void {
