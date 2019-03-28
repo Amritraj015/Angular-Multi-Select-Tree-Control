@@ -1,19 +1,19 @@
-import { ITreeNode } from "../Interfaces/ITreeNode";
+import { TreeNode } from "./TreeNode";
 
 //  This is a custom Queue class to support the
 //  Depth First Search Algorithms used in the control
 export class Stack {
-  stack: ITreeNode[];
+  stack: TreeNode[];
 
   constructor() {
     this.stack = [];
   }
 
-  pushStack(treeNode: ITreeNode): void {
+  pushStack(treeNode: TreeNode): void {
     this.stack.push(treeNode);
   }
 
-  popStack(): ITreeNode {
+  popStack(): TreeNode {
     return this.stack.pop();
   }
 }

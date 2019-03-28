@@ -81,11 +81,11 @@ export class GetTreeService {
     setTimeout(() => {
       if (expand) {
         const nodes = children.map(
-          nodeID =>
+          newNode =>
             new FlatTreeNode(
-              nodeID,
+              newNode,
               node.level + 1,
-              this.database.isExpandable(nodeID)
+              this.database.isExpandable(newNode)
             )
         );
         this.data.splice(index + 1, 0, ...nodes);

@@ -2,11 +2,12 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
 import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { FlatTreeNode } from "./flatTreeNode";
 import { Stack } from "./stackForDepthFirstSearch";
+import { TreeNode } from "./TreeNode";
 
 export class TreeMap {
-  treeMap = new Map<ITreeNode, ITreeNode[]>();
-  rootLevelNode: ITreeNode[];
-  nestedTree: ITreeNode[];
+  treeMap = new Map<TreeNode, TreeNode[]>();
+  rootLevelNode: TreeNode[];
+  nestedTree: TreeNode[];
 
   constructor() {
     this.rootLevelNode = [];
@@ -15,10 +16,10 @@ export class TreeMap {
   }
 
   getTree(): any {
-    let allNodes: ITreeNode[] = [];
+    let allNodes: TreeNode[] = [];
 
     for (let org of flatTreeNodes) {
-      const newNode: ITreeNode = {
+      const newNode: TreeNode = {
         nodeName: org.companyname,
         nodeID: parseInt(org.companyid),
         nodeParentID: parseInt(org.parentid),
@@ -38,7 +39,7 @@ export class TreeMap {
     this.buildNestedTree(allNodes);
   }
 
-  buildNestedTree(allNodes: ITreeNode[]): void {
+  buildNestedTree(allNodes: TreeNode[]): void {
     let stack = new Stack();
     this.nestedTree[0] = allNodes[0];
     stack.pushStack(this.nestedTree[0]);
@@ -56,7 +57,7 @@ export class TreeMap {
   }
 
   /** Biuld the Tree Map */
-  buildTreeMap(allNodes: ITreeNode[]): void {
+  buildTreeMap(allNodes: TreeNode[]): void {
     this.treeMap.set(allNodes[0], []);
 
     for (let node of allNodes) {
@@ -81,11 +82,11 @@ export class TreeMap {
     return this.rootLevelNode.map(node => new FlatTreeNode(node, 0, true));
   }
 
-  getChildren(node: ITreeNode): ITreeNode[] | undefined {
+  getChildren(node: TreeNode): TreeNode[] | undefined {
     return this.treeMap.get(node);
   }
 
-  isExpandable(node: ITreeNode): boolean {
+  isExpandable(node: TreeNode): boolean {
     return this.treeMap.has(node);
   }
 }
