@@ -1,6 +1,5 @@
 
-export class OrgUnitsDataSet {
-  orgUnits: any = [
+export let orgUnits: any = [
           {
             companyid: "100235",
             companyname: "NRT LLC",
@@ -10437,5 +10436,4 @@ export class OrgUnitsDataSet {
             parentid: "101474"
           }
         ];
-      }
 

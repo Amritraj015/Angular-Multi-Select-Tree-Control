@@ -1,23 +1,23 @@
 import { ITreeNode } from "../Interfaces/ITreeNode";
-import { OrgUnitsDataSet } from "../testData/medium_dataset";
+import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { FlatTreeNode } from "./flatTreeNode";
-import { map } from "rxjs/operators";
+import { Stack } from "./stackForDepthFirstSearch";
 
 export class TreeMap {
-  treeMap = new Map<number, number[]>();
-  rootLevelNode: number[];
-  allNodes: ITreeNode[];
+  treeMap = new Map<ITreeNode, ITreeNode[]>();
+  rootLevelNode: ITreeNode[];
+  nestedTree: ITreeNode[];
 
   constructor() {
-    this.allNodes = [];
     this.rootLevelNode = [];
+    this.nestedTree = [];
     this.getTree();
   }
 
   getTree(): any {
-    let tree = new OrgUnitsDataSet();
+    let allNodes: ITreeNode[] = [];
 
-    for (let org of tree.orgUnits) {
+    for (let org of flatTreeNodes) {
       const newNode: ITreeNode = {
         nodeName: org.companyname,
         nodeID: parseInt(org.companyid),
@@ -30,33 +30,50 @@ export class TreeMap {
         nodeChildren: []
       };
 
-      this.allNodes.push(newNode);
+      allNodes.push(newNode);
     }
-    this.rootLevelNode.push(this.allNodes[0].nodeID);
 
-    this.buildTreeMap(this.allNodes);
+    this.rootLevelNode.push(allNodes[0]);
+    this.buildTreeMap(allNodes);
+    this.buildNestedTree(allNodes);
+  }
+
+  buildNestedTree(allNodes: ITreeNode[]): void {
+    let stack = new Stack();
+    this.nestedTree[0] = allNodes[0];
+    stack.pushStack(this.nestedTree[0]);
+
+    for (let node of allNodes) {
+      stack.popStack();
+      for (let newNode of allNodes) {
+        if (newNode.nodeParentID === node.nodeID) {
+          node.nodeChildren.push(newNode);
+          stack.pushStack(newNode);
+        }
+      }
+    }
+    console.log(this.nestedTree);
   }
 
   /** Biuld the Tree Map */
   buildTreeMap(allNodes: ITreeNode[]): void {
-    this.treeMap.set(allNodes[0].nodeID, []);
+    this.treeMap.set(allNodes[0], []);
 
     for (let node of allNodes) {
       for (let i = allNodes.indexOf(node); i < allNodes.length; i++) {
-        if (this.treeMap.has(node.nodeID)) {
+        if (this.treeMap.has(node)) {
           if (node.nodeID === allNodes[i].nodeParentID) {
-            let children = this.treeMap.get(node.nodeID);
-            children.push(allNodes[i].nodeID);
+            let children = this.treeMap.get(node);
+            children.push(allNodes[i]);
 
-            this.treeMap.set(node.nodeID, children);
+            this.treeMap.set(node, children);
           }
         } else {
-          this.treeMap.set(node.nodeID, []);
+          this.treeMap.set(node, []);
         }
       }
 
-      if (this.treeMap.get(node.nodeID).length === 0)
-        this.treeMap.delete(node.nodeID);
+      if (this.treeMap.get(node).length === 0) this.treeMap.delete(node);
     }
   }
 
@@ -64,11 +81,11 @@ export class TreeMap {
     return this.rootLevelNode.map(node => new FlatTreeNode(node, 0, true));
   }
 
-  getChildren(nodeID: number): number[] | undefined {
-    return this.treeMap.get(nodeID);
+  getChildren(node: ITreeNode): ITreeNode[] | undefined {
+    return this.treeMap.get(node);
   }
 
-  isExpandable(nodeID: number): boolean {
-    return this.treeMap.has(nodeID);
+  isExpandable(node: ITreeNode): boolean {
+    return this.treeMap.has(node);
   }
 }

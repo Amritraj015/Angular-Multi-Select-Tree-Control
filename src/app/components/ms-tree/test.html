@@ -1,27 +1,102 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let treeNode" matTreeNodePadding>
-    <button mat-icon-button disabled></button>
-    {{ treeNode.nodeID }}
-  </mat-tree-node>
+<!-- <mat-tree
+  [dataSource]="treeInit.dataSource"
+  [treeControl]="treeControl"
+  class="ms-tree"
+>
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+    <li>
+      <div class="mat-tree-node">
+        <button
+          class="expand-collapse-button"
+          *ngIf="!checkChildren(node)"
+          mat-icon-button
+          matTreeNodeToggle
+          [attr.aria-label]="'toggle ' + node.nodeName"
+        >
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button>
 
-  <mat-tree-node
-    *matTreeNodeDef="let treeNode; when: hasChild"
-    matTreeNodePadding
-  >
-    <button
-      mat-icon-button
-      [attr.aria-label]="'toggle ' + treeNode.filename"
-      matTreeNodeToggle
-    >
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{ treeControl.isExpanded(treeNode) ? "expand_more" : "chevron_right" }}
-      </mat-icon>
-    </button>
-    {{ treeNode.nodeID }}
-    <mat-progress-bar
-      *ngIf="treeNode.isLoading"
-      mode="indeterminate"
-      class="example-tree-progress-bar"
-    ></mat-progress-bar>
-  </mat-tree-node>
-</mat-tree>
+        <button *ngIf="checkChildren(node)" mat-icon-button disabled></button>
+
+        <mat-checkbox
+          [checked]="node.nodeSelected"
+          (change)="selectAndExpand(node)"
+          color="warn"
+        >
+          <div
+            class="tree-node-active"
+            [innerHTML]="node.nodeName | searchFilter: searchTerm"
+          ></div>
+        </mat-checkbox>
+      </div>
+
+      <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
+        <ng-container matTreeNodeOutlet></ng-container>
+      </ul>
+    </li>
+  </mat-nested-tree-node>
+</mat-tree> -->
+
+<!-- ======================================================== -->
+
+<mat-tab-group animationDuration="100" mat-align-tabs="center">
+  <mat-tab label="Show All">
+    <mat-card class="tree-display">
+      <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <mat-tree-node *matTreeNodeDef="let treeNode" matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+
+          <mat-checkbox
+            class="tree-node-active"
+            [checked]="treeNode.node.nodeSelected"
+            (change)="selectAndExpand(treeNode)"
+            color="warn"
+          >
+            {{ treeNode.node.nodeName }}
+          </mat-checkbox>
+        </mat-tree-node>
+
+        <mat-tree-node
+          *matTreeNodeDef="let treeNode; when: hasChild"
+          matTreeNodePadding
+        >
+          <button
+            class="expand-collapse-button"
+            mat-icon-button
+            [attr.aria-label]="'toggle ' + treeNode.node.nodeName"
+            matTreeNodeToggle
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(treeNode)
+                  ? "expand_more"
+                  : "chevron_right"
+              }}
+            </mat-icon>
+          </button>
+
+          <mat-checkbox
+            class="tree-node-active"
+            [checked]="treeNode.node.nodeSelected"
+            (change)="selectAndExpand(treeNode)"
+            color="warn"
+          >
+            {{ treeNode.node.nodeName }}
+          </mat-checkbox>
+
+          <mat-progress-bar
+            *ngIf="treeNode.isLoading"
+            mode="indeterminate"
+            class="example-tree-progress-bar"
+          ></mat-progress-bar>
+        </mat-tree-node>
+      </mat-tree>
+    </mat-card>
+  </mat-tab>
+
+  <mat-tab label="Show Selected">
+    <ng-template matTabContent> </ng-template>
+  </mat-tab>
+</mat-tab-group>
