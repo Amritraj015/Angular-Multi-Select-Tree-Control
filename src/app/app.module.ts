@@ -23,6 +23,7 @@ import { SearchFilterPipe } from "./pipes/search-filter.pipe";
 import { MsSearchComponent } from "./components/ms-search/ms-search.component";
 import { MsShowSelectedComponent } from "./components/ms-show-selected/ms-show-selected.component";
 import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree-container.component";
+import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ScrollDispatchModule
   ],
   providers: [GetTreeService],
   bootstrap: [MSMainComponent]

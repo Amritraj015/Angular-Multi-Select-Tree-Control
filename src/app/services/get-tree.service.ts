@@ -67,9 +67,7 @@ export class GetTreeService {
     }
   }
 
-  /**
-   * Toggle the node, remove from display list
-   */
+  /** Toggle the node, remove from display list */
   toggleNode(node: FlatTreeNode, expand: boolean) {
     const children = this.database.getChildren(node.node);
     const index = this.data.indexOf(node);
