@@ -29,9 +29,9 @@ export class MsSearchComponent implements OnInit {
   @ViewChild("searchBox") inputValue: ElementRef;
 
   constructor(public treeInit: GetTreeService) {
-    this.searchBoxList = this.InitAllAutoCompleteList(
-      treeInit.dataSource.data[0]
-    );
+    // this.searchBoxList = this.InitAllAutoCompleteList(
+    //   treeInit.dataSource.data[0]
+    // );
   }
 
   ngOnInit(): void {

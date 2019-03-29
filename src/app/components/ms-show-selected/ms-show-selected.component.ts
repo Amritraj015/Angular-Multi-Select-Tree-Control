@@ -31,9 +31,9 @@ export class MsShowSelectedComponent implements OnInit {
   @ViewChild("searchBox") inputValue: ElementRef;
 
   constructor(public treeInit: GetTreeService) {
-    this.searchBoxList = this.InitAllAutoCompleteList(
-      treeInit.dataSource.data[0]
-    );
+    // this.searchBoxList = this.InitAllAutoCompleteList(
+    //   treeInit.dataSource.data[0]
+    // );
   }
 
   ngOnInit() {
@@ -41,7 +41,7 @@ export class MsShowSelectedComponent implements OnInit {
       startWith(""),
       map(value => this._filter(value))
     );
-    this.treeControl.expand(this.treeInit.dataSource.data[0]);
+    // this.treeControl.expand(this.treeInit.dataSource.data[0]);
   }
 
   private _filter(value: string): string[] {

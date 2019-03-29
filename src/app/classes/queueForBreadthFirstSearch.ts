@@ -1,19 +1,19 @@
-import { ITreeNode } from "../Interfaces/ITreeNode";
+import { TreeNode } from "./TreeNode";
 
 //  This is a custom Queue class to support the
 //  Breadth First Search Algorithms used in the control
 export class Queue {
-  queue: ITreeNode[];
+  queue: TreeNode[];
 
   constructor() {
     this.queue = [];
   }
 
-  Enqueue(node: ITreeNode): void {
+  Enqueue(node: TreeNode): void {
     this.queue.push(node);
   }
 
-  Dequeue(): ITreeNode {
+  Dequeue(): TreeNode {
     return this.queue.shift();
   }
 }

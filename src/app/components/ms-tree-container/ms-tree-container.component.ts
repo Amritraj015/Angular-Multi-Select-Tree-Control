@@ -11,7 +11,6 @@ export class MSTreeContainerComponent {
   count: number;
   text: string;
   renderTreeDiv: boolean;
-  @Input() treeIsSearchable: boolean;
 
   constructor() {
     this.count = 0;

@@ -1,8 +1,12 @@
 import { Injectable } from "@angular/core";
-import { ITreeNode } from "../Interfaces/ITreeNode";
-import { Stack } from "../classes/stackForDepthFirstSearch";
+import { TreeMap } from "../classes/treeMap";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { BehaviorSubject, Observable, merge } from "rxjs";
+import { CollectionViewer, SelectionChange } from "@angular/cdk/collections";
+import { map } from "rxjs/operators";
+import { FlatTreeNode } from "../classes/flatTreeNode";
 import { MatTreeNestedDataSource } from "@angular/material";
-import { TestTree } from "../testData/testTree";
+import { ITreeNode } from "../Interfaces/ITreeNode";
 
 @Injectable({
   providedIn: "root"
@@ -10,52 +14,95 @@ import { TestTree } from "../testData/testTree";
 export class GetTreeService {
   dataSource = new MatTreeNestedDataSource<ITreeNode>();
 
-  constructor() {
-    this.dataSource.data = this.getTree();
-    this.dataSource.data = this.fixTreeDataSource(this.dataSource.data[0]);
+  // constructor() {
+  //   let database = new TreeMap();
+  //   this.dataSource.data = database.nestedTree;
+  // }
+
+  //================================================================================
+  //  FLAT TREE NODES
+
+  dataChange = new BehaviorSubject<FlatTreeNode[]>([]);
+
+  constructor(
+    private treeControl: FlatTreeControl<FlatTreeNode>,
+    public database: TreeMap
+  ) {}
+
+  get data(): FlatTreeNode[] {
+    return this.dataChange.value;
+  }
+  set data(value: FlatTreeNode[]) {
+    this.treeControl.dataNodes = value;
+    this.dataChange.next(value);
   }
 
-  private fixTreeDataSource(tree: ITreeNode): ITreeNode[] {
-    let stack = new Stack();
-
-    stack.pushStack(tree);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeDescendantSelected = false;
-      removedNode.nodeSearchBreanch = false;
-      removedNode.nodeSelected = false;
-      if (!removedNode.nodeAuthorized) {
-        removedNode = this.denyNodeAccessToUser(removedNode);
-        continue;
+  connect(collectionViewer: CollectionViewer): Observable<FlatTreeNode[]> {
+    this.treeControl.expansionModel.onChange.subscribe(change => {
+      if (
+        (change as SelectionChange<FlatTreeNode>).added ||
+        (change as SelectionChange<FlatTreeNode>).removed
+      ) {
+        this.handleTreeControl(change as SelectionChange<FlatTreeNode>);
       }
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    });
+
+    console.log(collectionViewer.viewChange);
+
+    return merge(collectionViewer.viewChange, this.dataChange).pipe(
+      map(() => this.data)
+    );
+  }
+
+  /** Handle expand/collapse behaviors */
+  handleTreeControl(change: SelectionChange<FlatTreeNode>) {
+    if (change.added) {
+      change.added.forEach(node => this.toggleNode(node, true));
     }
-    return [tree];
+    if (change.removed) {
+      change.removed
+        .slice()
+        .reverse()
+        .forEach(node => this.toggleNode(node, false));
+    }
   }
 
-  private denyNodeAccessToUser(node: ITreeNode): ITreeNode {
-    let stack = new Stack();
-
-    stack.pushStack(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeAuthorized = false;
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+  /** Toggle the node, remove from display list */
+  toggleNode(node: FlatTreeNode, expand: boolean) {
+    const children = this.database.getChildren(node.node);
+    const index = this.data.indexOf(node);
+    if (!children || index < 0) {
+      // If no children, or cannot find the node, no op
+      return;
     }
 
-    return node;
-  }
+    node.isLoading = true;
 
-  //    This method will make a request to a server
-  //    to deliver an array with the tree object.
-  //    *** Since, this is a nested tree control, the array must have
-  //    one and only one nested tree object ***
+    setTimeout(() => {
+      if (expand) {
+        const nodes = children.map(
+          newNode =>
+            new FlatTreeNode(
+              newNode,
+              node.level + 1,
+              this.database.isExpandable(newNode)
+            )
+        );
+        this.data.splice(index + 1, 0, ...nodes);
+      } else {
+        let count = 0;
+        for (
+          let i = index + 1;
+          i < this.data.length && this.data[i].level > node.level;
+          i++, count++
+        ) {}
+        this.data.splice(index + 1, count);
+      }
 
-  getTree(): ITreeNode[] {
-    let test = new TestTree();
-    return test.getTreeData();
+      // notify the change
+      this.dataChange.next(this.data);
+      node.isLoading = false;
+    });
   }
+  //================================================================================
 }
