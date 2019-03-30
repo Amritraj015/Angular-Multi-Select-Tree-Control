@@ -22,17 +22,17 @@ export class MSTreeContainerComponent {
   //  Calculates the total number of selected nodes everytime
   //  nodes are selected/un-selected
   updateSelectedCount(treeObject: ITreeNode): void {
-    let stack = new Stack();
-    stack.pushStack(treeObject);
-    this.count = 0;
+    // let stack = new Stack();
+    // stack.pushStack(treeObject);
+    // this.count = 0;
 
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
+    // while (stack.stack.length > 0) {
+    //   let removedNode: ITreeNode = stack.popStack();
 
-      if (removedNode.nodeSelected) this.count++;
+    //   if (removedNode.nodeSelected) this.count++;
 
-      for (let child of removedNode.nodeChildren) stack.pushStack(child);
-    }
+    //   for (let child of removedNode.nodeChildren) stack.pushStack(child);
+    // }
 
     this.renderTree(true);
   }

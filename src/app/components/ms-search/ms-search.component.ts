@@ -62,16 +62,14 @@ export class MsSearchComponent implements OnInit {
   //===========================================================================================
   //  Initializes the search list for the auto-complete feature when searching on the "Show All" Tab
   private InitAllAutoCompleteList(tree: ITreeNode): string[] {
-    let stack = new Stack();
-    stack.pushStack(tree);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized)
-        this.searchBoxList.push(removedNode.nodeName);
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-
+    // let stack = new Stack();
+    // stack.pushStack(tree);
+    // while (stack.stack.length > 0) {
+    //   let removedNode: ITreeNode = stack.popStack();
+    //   if (removedNode.nodeAuthorized)
+    //     this.searchBoxList.push(removedNode.nodeName);
+    //   for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    // }
     return this.searchBoxList.sort();
   }
 

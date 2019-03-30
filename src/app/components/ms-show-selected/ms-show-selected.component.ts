@@ -22,7 +22,7 @@ import { NestedTreeControl } from "@angular/cdk/tree";
   styleUrls: ["./ms-show-selected.component.less"]
 })
 export class MsShowSelectedComponent implements OnInit {
-  treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
+  //treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
   searchBoxList: string[] = [];
   filteredOptions: Observable<string[]>;
   searchControl = new FormControl();
@@ -64,15 +64,15 @@ export class MsShowSelectedComponent implements OnInit {
   //===========================================================================================
   //  Initializes the search list for the auto-complete feature when searching on the "Show Selected" Tab
   private InitAllAutoCompleteList(tree: ITreeNode): string[] {
-    let stack = new Stack();
-    stack.pushStack(tree);
+    // let stack = new Stack();
+    // stack.pushStack(tree);
 
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      if (removedNode.nodeAuthorized && removedNode.nodeSelected)
-        this.searchBoxList.push(removedNode.nodeName);
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
+    // while (stack.stack.length > 0) {
+    //   let removedNode: ITreeNode = stack.popStack();
+    //   if (removedNode.nodeAuthorized && removedNode.nodeSelected)
+    //     this.searchBoxList.push(removedNode.nodeName);
+    //   for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    // }
 
     return this.searchBoxList.sort();
   }
