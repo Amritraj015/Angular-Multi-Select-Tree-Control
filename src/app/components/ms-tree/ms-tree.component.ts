@@ -19,8 +19,7 @@ import { ArrayDataSource } from "@angular/cdk/collections";
 @Component({
   selector: "ms-tree",
   templateUrl: "./test.html",
-  styleUrls: ["./ms-tree.component.less"],
-  providers: [TreeMap]
+  styleUrls: ["./ms-tree.component.less"]
 })
 export class MSTreeComponent implements OnInit {
   treeControl: FlatTreeControl<FlatTreeNode>;
@@ -35,14 +34,3 @@ export class MSTreeComponent implements OnInit {
 
   ngOnInit(): void {}
 }
-// //==============================================================================
-// treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
-
-// constructor(public treeInit: GetTreeService) {}
-// ngOnInit(): void {}
-
-// hasChild = (_: number, node: ITreeNode) =>
-//   !!node.nodeChildren && node.nodeChildren.length > 0;
-
-// checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
-// //==============================================================================

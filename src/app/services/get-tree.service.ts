@@ -1,14 +1,35 @@
 import { Injectable } from "@angular/core";
-import { TreeMap } from "../classes/treeMap";
-import { FlatTreeControl } from "@angular/cdk/tree";
-import { BehaviorSubject, Observable, merge } from "rxjs";
-import { CollectionViewer, SelectionChange } from "@angular/cdk/collections";
-import { map } from "rxjs/operators";
+import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { FlatTreeNode } from "../classes/flatTreeNode";
-import { MatTreeNestedDataSource } from "@angular/material";
-import { ITreeNode } from "../Interfaces/ITreeNode";
 
 @Injectable({
   providedIn: "root"
 })
-export class GetTreeService {}
+export class GetTreeService {
+  allNodes: FlatTreeNode[];
+
+  constructor() {
+    this.allNodes = [];
+    this.getTree();
+  }
+
+  getTree(): void {
+    for (let org of flatTreeNodes) {
+      const newFlatNode: FlatTreeNode = {
+        node: {
+          nodeName: org.companyname,
+          nodeID: parseInt(org.companyid),
+          nodeParentID: parseInt(org.parentid),
+          nodeAuthorized: true,
+          nodeInactive: false
+        },
+        level: 1,
+        expandable: true,
+        isLoading: false
+      };
+
+      this.allNodes.push(newFlatNode);
+    }
+    console.log(this.allNodes);
+  }
+}
