@@ -1,7 +1,7 @@
 import { TreeNode } from "./TreeNode";
 
-//  This is a custom Queue class to support the
-//  Depth First Search Algorithms used in the control
+/**   This is a custom Stack class to support the
+Depth First Search Algorithms used in the control */
 export class Stack {
   stack: TreeNode[];
 

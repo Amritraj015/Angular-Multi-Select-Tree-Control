@@ -1,35 +1,55 @@
 import { Injectable } from "@angular/core";
 import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { FlatTreeNode } from "../classes/flatTreeNode";
+import { ITreeNode } from "../Interfaces/ITreeNode";
+import { Stack } from "../classes/stackForDepthFirstSearch";
+import { TreeNode } from "../classes/TreeNode";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
-  allNodes: FlatTreeNode[];
+  tree: TreeNode[];
 
   constructor() {
-    this.allNodes = [];
+    this.tree = [];
     this.getTree();
   }
 
   getTree(): void {
+    let allNodes: TreeNode[] = [];
+
     for (let org of flatTreeNodes) {
-      const newFlatNode: FlatTreeNode = {
-        node: {
-          nodeName: org.companyname,
-          nodeID: parseInt(org.companyid),
-          nodeParentID: parseInt(org.parentid),
-          nodeAuthorized: true,
-          nodeInactive: false
-        },
-        level: 1,
-        expandable: true,
-        isLoading: false
+      const newNode: TreeNode = {
+        nodeName: org.companyname,
+        nodeID: parseInt(org.companyid),
+        nodeParentID: parseInt(org.parentid),
+        nodeSelected: false,
+        nodeDescendantSelected: false,
+        nodeAuthorized: true,
+        nodeInactive: false,
+        nodeSearchBreanch: false,
+        nodeChildren: []
       };
 
-      this.allNodes.push(newFlatNode);
+      allNodes.push(newNode);
     }
-    console.log(this.allNodes);
+    this.buildNestedTree(allNodes);
+  }
+
+  buildNestedTree(allNodes: TreeNode[]): void {
+    let stack = new Stack();
+    this.tree[0] = allNodes[0];
+    stack.pushStack(this.tree[0]);
+
+    for (let node of allNodes) {
+      stack.popStack();
+      for (let newNode of allNodes) {
+        if (newNode.nodeParentID === node.nodeID) {
+          node.nodeChildren.push(newNode);
+          stack.pushStack(newNode);
+        }
+      }
+    }
   }
 }

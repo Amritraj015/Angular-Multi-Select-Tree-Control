@@ -1,10 +1,9 @@
-import { ITreeNode } from "../Interfaces/ITreeNode";
+import { TreeNode } from "./TreeNode";
 
 export class FlatTreeNode {
   constructor(
-    public node: ITreeNode,
+    public treeNode: TreeNode,
     public level,
-    public expandable: boolean = false,
-    public isLoading: boolean = false
+    public expandable: boolean
   ) {}
 }

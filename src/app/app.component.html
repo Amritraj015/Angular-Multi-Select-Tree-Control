@@ -10,16 +10,16 @@
       <mat-panel-description>
         <!-- This badge displays when none of the tree nodes have been selected-->
         <span
-          *ngIf="renderTreeDiv && count === 0"
+          *ngIf="renderTreeDiv && totalNodesSelected === 0"
           class="badge badge-secondary p-2 mr-2"
           >None
         </span>
 
         <!-- This badge displays when at least one of the tree nodes have been selected-->
         <span
-          *ngIf="renderTreeDiv && count > 0"
+          *ngIf="renderTreeDiv && totalNodesSelected > 0"
           class="badge badge-warning p-2 mr-2"
-          >{{ count }}
+          >{{ totalNodesSelected }}
         </span>
 
         {{ text }}

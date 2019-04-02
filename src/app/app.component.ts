@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { ITreeNode } from "./Interfaces/ITreeNode";
 
 @Component({
   selector: "ms-tree-control",
@@ -7,37 +6,26 @@ import { ITreeNode } from "./Interfaces/ITreeNode";
   styleUrls: ["./app.component.less"]
 })
 export class MSMainComponent {
-  count: number;
+  totalNodesSelected: number;
   text: string;
   renderTreeDiv: boolean;
 
   constructor() {
-    this.count = 0;
+    this.totalNodesSelected = 0;
     this.text = "Select User Groups";
     this.renderTreeDiv = false;
   }
 
   //==========================================================================
-  //  Calculates the total number of selected nodes everytime
-  //  nodes are selected/un-selected
-  updateSelectedCount(treeObject: ITreeNode): void {
-    // let stack = new Stack();
-    // stack.pushStack(treeObject);
-    // this.count = 0;
-
-    // while (stack.stack.length > 0) {
-    //   let removedNode: ITreeNode = stack.popStack();
-
-    //   if (removedNode.nodeSelected) this.count++;
-
-    //   for (let child of removedNode.nodeChildren) stack.pushStack(child);
-    // }
-
+  /**   Calculates the total number of selected nodes everytime
+  nodes are selected/un-selected */
+  updateSelectedCount(selectedCount: number): void {
+    this.totalNodesSelected = selectedCount;
     this.renderTree(true);
   }
 
   //==========================================================================
-  //  Renders the Selected Count on the expansion pannel header
+  /**   Renders the Selected Count on the expansion pannel header */
   renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
     if (!firedFromUpdateSelectedCount) {
       this.text = !this.renderTreeDiv ? " Selected" : "Select User Groups";
@@ -45,6 +33,5 @@ export class MSMainComponent {
     }
 
     this.text = " Selected";
-    return this.renderTreeDiv;
   }
 }

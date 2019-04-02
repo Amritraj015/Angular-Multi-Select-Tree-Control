@@ -1,56 +1,46 @@
-<!-- <mat-tree
-  [dataSource]="treeInit.dataSource"
-  [treeControl]="treeControl"
-  class="ms-tree"
->
-  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-    <li>
-      <div class="mat-tree-node">
-        <button
-          class="expand-collapse-button"
-          *ngIf="!checkChildren(node)"
-          mat-icon-button
-          matTreeNodeToggle
-          [attr.aria-label]="'toggle ' + node.nodeName"
-        >
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
-          </mat-icon>
-        </button>
-
-        <button *ngIf="checkChildren(node)" mat-icon-button disabled></button>
-
-        <mat-checkbox
-          [checked]="node.nodeSelected"
-          (change)="selectAndExpand(node)"
-          color="warn"
-        >
-          <div
-            class="tree-node-active"
-            [innerHTML]="node.nodeName | searchFilter: searchTerm"
-          ></div>
-        </mat-checkbox>
-      </div>
-
-      <ul [class.ms-tree-invisible]="!treeControl.isExpanded(node)">
-        <ng-container matTreeNodeOutlet></ng-container>
-      </ul>
-    </li>
-  </mat-nested-tree-node>
-</mat-tree> -->
-
-<!-- ======================================================== -->
-
 <mat-tab-group animationDuration="100" mat-align-tabs="center">
   <mat-tab label="Show All">
     <mat-card class="tree-display">
-      <cdk-virtual-scroll-viewport itemSize="48" style="height: 500px;">
-        <ng-container
-          *cdkVirtualFor="let item of fullDatasource"
-        ></ng-container>
-        <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl">
-        </mat-tree>
-      </cdk-virtual-scroll-viewport>
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+          <mat-checkbox
+            class="tree-node-active"
+            [checked]="node.treeNode.nodeSelected"
+            (change)="selectAndExpand(node)"
+            color="warn"
+          >
+            {{ node.treeNode.nodeName }}
+          </mat-checkbox>
+        </mat-tree-node>
+
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: hasChild"
+          matTreeNodePadding
+        >
+          <button
+            class="expand-collapse-button"
+            mat-icon-button
+            matTreeNodeToggle
+            [attr.aria-label]="'toggle ' + node.name"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+              }}
+            </mat-icon>
+          </button>
+
+          <mat-checkbox
+            class="tree-node-active"
+            [checked]="node.treeNode.nodeSelected"
+            (change)="selectAndExpand(node)"
+            color="warn"
+          >
+            {{ node.treeNode.nodeName }}
+          </mat-checkbox>
+        </mat-tree-node>
+      </mat-tree>
     </mat-card>
   </mat-tab>
 

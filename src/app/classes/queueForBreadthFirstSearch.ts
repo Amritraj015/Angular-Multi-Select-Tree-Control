@@ -1,7 +1,7 @@
 import { TreeNode } from "./TreeNode";
 
-//  This is a custom Queue class to support the
-//  Breadth First Search Algorithms used in the control
+/**   This is a custom Queue class to support the
+Breadth First Search Algorithms used in the control */
 export class Queue {
   queue: TreeNode[];
 
