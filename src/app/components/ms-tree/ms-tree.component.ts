@@ -12,6 +12,7 @@ import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { TreeNode } from "src/app/classes/TreeNode";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
+import { tree } from "src/app/testData/testTree";
 
 @Component({
   selector: "ms-tree",
@@ -52,7 +53,7 @@ export class MSTreeComponent implements OnInit {
   hasChild = (_: number, node: FlatTreeNode) => node.expandable;
 
   ngOnInit(): void {
-    //this.treeControl.expandAll();
+    this.treeControl.expand(this.treeControl.dataNodes[0]);
   }
 
   selectAndExpand(node: FlatTreeNode) {
