@@ -29,4 +29,6 @@ export class TreeNode implements ITreeNode {
   Value must be 'true' for the node being searched itself.
   nodeSearchBreanch = false (by default), when being fed to the control */
   nodeSearchBreanch: boolean;
+
+  nodeIsLoading: boolean;
 }

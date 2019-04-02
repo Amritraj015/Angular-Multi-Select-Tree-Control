@@ -65,6 +65,8 @@ export class MSTreeComponent implements OnInit {
     let stack = new Stack();
     stack.pushStack(node.treeNode);
 
+    node.treeNode.nodeIsLoading = true;
+
     node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
     if (node.treeNode.nodeSelected) {
       this.treeControl.expandDescendants(node);
@@ -85,5 +87,6 @@ export class MSTreeComponent implements OnInit {
     }
 
     this.selectedCountEvent.emit(this.totalSelectedNodes);
+    node.treeNode.nodeIsLoading = false;
   }
 }

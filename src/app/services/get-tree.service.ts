@@ -29,7 +29,8 @@ export class GetTreeService {
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSearchBreanch: false,
-        nodeChildren: []
+        nodeChildren: [],
+        nodeIsLoading: false
       };
 
       allNodes.push(newNode);
