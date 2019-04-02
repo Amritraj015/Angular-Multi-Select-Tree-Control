@@ -12,7 +12,6 @@ import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { TreeNode } from "src/app/classes/TreeNode";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
-import { tree } from "src/app/testData/testTree";
 
 @Component({
   selector: "ms-tree",
@@ -20,8 +19,10 @@ import { tree } from "src/app/testData/testTree";
   styleUrls: ["./ms-tree.component.less"]
 })
 export class MSTreeComponent implements OnInit {
-  @Output() selectedCount = new EventEmitter<number>();
+  dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
+  treeControl: FlatTreeControl<FlatTreeNode>;
   totalSelectedNodes: number;
+  @Output() selectedCountEvent = new EventEmitter<number>();
 
   private transformer = (node: TreeNode, level: number) => {
     return {
@@ -31,11 +32,6 @@ export class MSTreeComponent implements OnInit {
     };
   };
 
-  treeControl = new FlatTreeControl<FlatTreeNode>(
-    node => node.level,
-    node => node.expandable
-  );
-
   treeFlattener = new MatTreeFlattener(
     this.transformer,
     node => node.level,
@@ -43,11 +39,20 @@ export class MSTreeComponent implements OnInit {
     node => node.nodeChildren
   );
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
   constructor(treeService: GetTreeService) {
-    this.dataSource.data = treeService.tree;
     this.totalSelectedNodes = 0;
+
+    this.treeControl = new FlatTreeControl<FlatTreeNode>(
+      node => node.level,
+      node => node.expandable
+    );
+
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
+
+    this.dataSource.data = treeService.tree;
   }
 
   hasChild = (_: number, node: FlatTreeNode) => node.expandable;
@@ -79,6 +84,6 @@ export class MSTreeComponent implements OnInit {
       for (let child of removedNode.nodeChildren) stack.pushStack(child);
     }
 
-    this.selectedCount.emit(this.totalSelectedNodes);
+    this.selectedCountEvent.emit(this.totalSelectedNodes);
   }
 }

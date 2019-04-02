@@ -1,20 +1,21 @@
 <mat-tab-group animationDuration="100" mat-align-tabs="center">
   <mat-tab label="Show All">
-    <ms-search
-      (searchTerm)="searchTerm = $event; extractNodes($event)"
-    ></ms-search>
+    <ms-search #search (searchTerm)="searchTerm = $event"></ms-search>
 
     <mat-card class="tree-display">
       <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
           <button mat-icon-button disabled></button>
           <mat-checkbox
-            class="tree-node-active"
             [checked]="node.treeNode.nodeSelected"
             (change)="selectAndExpand(node)"
             color="warn"
           >
-            {{ node.treeNode.nodeName }}
+            <div
+              class="tree-node-active"
+              [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
+            ></div>
+            <!-- {{ node.treeNode.nodeName | searchFilter: searchTerm }} -->
           </mat-checkbox>
         </mat-tree-node>
 
@@ -41,7 +42,11 @@
             (change)="selectAndExpand(node)"
             color="warn"
           >
-            {{ node.treeNode.nodeName }}
+            <div
+              [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
+            ></div>
+
+            <!-- {{ node.treeNode.nodeName | searchFilter: searchTerm }} -->
           </mat-checkbox>
         </mat-tree-node>
       </mat-tree>

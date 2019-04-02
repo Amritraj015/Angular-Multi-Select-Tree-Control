@@ -30,7 +30,7 @@
     <ng-template matExpansionPanelContent>
       <ms-tree
         *ngIf="renderTreeDiv"
-        (selectedCount)="updateSelectedCount($event)"
+        (selectedCountEvent)="updateSelectedCount($event)"
       ></ms-tree>
     </ng-template>
   </mat-expansion-panel>
