@@ -1,5 +1,9 @@
 <mat-tab-group animationDuration="100" mat-align-tabs="center">
   <mat-tab label="Show All">
+    <ms-search
+      (searchTerm)="searchTerm = $event; extractNodes($event)"
+    ></ms-search>
+
     <mat-card class="tree-display">
       <mat-tree #tree [dataSource]="dataSource" [treeControl]="treeControl">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
