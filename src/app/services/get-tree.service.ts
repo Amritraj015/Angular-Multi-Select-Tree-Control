@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
 import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
-import { FlatTreeNode } from "../classes/flatTreeNode";
-import { ITreeNode } from "../Interfaces/ITreeNode";
 import { Stack } from "../classes/stackForDepthFirstSearch";
 import { TreeNode } from "../classes/TreeNode";
 
@@ -29,8 +27,7 @@ export class GetTreeService {
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSearchBreanch: false,
-        nodeChildren: [],
-        nodeIsLoading: false
+        nodeChildren: []
       };
 
       allNodes.push(newNode);

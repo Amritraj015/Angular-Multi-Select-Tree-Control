@@ -57,6 +57,9 @@ export class MSTreeComponent implements OnInit {
 
   hasChild = (_: number, node: FlatTreeNode) => node.expandable;
 
+  checkChildren = (node: FlatTreeNode) =>
+    node.treeNode.nodeChildren.length === 0;
+
   ngOnInit(): void {
     this.treeControl.expand(this.treeControl.dataNodes[0]);
   }
@@ -64,8 +67,6 @@ export class MSTreeComponent implements OnInit {
   selectAndExpand(node: FlatTreeNode) {
     let stack = new Stack();
     stack.pushStack(node.treeNode);
-
-    node.treeNode.nodeIsLoading = true;
 
     node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
     if (node.treeNode.nodeSelected) {
@@ -87,6 +88,5 @@ export class MSTreeComponent implements OnInit {
     }
 
     this.selectedCountEvent.emit(this.totalSelectedNodes);
-    node.treeNode.nodeIsLoading = false;
   }
 }

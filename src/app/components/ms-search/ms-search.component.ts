@@ -32,7 +32,7 @@ export class MsSearchComponent {
 
   //===========================================================================================
   /**   Emit an empty search term event to return to the top of the tree on "Show All" Tab */
-  searchHighlight($searchEvent: string): void {
-    this.searchTerm.emit($searchEvent);
+  searchHighlight($searchTerm: string): void {
+    this.searchTerm.emit($searchTerm);
   }
 }
