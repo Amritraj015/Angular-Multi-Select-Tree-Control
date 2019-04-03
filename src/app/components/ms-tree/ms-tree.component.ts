@@ -12,6 +12,8 @@ import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { TreeNode } from "src/app/classes/TreeNode";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
+import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { isDefaultChangeDetectionStrategy } from "@angular/core/src/change_detection/constants";
 
 @Component({
   selector: "ms-tree",
@@ -23,6 +25,8 @@ export class MSTreeComponent implements OnInit {
   treeControl: FlatTreeControl<FlatTreeNode>;
   totalSelectedNodes: number;
   @Output() selectedCountEvent = new EventEmitter<number>();
+  // fullDataSource: TreeNode[];
+  // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   private transformer = (node: TreeNode, level: number) => {
     return {
@@ -39,19 +43,19 @@ export class MSTreeComponent implements OnInit {
     node => node.nodeChildren
   );
 
-  constructor(treeService: GetTreeService) {
+  constructor(public treeService: GetTreeService) {
     this.totalSelectedNodes = 0;
 
     this.treeControl = new FlatTreeControl<FlatTreeNode>(
       node => node.level,
       node => node.expandable
     );
-
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
       this.treeFlattener
     );
 
+    // this.fullDataSource = [];
     this.dataSource.data = treeService.tree;
   }
 
@@ -61,7 +65,21 @@ export class MSTreeComponent implements OnInit {
     node.treeNode.nodeChildren.length === 0;
 
   ngOnInit(): void {
+    for (let i = 0; i < this.treeControl.dataNodes.length / 50; i++) {
+      this.treeControl.dataNodes[i].treeNode.nodeSearchBreanch = true;
+    }
+
+    // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
+
     this.treeControl.expand(this.treeControl.dataNodes[0]);
+  }
+
+  ngAfterViewInit() {
+    // console.log(this.fullDataSource);
+    // this.virtualScroll.renderedRangeStream.subscribe(range => {
+    //   console.log(range, "range");
+    //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
+    // });
   }
 
   selectAndExpand(node: FlatTreeNode) {
@@ -88,5 +106,43 @@ export class MSTreeComponent implements OnInit {
     }
 
     this.selectedCountEvent.emit(this.totalSelectedNodes);
+  }
+
+  findMatchingTreeNodes(searchTerm: string): void {
+    if (searchTerm === null || searchTerm.length < 2) return;
+
+    let matchedNames: string[] = [];
+    let pattern = searchTerm
+      .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+      .split(" ")
+      .filter(splitTerm => {
+        return splitTerm.length > 1;
+      })
+      .join("|");
+    let regExp = new RegExp(pattern, "gi");
+
+    for (let node of this.treeControl.dataNodes) {
+      if (regExp.test(node.treeNode.nodeName))
+        matchedNames.push(
+          node.treeNode.nodeName.replace(regExp, matchedString => matchedString)
+        );
+    }
+
+    this.buildNewDataSource(matchedNames);
+  }
+
+  private buildNewDataSource(matchedNames: string[]): void {
+    let stack = new Stack();
+    stack.pushStack(this.treeControl.dataNodes[0].treeNode);
+
+    for (let node of this.treeControl.dataNodes) {
+      stack.popStack();
+      for (let newNode of this.treeControl.dataNodes) {
+        if (newNode.treeNode.nodeParentID === node.treeNode.nodeID) {
+          node.treeNode.nodeChildren.push(newNode.treeNode);
+          stack.pushStack(newNode.treeNode);
+        }
+      }
+    }
   }
 }

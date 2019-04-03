@@ -1,8 +1,14 @@
 <mat-tab-group animationDuration="100" mat-align-tabs="center">
   <mat-tab label="Show All">
-    <ms-search (searchTerm)="searchTerm = $event"></ms-search>
+    <ms-search
+      (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
+    ></ms-search>
 
     <mat-card class="tree-display">
+      <!-- <cdk-virtual-scroll-viewport itemSize="48" style="height: 750px;">
+        <ng-container
+          *cdkVirtualFor="let data of fullDataSource"
+        ></ng-container> -->
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
         <mat-tree-node
           *matTreeNodeDef="let node; when: hasChild"
@@ -58,18 +64,17 @@
               *ngIf="!node.treeNode.nodeInactive"
               [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
             ></div>
-
-            <!-- {{ node.treeNode.nodeName | searchFilter: searchTerm }} -->
           </mat-checkbox>
         </mat-tree-node>
       </mat-tree>
+      <!-- </cdk-virtual-scroll-viewport> -->
     </mat-card>
   </mat-tab>
 
   <mat-tab label="Show Selected">
     <ng-template matTabContent>
       <ms-search (searchTerm)="searchTerm = $event"></ms-search>
-      <mat-card class="tree-display"></mat-card>
+      <mat-card class="tree-display"> </mat-card>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

@@ -4,8 +4,8 @@ import { Pipe, PipeTransform } from "@angular/core";
   name: "searchFilter"
 })
 export class SearchFilterPipe implements PipeTransform {
-  transform(treeNode: string, search: string): any {
-    if (!search) return treeNode;
+  transform(treeNodeName: string, search: string): any {
+    if (!search) return treeNodeName;
 
     let pattern = search
       .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
@@ -17,7 +17,7 @@ export class SearchFilterPipe implements PipeTransform {
 
     let regExp = new RegExp(pattern, "gi");
 
-    return treeNode.replace(
+    return treeNodeName.replace(
       regExp,
       matchedString => `<span class="bg-warning">${matchedString}</span>`
     );
