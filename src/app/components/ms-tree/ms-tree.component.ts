@@ -7,13 +7,12 @@ import {
   ViewChild
 } from "@angular/core";
 import { GetTreeService } from "src/app/services/get-tree.service";
-import { FlatTreeNode } from "src/app/classes/flatTreeNode";
+import { FlatTreeNode } from "src/app/classes/FlatTreeNode";
 import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
 import { Stack } from "src/app/classes/stackForDepthFirstSearch";
 import { TreeNode } from "src/app/classes/TreeNode";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { isDefaultChangeDetectionStrategy } from "@angular/core/src/change_detection/constants";
 
 @Component({
   selector: "ms-tree",
@@ -29,11 +28,11 @@ export class MSTreeComponent implements OnInit {
   // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   private transformer = (node: TreeNode, level: number) => {
-    return {
-      expandable: !!node.nodeChildren && node.nodeChildren.length > 0,
-      treeNode: node,
-      level: level
-    };
+    return new FlatTreeNode(
+      node,
+      level,
+      !!node.nodeChildren && node.nodeChildren.length > 0
+    );
   };
 
   treeFlattener = new MatTreeFlattener(
@@ -109,29 +108,38 @@ export class MSTreeComponent implements OnInit {
   }
 
   findMatchingTreeNodes(searchTerm: string): void {
-    if (searchTerm === null || searchTerm.length < 2) return;
-
-    let matchedNames: string[] = [];
-    let pattern = searchTerm
-      .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-      .split(" ")
-      .filter(splitTerm => {
-        return splitTerm.length > 1;
-      })
-      .join("|");
-    let regExp = new RegExp(pattern, "gi");
-
-    for (let node of this.treeControl.dataNodes) {
-      if (regExp.test(node.treeNode.nodeName))
-        matchedNames.push(
-          node.treeNode.nodeName.replace(regExp, matchedString => matchedString)
-        );
+    if (searchTerm === null || searchTerm === "") {
+      this.treeControl.collapseAll();
+      this.treeControl.expand(this.treeControl.dataNodes[0]);
+      return;
     }
 
-    this.buildNewDataSource(matchedNames);
+    if (searchTerm.length > 1) {
+      let matchedNames: Set<string> = new Set<string>([]);
+      let pattern = searchTerm
+        .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+        .split(" ")
+        .filter(splitTerm => {
+          return splitTerm.length > 1;
+        })
+        .join("|");
+      let regExp = new RegExp(pattern, "gi");
+
+      for (let node of this.treeControl.dataNodes) {
+        if (regExp.test(node.treeNode.nodeName))
+          matchedNames.add(
+            node.treeNode.nodeName.replace(
+              regExp,
+              matchedString => matchedString
+            )
+          );
+      }
+      console.log(matchedNames);
+      this.buildNewDataSource(matchedNames);
+    }
   }
 
-  private buildNewDataSource(matchedNames: string[]): void {
+  private buildNewDataSource(matchedNames: Set<string>): void {
     let stack = new Stack();
     stack.pushStack(this.treeControl.dataNodes[0].treeNode);
 
