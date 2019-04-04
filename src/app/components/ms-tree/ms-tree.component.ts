@@ -86,7 +86,6 @@ export class MSTreeComponent implements OnInit {
 
   storeTabIndex($event: number): void {
     this.currentTabIndex = $event;
-    console.log(this.currentTabIndex);
   }
 
   selectAndExpand(node: FlatTreeNode) {
