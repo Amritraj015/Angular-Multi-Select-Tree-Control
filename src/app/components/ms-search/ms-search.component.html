@@ -18,7 +18,7 @@
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
-      (click)="searchBox.value = null; highlight(searchBox.value)"
+      (click)="searchBox.value = ''; highlight(searchBox.value)"
       style="cursor: pointer"
       matSuffix
     >

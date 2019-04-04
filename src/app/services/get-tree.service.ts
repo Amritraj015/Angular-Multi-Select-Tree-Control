@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
-import { Stack } from "../classes/stackForDepthFirstSearch";
+import { Stack } from "../classes/Stack";
 import { TreeNode } from "../classes/TreeNode";
 
 @Injectable({

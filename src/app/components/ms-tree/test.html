@@ -1,6 +1,11 @@
-<mat-tab-group animationDuration="100" mat-align-tabs="center">
+<mat-tab-group
+  (selectedIndexChange)="storeTabIndex($event)"
+  animationDuration="100"
+  mat-align-tabs="center"
+>
   <mat-tab label="Show All">
     <ms-search
+      [tabIndex]="currentTabIndex"
       (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
     ></ms-search>
 

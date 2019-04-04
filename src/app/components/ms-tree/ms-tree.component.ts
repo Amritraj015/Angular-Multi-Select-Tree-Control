@@ -9,7 +9,7 @@ import {
 import { GetTreeService } from "src/app/services/get-tree.service";
 import { FlatTreeNode } from "src/app/classes/FlatTreeNode";
 import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
-import { Stack } from "src/app/classes/stackForDepthFirstSearch";
+import { Stack } from "src/app/classes/Stack";
 import { TreeNode } from "src/app/classes/TreeNode";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
@@ -24,6 +24,8 @@ export class MSTreeComponent implements OnInit {
   treeControl: FlatTreeControl<FlatTreeNode>;
   totalSelectedNodes: number;
   @Output() selectedCountEvent = new EventEmitter<number>();
+  currentTabIndex: number;
+
   // fullDataSource: TreeNode[];
   // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
@@ -56,6 +58,7 @@ export class MSTreeComponent implements OnInit {
 
     // this.fullDataSource = [];
     this.dataSource.data = treeService.tree;
+    this.currentTabIndex = 0;
   }
 
   hasChild = (_: number, node: FlatTreeNode) => node.expandable;
@@ -79,6 +82,11 @@ export class MSTreeComponent implements OnInit {
     //   console.log(range, "range");
     //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
     // });
+  }
+
+  storeTabIndex($event: number): void {
+    this.currentTabIndex = $event;
+    console.log(this.currentTabIndex);
   }
 
   selectAndExpand(node: FlatTreeNode) {
@@ -140,17 +148,16 @@ export class MSTreeComponent implements OnInit {
   }
 
   private buildNewDataSource(matchedNames: string[]): void {
-    let stack = new Stack();
-    stack.pushStack(this.treeControl.dataNodes[0].treeNode);
-
-    for (let node of this.treeControl.dataNodes) {
-      stack.popStack();
-      for (let newNode of this.treeControl.dataNodes) {
-        if (newNode.treeNode.nodeParentID === node.treeNode.nodeID) {
-          node.treeNode.nodeChildren.push(newNode.treeNode);
-          stack.pushStack(newNode.treeNode);
-        }
-      }
-    }
+    // let stack = new Stack();
+    // stack.pushStack(this.treeControl.dataNodes[0].treeNode);
+    // for (let node of this.treeControl.dataNodes) {
+    //   stack.popStack();
+    //   for (let newNode of this.treeControl.dataNodes) {
+    //     if (newNode.treeNode.nodeParentID === node.treeNode.nodeID) {
+    //       node.treeNode.nodeChildren.push(newNode.treeNode);
+    //       stack.pushStack(newNode.treeNode);
+    //     }
+    //   }
+    // }
   }
 }

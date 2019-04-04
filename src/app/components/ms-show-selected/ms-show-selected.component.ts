@@ -13,7 +13,7 @@ import { FormControl } from "@angular/forms";
 import { GetTreeService } from "src/app/services/get-tree.service";
 import { startWith, map } from "rxjs/operators";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
-import { Stack } from "src/app/classes/stackForDepthFirstSearch";
+import { Stack } from "src/app/classes/Stack";
 import { NestedTreeControl } from "@angular/cdk/tree";
 
 @Component({

@@ -6,7 +6,8 @@ import {
   SimpleChanges,
   ViewChild,
   ElementRef,
-  ɵConsole
+  ɵConsole,
+  OnChanges
 } from "@angular/core";
 
 @Component({
@@ -14,19 +15,21 @@ import {
   templateUrl: "./ms-search.component.html",
   styleUrls: ["./ms-search.component.less"]
 })
-export class MsSearchComponent {
+export class MsSearchComponent implements OnChanges {
   @Output() searchTerm = new EventEmitter<string>();
   @Input() tabIndex: number;
+  @ViewChild("searchBox") searchBox: ElementRef;
 
-  constructor() {}
-
+  ngOnChanges(): void {
+    this.searchBox.nativeElement.value = "";
+    this.searchTerm.emit("");
+  }
   //===========================================================================================
   /**   Emit the search term for the "highlight on search" feature on the "Shoe All" Tab */
   highlight($searchEvent: string): void {
     if ($searchEvent.length > 1) this.searchTerm.emit($searchEvent);
     else {
-      $searchEvent = null;
-      this.searchTerm.emit($searchEvent);
+      this.searchTerm.emit("");
     }
   }
 
