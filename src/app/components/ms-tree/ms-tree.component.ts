@@ -51,6 +51,7 @@ export class MSTreeComponent implements OnInit {
       node => node.level,
       node => node.expandable
     );
+
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
       this.treeFlattener
@@ -61,14 +62,11 @@ export class MSTreeComponent implements OnInit {
     this.currentTabIndex = 0;
   }
 
-  hasChild = (_: number, node: FlatTreeNode) => node.expandable;
-
-  checkChildren = (node: FlatTreeNode) =>
-    node.treeNode.nodeChildren.length === 0;
-
   ngOnInit(): void {
-    for (let i = 0; i < this.treeControl.dataNodes.length / 50; i++) {
-      this.treeControl.dataNodes[i].treeNode.nodeSearchBreanch = true;
+    for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
+      // this.treeControl.dataNodes[i].treeNode.nodeSearchBreanch = true;
+      this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
+      this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
     }
 
     // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
@@ -83,6 +81,15 @@ export class MSTreeComponent implements OnInit {
     //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
     // });
   }
+
+  hasChild = (_: number, node: FlatTreeNode) => node.expandable;
+
+  checkNodeSelection(): boolean {
+    return this.totalSelectedNodes > 0;
+  }
+
+  checkChildren = (node: FlatTreeNode) =>
+    node.treeNode.nodeChildren.length === 0;
 
   storeTabIndex($event: number): void {
     this.currentTabIndex = $event;
@@ -102,10 +109,12 @@ export class MSTreeComponent implements OnInit {
       let removedNode = stack.popStack();
 
       if (node.treeNode.nodeSelected)
-        if (!removedNode.nodeSelected) this.totalSelectedNodes++;
+        if (!removedNode.nodeSelected && removedNode.nodeAuthorized)
+          this.totalSelectedNodes++;
 
       if (!node.treeNode.nodeSelected)
-        if (removedNode.nodeSelected) this.totalSelectedNodes--;
+        if (removedNode.nodeSelected && removedNode.nodeAuthorized)
+          this.totalSelectedNodes--;
 
       removedNode.nodeSelected = node.treeNode.nodeSelected;
       for (let child of removedNode.nodeChildren) stack.pushStack(child);
@@ -133,20 +142,22 @@ export class MSTreeComponent implements OnInit {
       let regExp = new RegExp(pattern, "gi");
 
       for (let node of this.treeControl.dataNodes) {
-        if (regExp.test(node.treeNode.nodeName))
+        if (regExp.test(node.treeNode.nodeName)) {
           matchedNames.push(
             node.treeNode.nodeName.replace(
               regExp,
               matchedString => matchedString
             )
           );
+        }
       }
-      console.log(matchedNames);
+
       this.buildNewDataSource(matchedNames);
     }
   }
 
   private buildNewDataSource(matchedNames: string[]): void {
+    console.log(this.dataSource._flattenedData);
     // let stack = new Stack();
     // stack.pushStack(this.treeControl.dataNodes[0].treeNode);
     // for (let node of this.treeControl.dataNodes) {

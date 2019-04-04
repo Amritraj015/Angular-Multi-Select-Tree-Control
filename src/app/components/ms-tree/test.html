@@ -36,15 +36,13 @@
           <button *ngIf="checkChildren(node)" mat-icon-button disabled></button>
 
           <div *ngIf="!node.treeNode.nodeAuthorized">
-            <button mat-icon-button disabled>
-              <mat-icon class="mat-icon-rtl-mirror">
-                remove_circle
-              </mat-icon>
-            </button>
+            <mat-icon color="warn" [inline]="true" class="mat-icon-rtl-mirror">
+              remove_circle
+            </mat-icon>
 
             <div
               class="tree-node-unauthorized"
-              [innerHTML]="node.nodeName | searchFilter: searchTerm"
+              [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
             ></div>
           </div>
 
@@ -53,7 +51,7 @@
             class="tree-node-active"
             [checked]="node.treeNode.nodeSelected"
             (change)="selectAndExpand(node)"
-            color="warn"
+            color="accent"
           >
             <div
               *ngIf="node.treeNode.nodeInactive"
@@ -62,7 +60,7 @@
             ></div>
 
             <div class="inactive-text" *ngIf="node.treeNode.nodeInactive">
-              &nbsp; &nbsp; (inactive)
+              (inactive)
             </div>
 
             <div
@@ -87,7 +85,11 @@
         <ng-container
           *cdkVirtualFor="let data of fullDataSource"
         ></ng-container> -->
-        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+        <mat-tree
+          *ngIf="totalSelectedNodes > 0"
+          [dataSource]="dataSource"
+          [treeControl]="treeControl"
+        >
           <mat-tree-node
             *matTreeNodeDef="let node; when: hasChild"
             matTreeNodePadding
@@ -113,15 +115,19 @@
             ></button>
 
             <div *ngIf="!node.treeNode.nodeAuthorized">
-              <button mat-icon-button disabled>
-                <mat-icon class="mat-icon-rtl-mirror">
-                  remove_circle
-                </mat-icon>
-              </button>
+              <mat-icon
+                color="warn"
+                [inline]="true"
+                class="mat-icon-rtl-mirror"
+              >
+                remove_circle
+              </mat-icon>
 
               <div
                 class="tree-node-unauthorized"
-                [innerHTML]="node.nodeName | searchFilter: searchSelected"
+                [innerHTML]="
+                  node.treeNode.nodeName | searchFilter: searchSelected
+                "
               ></div>
             </div>
 
@@ -130,7 +136,7 @@
               class="tree-node-active"
               [checked]="node.treeNode.nodeSelected"
               (change)="selectAndExpand(node)"
-              color="warn"
+              color="accent"
             >
               <div
                 *ngIf="node.treeNode.nodeInactive"
@@ -154,6 +160,12 @@
           </mat-tree-node>
         </mat-tree>
         <!-- </cdk-virtual-scroll-viewport> -->
+        <div
+          *ngIf="!checkNodeSelection() && currentTabIndex === 1"
+          class="none-selected-div"
+        >
+          None Selected
+        </div>
       </mat-card>
     </ng-template>
   </mat-tab>

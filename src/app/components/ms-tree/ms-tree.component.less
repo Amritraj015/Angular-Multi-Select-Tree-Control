@@ -1,4 +1,4 @@
-/*  Use this style sheet to style the <ms-tree> (ms-tree.component.ts) component */
+/*  Use this style sheet to style the <ms-tree> (ms-tree.component.html) component */
 
 .tree-display {
   height: 800px;
@@ -10,23 +10,14 @@
   border: 5px solid grey;
 }
 
-.ms-tree-invisible {
-  display: none;
-}
-
-.ms-tree ul,
-.ms-tree li {
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-}
-
 .tree-node-active:hover {
   color: #8ad3e2;
 }
 
 .tree-node-unauthorized {
-  color: orangered;
+  float: right;
+  margin-left: 10px;
+  color: grey;
   cursor: default;
 }
 
@@ -43,6 +34,7 @@
   float: right;
   font-size: 75%;
   color: yellow;
+  margin-left: 20px;
 }
 
 .expand-collapse-button {
@@ -50,9 +42,7 @@
 }
 
 .none-selected-div {
-  height: 300px;
-  line-height: 300px;
+  line-height: 750px;
   text-align: center;
   width: 100%;
-  border: 1px solid lightgrey;
 }
