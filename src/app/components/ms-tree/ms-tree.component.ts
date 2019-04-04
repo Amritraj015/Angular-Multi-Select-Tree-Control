@@ -92,8 +92,7 @@ export class MSTreeComponent implements OnInit {
     return this.totalSelectedNodes > 0;
   }
 
-  checkChildren = (node: FlatTreeNode) =>
-    node.treeNode.nodeChildren.length === 0;
+  checkChildren = (node: FlatTreeNode) => !node.expandable;
 
   storeTabIndex($event: number): void {
     this.currentTabIndex = $event;
