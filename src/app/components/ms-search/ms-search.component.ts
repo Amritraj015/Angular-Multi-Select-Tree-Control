@@ -3,10 +3,8 @@ import {
   Output,
   EventEmitter,
   Input,
-  SimpleChanges,
   ViewChild,
   ElementRef,
-  ɵConsole,
   OnChanges
 } from "@angular/core";
 
@@ -23,19 +21,12 @@ export class MsSearchComponent implements OnChanges {
   ngOnChanges(): void {
     this.searchBox.nativeElement.value = "";
     this.searchTerm.emit("");
-  }
-  //===========================================================================================
-  /**   Emit the search term for the "highlight on search" feature on the "Shoe All" Tab */
-  highlight($searchEvent: string): void {
-    if ($searchEvent.length > 1) this.searchTerm.emit($searchEvent);
-    else {
-      this.searchTerm.emit("");
-    }
+    this.searchBox.nativeElement.focus();
   }
 
   //===========================================================================================
-  /**   Emit an empty search term event to return to the top of the tree on "Show All" Tab */
-  searchHighlight($searchTerm: string): void {
+  /**   Emits search term event to the ms-tree component */
+  emitSearchTerm($searchTerm: string): void {
     this.searchTerm.emit($searchTerm);
   }
 }

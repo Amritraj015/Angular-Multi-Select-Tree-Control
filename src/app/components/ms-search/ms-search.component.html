@@ -11,14 +11,14 @@
       type="search"
       aria-label="Number"
       placeholder="Search"
-      (input)="searchHighlight($event.target.value)"
+      (input)="emitSearchTerm($event.target.value)"
     />
 
     <!-- "Search" and "Clear" icons that toggle depending on the input field "value" -->
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
-      (click)="searchBox.value = ''; highlight(searchBox.value)"
+      (click)="searchBox.value = ''; emitSearchTerm(searchBox.value)"
       style="cursor: pointer"
       matSuffix
     >
