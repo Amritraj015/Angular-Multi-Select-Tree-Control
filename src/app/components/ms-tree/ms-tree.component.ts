@@ -115,7 +115,7 @@ export class MSTreeComponent implements OnInit {
     }
 
     if (searchTerm.length > 1) {
-      let matchedNames: Set<string> = new Set<string>([]);
+      let matchedNames: string[] = [];
       let pattern = searchTerm
         .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
         .split(" ")
@@ -127,7 +127,7 @@ export class MSTreeComponent implements OnInit {
 
       for (let node of this.treeControl.dataNodes) {
         if (regExp.test(node.treeNode.nodeName))
-          matchedNames.add(
+          matchedNames.push(
             node.treeNode.nodeName.replace(
               regExp,
               matchedString => matchedString
@@ -139,7 +139,7 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
-  private buildNewDataSource(matchedNames: Set<string>): void {
+  private buildNewDataSource(matchedNames: string[]): void {
     let stack = new Stack();
     stack.pushStack(this.treeControl.dataNodes[0].treeNode);
 
