@@ -89,7 +89,8 @@ export class MSTreeComponent implements OnInit {
     // });
   }
 
-  hasChild = (_: number, node: FlatTreeNode) => node.expandable;
+  hasChild = (_: number, node: FlatTreeNode) =>
+    node.expandable && node.treeNode.nodeAuthorized;
 
   checkNodeSelection(): boolean {
     return this.totalSelectedNodes > 0;
@@ -162,17 +163,5 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
-  private buildNewDataSource(matchedNames: string[]): void {
-    // let stack = new Stack();
-    // stack.pushStack(this.treeControl.dataNodes[0].treeNode);
-    // for (let node of this.treeControl.dataNodes) {
-    //   stack.popStack();
-    //   for (let newNode of this.treeControl.dataNodes) {
-    //     if (newNode.treeNode.nodeParentID === node.treeNode.nodeID) {
-    //       node.treeNode.nodeChildren.push(newNode.treeNode);
-    //       stack.pushStack(newNode.treeNode);
-    //     }
-    //   }
-    // }
-  }
+  private buildNewDataSource(matchedNames: string[]): void {}
 }

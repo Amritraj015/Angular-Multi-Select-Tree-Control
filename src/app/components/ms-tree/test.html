@@ -15,12 +15,13 @@
           *cdkVirtualFor="let data of fullDataSource"
         ></ng-container> -->
       <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-        <!-- <ng-container *ngIf="treeNodes !== null"> -->
         <mat-tree-node
           #treeNode
+          template="node"
           *matTreeNodeDef="let node; when: hasChild"
           matTreeNodePadding
         >
+          <!-- <ng-container *ngIf="treeNodes !== null"> -->
           <button
             class="expand-collapse-button"
             *ngIf="!checkChildren(node)"
@@ -70,8 +71,8 @@
               [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
             ></div>
           </mat-checkbox>
+          <!-- </ng-container> -->
         </mat-tree-node>
-        <!-- </ng-container> -->
       </mat-tree>
       <!-- </cdk-virtual-scroll-viewport> -->
     </mat-card>
