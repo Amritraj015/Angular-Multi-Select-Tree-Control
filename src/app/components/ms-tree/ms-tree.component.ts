@@ -6,7 +6,9 @@ import {
   Input,
   ViewChild,
   ElementRef,
-  ContentChildren
+  ContentChildren,
+  ViewChildren,
+  QueryList
 } from "@angular/core";
 import { GetTreeService } from "src/app/services/get-tree.service";
 import { FlatTreeNode } from "src/app/classes/FlatTreeNode";
@@ -27,8 +29,8 @@ export class MSTreeComponent implements OnInit {
   totalSelectedNodes: number;
   @Output() selectedCountEvent = new EventEmitter<number>();
   currentTabIndex: number;
-  @ViewChild("tree") tree: ElementRef;
 
+  @ViewChildren("treeNode") treeNodes;
   // fullDataSource: TreeNode[];
   // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
@@ -78,7 +80,8 @@ export class MSTreeComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log(this.tree);
+    console.log(this.treeNodes.toArray());
+    // console.log(this.tree);
     // console.log(this.fullDataSource);
     // this.virtualScroll.renderedRangeStream.subscribe(range => {
     //   console.log(range, "range");
