@@ -33,8 +33,8 @@ export class MSTreeComponent implements OnInit {
   currentTabIndex: number;
   @Input() @ViewChildren("treeNodes") treeNodes;
 
-  fullDataSource: TreeNode[];
-  @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+  // fullDataSource: TreeNode[];
+  // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(
@@ -64,7 +64,7 @@ export class MSTreeComponent implements OnInit {
       this.treeFlattener
     );
 
-    this.fullDataSource = [];
+    // this.fullDataSource = [];
     this.dataSource.data = treeService.tree;
     this.currentTabIndex = 0;
   }
@@ -76,9 +76,7 @@ export class MSTreeComponent implements OnInit {
       this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
     }
 
-    this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
-
-    this.treeControl.expand(this.treeControl.dataNodes[0]);
+    // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
   }
 
   ngAfterViewInit() {
@@ -86,12 +84,13 @@ export class MSTreeComponent implements OnInit {
       if (treeNode.nativeElement.children.length === 0)
         treeNode.nativeElement.remove();
     }
+    this.treeControl.expand(this.treeControl.dataNodes[0]);
 
     // console.log(this.tree);
     // console.log(this.fullDataSource);
-    this.virtualScroll.renderedRangeStream.subscribe(range => {
-      this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
-    });
+    // this.virtualScroll.renderedRangeStream.subscribe(range => {
+    //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
+    // });
   }
 
   hasChild = (_: number, node: FlatTreeNode) =>
@@ -172,8 +171,14 @@ export class MSTreeComponent implements OnInit {
   }
 
   private buildNewDataSource(matchedNames: Set<string>): void {
-    let nodesSet = new Set(this.treeControl.dataNodes);
-    console.log(nodesSet);
+    console.log(matchedNames);
+    for (let node of this.treeControl.dataNodes) {
+      node.treeNode.nodeSearchBreanch = false;
+      if (matchedNames.has(node.treeNode.nodeName)) {
+        if (!node.treeNode.nodeSearchBreanch)
+          node.treeNode.nodeSearchBreanch = true;
+      }
+    }
   }
 
   private buildSearchedTree(matchedNames: Set<string>, laefNode: TreeNode) {}
