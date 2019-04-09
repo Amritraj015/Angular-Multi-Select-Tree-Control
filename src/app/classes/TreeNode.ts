@@ -11,7 +11,7 @@ export class TreeNode implements ITreeNode {
   /** Children of a given node.
     
   Total number of children for a node ∈ Z+ */
-  nodeChildren?: TreeNode[];
+  nodeChildren: TreeNode[];
 
   /** Represents if a node is selected.
 

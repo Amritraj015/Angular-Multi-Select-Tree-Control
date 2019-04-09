@@ -73,7 +73,6 @@ export class MSTreeComponent implements OnInit {
       this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
       this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
     }
-
     // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
 
     this.treeControl.expand(this.treeControl.dataNodes[0]);
