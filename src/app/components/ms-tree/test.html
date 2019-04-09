@@ -10,71 +10,87 @@
     ></ms-search>
 
     <mat-card class="tree-display">
-      <!-- <cdk-virtual-scroll-viewport itemSize="48" style="height: 750px;">
+      <cdk-virtual-scroll-viewport itemSize="48" style="height: 750px;">
         <ng-container
           *cdkVirtualFor="let data of fullDataSource"
-        ></ng-container> -->
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-        <mat-tree-node
-          #treeNode
-          template="node"
-          *matTreeNodeDef="let node; when: hasChild"
-          matTreeNodePadding
-        >
-          <!-- <ng-container *ngIf="treeNodes !== null"> -->
-          <button
-            class="expand-collapse-button"
-            *ngIf="!checkChildren(node)"
-            mat-icon-button
-            matTreeNodeToggle
-            [attr.aria-label]="'toggle ' + node.treeNode.nodeName"
+        ></ng-container>
+        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+          <mat-tree-node
+            #treeNodes
+            *matTreeNodeDef="let node; when: hasChild"
+            matTreeNodePadding
           >
-            <mat-icon class="mat-icon-rtl-mirror">
-              {{
-                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
-              }}
-            </mat-icon>
-          </button>
+            <ng-container *ngIf="node.treeNode.nodeSearchBreanch">
+              <button
+                class="expand-collapse-button"
+                *ngIf="!checkChildren(node)"
+                mat-icon-button
+                matTreeNodeToggle
+                [attr.aria-label]="'toggle ' + node.treeNode.nodeName"
+                (click)="ngAfterViewInit()"
+              >
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{
+                    treeControl.isExpanded(node)
+                      ? "expand_more"
+                      : "chevron_right"
+                  }}
+                </mat-icon>
+              </button>
 
-          <button *ngIf="checkChildren(node)" mat-icon-button disabled></button>
+              <button
+                *ngIf="checkChildren(node)"
+                mat-icon-button
+                disabled
+              ></button>
 
-          <div *ngIf="!node.treeNode.nodeAuthorized">
-            <mat-icon color="warn" [inline]="true" class="mat-icon-rtl-mirror">
-              remove_circle
-            </mat-icon>
+              <div *ngIf="!node.treeNode.nodeAuthorized">
+                <mat-icon
+                  color="warn"
+                  [inline]="true"
+                  class="mat-icon-rtl-mirror"
+                >
+                  remove_circle
+                </mat-icon>
 
-            <div
-              class="tree-node-unauthorized"
-              [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
-            ></div>
-          </div>
+                <div
+                  class="tree-node-unauthorized"
+                  [innerHTML]="
+                    node.treeNode.nodeName | searchFilter: searchTerm
+                  "
+                ></div>
+              </div>
 
-          <mat-checkbox
-            *ngIf="node.treeNode.nodeAuthorized"
-            class="tree-node-active"
-            [checked]="node.treeNode.nodeSelected"
-            (change)="selectAndExpand(node)"
-            color="accent"
-          >
-            <div
-              *ngIf="node.treeNode.nodeInactive"
-              class="tree-node-inactive"
-              [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
-            ></div>
+              <mat-checkbox
+                *ngIf="node.treeNode.nodeAuthorized"
+                class="tree-node-active"
+                [checked]="node.treeNode.nodeSelected"
+                (change)="selectAndExpand(node)"
+                color="accent"
+              >
+                <div
+                  *ngIf="node.treeNode.nodeInactive"
+                  class="tree-node-inactive"
+                  [innerHTML]="
+                    node.treeNode.nodeName | searchFilter: searchTerm
+                  "
+                ></div>
 
-            <div class="inactive-text" *ngIf="node.treeNode.nodeInactive">
-              (inactive)
-            </div>
+                <div class="inactive-text" *ngIf="node.treeNode.nodeInactive">
+                  (inactive)
+                </div>
 
-            <div
-              *ngIf="!node.treeNode.nodeInactive"
-              [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
-            ></div>
-          </mat-checkbox>
-          <!-- </ng-container> -->
-        </mat-tree-node>
-      </mat-tree>
-      <!-- </cdk-virtual-scroll-viewport> -->
+                <div
+                  *ngIf="!node.treeNode.nodeInactive"
+                  [innerHTML]="
+                    node.treeNode.nodeName | searchFilter: searchTerm
+                  "
+                ></div>
+              </mat-checkbox>
+            </ng-container>
+          </mat-tree-node>
+        </mat-tree>
+      </cdk-virtual-scroll-viewport>
     </mat-card>
   </mat-tab>
 

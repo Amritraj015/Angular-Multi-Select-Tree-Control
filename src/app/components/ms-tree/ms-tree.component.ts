@@ -17,6 +17,8 @@ import { Stack } from "src/app/classes/Stack";
 import { TreeNode } from "src/app/classes/TreeNode";
 import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { Queue } from "src/app/classes/Queue";
+import { FooterRowOutlet } from "@angular/cdk/table";
 
 @Component({
   selector: "ms-tree",
@@ -29,10 +31,10 @@ export class MSTreeComponent implements OnInit {
   totalSelectedNodes: number;
   @Output() selectedCountEvent = new EventEmitter<number>();
   currentTabIndex: number;
+  @Input() @ViewChildren("treeNodes") treeNodes;
 
-  @ViewChildren("treeNode") treeNodes;
-  // fullDataSource: TreeNode[];
-  // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+  fullDataSource: TreeNode[];
+  @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(
@@ -62,7 +64,7 @@ export class MSTreeComponent implements OnInit {
       this.treeFlattener
     );
 
-    // this.fullDataSource = [];
+    this.fullDataSource = [];
     this.dataSource.data = treeService.tree;
     this.currentTabIndex = 0;
   }
@@ -73,23 +75,30 @@ export class MSTreeComponent implements OnInit {
       this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
       this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
     }
-    // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
+
+    this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
 
     this.treeControl.expand(this.treeControl.dataNodes[0]);
   }
 
   ngAfterViewInit() {
-    console.log(this.treeNodes.toArray());
+    for (let treeNode of this.treeNodes.toArray()) {
+      if (treeNode.nativeElement.children.length === 0)
+        treeNode.nativeElement.remove();
+    }
+
     // console.log(this.tree);
     // console.log(this.fullDataSource);
-    // this.virtualScroll.renderedRangeStream.subscribe(range => {
-    //   console.log(range, "range");
-    //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
-    // });
+    this.virtualScroll.renderedRangeStream.subscribe(range => {
+      this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
+    });
   }
 
   hasChild = (_: number, node: FlatTreeNode) =>
     node.expandable && node.treeNode.nodeAuthorized;
+
+  isAuthorized = (index: number, node: FlatTreeNode) =>
+    !node.treeNode.nodeAuthorized;
 
   checkNodeSelection(): boolean {
     return this.totalSelectedNodes > 0;
@@ -137,7 +146,7 @@ export class MSTreeComponent implements OnInit {
     }
 
     if (searchTerm.length > 1) {
-      let matchedNames: string[] = [];
+      let matchedNames = new Set();
       let pattern = searchTerm
         .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
         .split(" ")
@@ -149,7 +158,7 @@ export class MSTreeComponent implements OnInit {
 
       for (let node of this.treeControl.dataNodes) {
         if (regExp.test(node.treeNode.nodeName)) {
-          matchedNames.push(
+          matchedNames.add(
             node.treeNode.nodeName.replace(
               regExp,
               matchedString => matchedString
@@ -162,5 +171,10 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
-  private buildNewDataSource(matchedNames: string[]): void {}
+  private buildNewDataSource(matchedNames: Set<string>): void {
+    let nodesSet = new Set(this.treeControl.dataNodes);
+    console.log(nodesSet);
+  }
+
+  private buildSearchedTree(matchedNames: Set<string>, laefNode: TreeNode) {}
 }

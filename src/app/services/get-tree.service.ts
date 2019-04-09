@@ -26,7 +26,7 @@ export class GetTreeService {
         nodeDescendantSelected: false,
         nodeAuthorized: true,
         nodeInactive: false,
-        nodeSearchBreanch: false,
+        nodeSearchBreanch: true,
         nodeChildren: []
       };
 
