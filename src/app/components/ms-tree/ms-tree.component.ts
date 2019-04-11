@@ -173,19 +173,52 @@ export class MSTreeComponent implements OnInit {
 
   private buildNewDataSource(matchedNames: Set<string>): void {
     for (let node of this.treeControl.dataNodes) {
-      node.treeNode.nodeSearchBreanch = true;
+      node.treeNode.nodeSearchBreanch = false;
     }
 
     matchedNames.forEach(name => {
-      for (let node of this.treeControl.dataNodes) {
-        if (node.treeNode.nodeName === name) {
-          const descendants = this.treeControl.getDescendants(node);
+      let stack = new Stack();
+      let queue = new Queue();
+      let matchFound: boolean = false;
+      let lastNode: TreeNode;
+      queue.Enqueue(this.dataSource.data[0]);
+      stack.pushStack(this.dataSource.data[0]);
 
-          for (let descendant of descendants) {
-            descendant.treeNode.nodeSearchBreanch = false;
+      if (this.dataSource.data[0].nodeName === name) {
+        this.dataSource.data[0].nodeSearchBreanch = true;
+        queue.Dequeue();
+        stack.popStack();
+      }
+
+      while (stack.stack.length !== 0) {
+        if (!matchFound) {
+          let removedNodeFromQueue: TreeNode = queue.Dequeue();
+          stack.pushStack(removedNodeFromQueue);
+
+          //if (removedNodeFromQueue.nodeSearchBreanch) break;
+
+          for (let child of removedNodeFromQueue.nodeChildren) {
+            stack.pushStack(child);
+
+            if (child.nodeName === name) {
+              lastNode = child;
+              lastNode.nodeSearchBreanch = true;
+              matchFound = true;
+              break;
+            }
+
+            queue.Enqueue(child);
+          }
+        } else {
+          let removedNodeFromStack: TreeNode = stack.popStack();
+          if (removedNodeFromStack.nodeID === lastNode.nodeParentID) {
+            removedNodeFromStack.nodeSearchBreanch = true;
+            lastNode = removedNodeFromStack;
           }
         }
       }
     });
+
+    this.treeControl.expandAll();
   }
 }

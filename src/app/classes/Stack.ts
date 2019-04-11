@@ -16,4 +16,8 @@ export class Stack {
   popStack(): TreeNode {
     return this.stack.pop();
   }
+
+  peekStack(): TreeNode {
+    return this.stack[this.stack.length - 1];
+  }
 }
