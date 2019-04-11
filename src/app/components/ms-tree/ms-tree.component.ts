@@ -145,6 +145,10 @@ export class MSTreeComponent implements OnInit {
       return;
     }
 
+    // if (searchTerm.length < 2)
+    //   for (let node of this.treeControl.dataNodes)
+    //     node.treeNode.nodeSearchBreanch = true;
+
     if (searchTerm.length > 1) {
       let matchedNames = new Set();
       let pattern = searchTerm
@@ -195,8 +199,6 @@ export class MSTreeComponent implements OnInit {
           let removedNodeFromQueue: TreeNode = queue.Dequeue();
           stack.pushStack(removedNodeFromQueue);
 
-          //if (removedNodeFromQueue.nodeSearchBreanch) break;
-
           for (let child of removedNodeFromQueue.nodeChildren) {
             stack.pushStack(child);
 
@@ -207,14 +209,18 @@ export class MSTreeComponent implements OnInit {
               break;
             }
 
+            //if (removedNodeFromQueue.nodeSearchBreanch) break;
             queue.Enqueue(child);
           }
         } else {
           let removedNodeFromStack: TreeNode = stack.popStack();
+
           if (removedNodeFromStack.nodeID === lastNode.nodeParentID) {
             removedNodeFromStack.nodeSearchBreanch = true;
             lastNode = removedNodeFromStack;
           }
+
+          //if (removedNodeFromStack.nodeSearchBreanch) break;
         }
       }
     });
