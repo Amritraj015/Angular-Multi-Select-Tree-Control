@@ -23,6 +23,7 @@ export class MSTreeComponent implements OnInit {
   totalSelectedNodes: number;
   @Output() selectedCountEvent = new EventEmitter<number>();
   currentTabIndex: number;
+  nodesFoundOnSearch: boolean;
 
   // fullDataSource: TreeNode[];
   // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
@@ -46,6 +47,7 @@ export class MSTreeComponent implements OnInit {
     public treeService: GetTreeService,
     private snackBar: MatSnackBar
   ) {
+    this.nodesFoundOnSearch = true;
     this.totalSelectedNodes = 0;
 
     this.treeControl = new FlatTreeControl<FlatTreeNode>(
@@ -106,7 +108,15 @@ export class MSTreeComponent implements OnInit {
     stack.pushStack(node.treeNode);
 
     node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
+
+    if (this.nodesFoundOnSearch) {
+      const descendanats = this.treeControl.getDescendants(node);
+      for (let descendanat of descendanats)
+        descendanat.treeNode.nodeSearchBreanch = true;
+    }
+
     this.treeControl.expand(node);
+
     if (node.treeNode.nodeSelected) {
       this.totalSelectedNodes++;
     } else this.totalSelectedNodes--;
@@ -142,12 +152,9 @@ export class MSTreeComponent implements OnInit {
     if (searchTerm === null || searchTerm === "") {
       this.treeControl.collapseAll();
       this.treeControl.expand(this.treeControl.dataNodes[0]);
+      this.nodesFoundOnSearch = true;
       return;
     }
-
-    // if (searchTerm.length < 2)
-    //   for (let node of this.treeControl.dataNodes)
-    //     node.treeNode.nodeSearchBreanch = true;
 
     if (searchTerm.length > 1) {
       let matchedNames = new Set();
@@ -171,7 +178,10 @@ export class MSTreeComponent implements OnInit {
         }
       }
 
-      this.buildNewDataSource(matchedNames);
+      if (matchedNames.size > 0) {
+        this.nodesFoundOnSearch = true;
+        this.buildNewDataSource(matchedNames);
+      } else this.nodesFoundOnSearch = false;
     }
   }
 

@@ -11,7 +11,8 @@
       type="search"
       aria-label="Number"
       placeholder="Search"
-      (input)="emitSearchTerm($event.target.value)"
+      (keyup.enter)="emitSearchTerm($event.target.value)"
+      (input)="emitEmptySearchString($event.target.value)"
     />
 
     <!-- "Search" and "Clear" icons that toggle depending on the input field "value" -->
@@ -25,6 +26,6 @@
       clear
     </mat-icon>
 
-    <mat-hint>Type at least two characters to search</mat-hint>
+    <mat-hint>{{ searchHint }}</mat-hint>
   </mat-form-field>
 </div>
