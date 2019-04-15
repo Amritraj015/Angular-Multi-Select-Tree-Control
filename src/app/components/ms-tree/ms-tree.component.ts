@@ -11,11 +11,10 @@ import {
 } from "@angular/material";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { Queue } from "src/app/classes/Queue";
-import { IfStmt } from "@angular/compiler";
 
 @Component({
   selector: "ms-tree",
-  templateUrl: "./test.html",
+  templateUrl: "./ms-tree.component.html",
   styleUrls: ["./ms-tree.component.less"]
 })
 export class MSTreeComponent implements OnInit {
