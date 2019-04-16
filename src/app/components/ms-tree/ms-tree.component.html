@@ -205,7 +205,10 @@
           None Selected
         </div>
 
-        <div *ngIf="!nodesFoundOnSearch" class="none-selected-div">
+        <div
+          *ngIf="!nodesFoundOnSearch && checkNodeSelection()"
+          class="none-selected-div"
+        >
           No Results Found
         </div>
       </mat-card>

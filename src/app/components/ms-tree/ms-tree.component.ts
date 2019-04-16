@@ -135,7 +135,6 @@ export class MSTreeComponent implements OnInit {
       let selectedNodeFound: boolean = false;
       let lastNode: TreeNode = this.dataSource.data[0];
       queue.Enqueue(this.dataSource.data[0]);
-      //stack.pushStack(this.dataSource.data[0]);
 
       if (node.nodeID === this.dataSource.data[0].nodeID) {
         selectedNodeFound = true;
@@ -148,7 +147,6 @@ export class MSTreeComponent implements OnInit {
           let removedNodeFromQueue: TreeNode = queue.Dequeue();
           stack.pushStack(removedNodeFromQueue);
 
-          //console.log(queue);
           for (let child of removedNodeFromQueue.nodeChildren) {
             stack.pushStack(child);
 
