@@ -74,9 +74,15 @@ export class MSTreeComponent implements OnInit {
     this.treeControl.expand(this.treeControl.dataNodes[0]);
 
     // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
+    this.totalSelectedNodes = 0;
+    for (let node of this.treeControl.dataNodes) {
+      if (node.treeNode.nodeSelected) {
+        this.selectedNodes.add(node.treeNode);
+        this.totalSelectedNodes++;
+      }
+    }
 
-    for (let node of this.treeControl.dataNodes)
-      if (node.treeNode.nodeSelected) this.selectedNodes.add(node.treeNode);
+    this.selectedCountEvent.emit(this.totalSelectedNodes);
   }
 
   ngAfterViewInit() {
