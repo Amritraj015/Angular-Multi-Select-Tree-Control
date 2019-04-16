@@ -182,6 +182,12 @@ export class MSTreeComponent implements OnInit {
     node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
     this.treeControl.expand(node);
 
+    if (this.nodesFoundOnSearch) {
+      let descendants = this.treeControl.getDescendants(node);
+      for (let descendant of descendants)
+        descendant.treeNode.nodeSearchBreanch = true;
+    }
+
     if (node.treeNode.nodeSelected) {
       this.totalSelectedNodes++;
     } else this.totalSelectedNodes--;
