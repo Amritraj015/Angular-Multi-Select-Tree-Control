@@ -1,4 +1,4 @@
-let orgUnits = [
+export let orgUnits = [
     {
         "companyid": "100235",
         "companyname": "NRT LLC",
@@ -10436,4 +10436,3 @@ let orgUnits = [
     }
 ];
 
-console.log(typeof JSON.stringify(orgUnits));

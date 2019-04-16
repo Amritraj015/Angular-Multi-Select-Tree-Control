@@ -8,7 +8,9 @@ import {
   MatInputModule,
   MatTabsModule,
   MatCardModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatProgressBarModule,
+  MatSnackBarModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -20,17 +22,14 @@ import { MSTreeComponent } from "./components/ms-tree/ms-tree.component";
 import { GetTreeService } from "./services/get-tree.service";
 import { SearchFilterPipe } from "./pipes/search-filter.pipe";
 import { MsSearchComponent } from "./components/ms-search/ms-search.component";
-import { MsShowSelectedComponent } from "./components/ms-show-selected/ms-show-selected.component";
-import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree-container.component";
+import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
     MSMainComponent,
-    MSTreeContainerComponent,
     MSTreeComponent,
     MsSearchComponent,
-    SearchFilterPipe,
-    MsShowSelectedComponent
+    SearchFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -46,7 +45,10 @@ import { MSTreeContainerComponent } from "./components/ms-tree-container/ms-tree
     MatAutocompleteModule,
     MatTabsModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    ScrollDispatchModule
   ],
   providers: [GetTreeService],
   bootstrap: [MSMainComponent]

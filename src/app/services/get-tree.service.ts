@@ -1,61 +1,54 @@
 import { Injectable } from "@angular/core";
-import { ITreeNode } from "../Interfaces/ITreeNode";
-import { Stack } from "../classes/stackForDepthFirstSearch";
-import { MatTreeNestedDataSource } from "@angular/material";
-import { TestTree } from "../testData/testTree";
+import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
+import { Stack } from "../classes/Stack";
+import { TreeNode } from "../classes/TreeNode";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
-  dataSource = new MatTreeNestedDataSource<ITreeNode>();
+  tree: TreeNode[];
 
   constructor() {
-    this.dataSource.data = this.getTree();
-    this.dataSource.data = this.fixTreeDataSource(this.dataSource.data[0]);
+    this.tree = [];
+    this.getTree();
   }
 
-  private fixTreeDataSource(tree: ITreeNode): ITreeNode[] {
+  getTree(): void {
+    let allNodes: TreeNode[] = [];
+
+    for (let org of flatTreeNodes) {
+      const newNode: TreeNode = {
+        nodeName: org.companyname,
+        nodeID: parseInt(org.companyid),
+        nodeParentID: parseInt(org.parentid),
+        nodeSelected: false,
+        nodeDescendantSelected: false,
+        nodeAuthorized: true,
+        nodeInactive: false,
+        nodeSearchBreanch: true,
+        nodeChildren: []
+      };
+
+      allNodes.push(newNode);
+    }
+    this.buildNestedTree(allNodes);
+  }
+
+  /** Builds the initial tree for `Show All` Tab*/
+  buildNestedTree(allNodes: TreeNode[]): void {
     let stack = new Stack();
+    this.tree[0] = allNodes[0];
+    stack.pushStack(this.tree[0]);
 
-    stack.pushStack(tree);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeDescendantSelected = false;
-      removedNode.nodeSearchBreanch = false;
-      removedNode.nodeSelected = false;
-      if (!removedNode.nodeAuthorized) {
-        removedNode = this.denyNodeAccessToUser(removedNode);
-        continue;
+    for (let node of allNodes) {
+      stack.popStack();
+      for (let newNode of allNodes) {
+        if (newNode.nodeParentID === node.nodeID) {
+          node.nodeChildren.push(newNode);
+          stack.pushStack(newNode);
+        }
       }
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
     }
-    return [tree];
-  }
-
-  private denyNodeAccessToUser(node: ITreeNode): ITreeNode {
-    let stack = new Stack();
-
-    stack.pushStack(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-      removedNode.nodeAuthorized = false;
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-
-    return node;
-  }
-
-  //    This method will make a request to a server
-  //    to deliver an array with the tree object.
-  //    *** Since, this is a nested tree control, the array must have
-  //    one and only one nested tree object ***
-
-  getTree(): ITreeNode[] {
-    let test = new TestTree();
-    return test.getTreeData();
   }
 }

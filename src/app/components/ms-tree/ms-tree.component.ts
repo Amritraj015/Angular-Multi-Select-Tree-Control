@@ -1,9 +1,16 @@
-import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
-import { ITreeNode } from "src/app/Interfaces/ITreeNode";
-import { NestedTreeControl } from "@angular/cdk/tree";
-import { Stack } from "src/app/classes/stackForDepthFirstSearch";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import { GetTreeService } from "src/app/services/get-tree.service";
-import { Queue } from "src/app/classes/queueForBreadthFirstSearch";
+import { FlatTreeNode } from "src/app/classes/FlatTreeNode";
+import { FlatTreeControl } from "@angular/cdk/tree";
+import { Stack } from "src/app/classes/Stack";
+import { TreeNode } from "src/app/classes/TreeNode";
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+  MatSnackBar
+} from "@angular/material";
+import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { Queue } from "src/app/classes/Queue";
 
 @Component({
   selector: "ms-tree",
@@ -11,225 +18,317 @@ import { Queue } from "src/app/classes/queueForBreadthFirstSearch";
   styleUrls: ["./ms-tree.component.less"]
 })
 export class MSTreeComponent implements OnInit {
-  treeControl = new NestedTreeControl<ITreeNode>(node => node.nodeChildren);
-  checkSelected: boolean;
+  dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
+  treeControl: FlatTreeControl<FlatTreeNode>;
+  totalSelectedNodes: number;
+  @Output() selectedCountEvent = new EventEmitter<number>();
+  selectedNodes: Set<TreeNode>;
   currentTabIndex: number;
-  searching: boolean;
-  searchingSelected: boolean;
-  @Output() selectedCount = new EventEmitter<ITreeNode>();
-  @Input() treeIsSearchable: boolean;
+  nodesFoundOnSearch: boolean;
 
-  //===========================================================================================
-  //  call service to get the tree
-  constructor(public treeInit: GetTreeService) {
-    this.searching = false;
-    this.searchingSelected = false;
-    this.checkSelected = false;
+  // fullDataSource: TreeNode[];
+  // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+
+  private transformer = (node: TreeNode, level: number) => {
+    return new FlatTreeNode(
+      node,
+      level,
+      !!node.nodeChildren && node.nodeChildren.length > 0
+    );
+  };
+
+  treeFlattener = new MatTreeFlattener(
+    this.transformer,
+    node => node.level,
+    node => node.expandable,
+    node => node.nodeChildren
+  );
+
+  constructor(
+    public treeService: GetTreeService,
+    private snackBar: MatSnackBar
+  ) {
+    this.treeControl = new FlatTreeControl<FlatTreeNode>(
+      node => node.level,
+      node => node.expandable
+    );
+
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
+
+    // this.fullDataSource = [];
+    this.dataSource.data = treeService.tree;
     this.currentTabIndex = 0;
+    this.selectedNodes = new Set();
+    this.nodesFoundOnSearch = true;
+    this.totalSelectedNodes = 0;
   }
 
-  //===========================================================================================
-  //  Automatically expand the first level children when the fly-out loads
   ngOnInit(): void {
-    this.treeControl.expand(this.treeInit.dataSource.data[0]);
-    console.log(this.treeIsSearchable);
-  }
-
-  //===========================================================================================
-  //  check if a node has children
-  hasChild = (_: number, node: ITreeNode) =>
-    !!node.nodeChildren && node.nodeChildren.length > 0;
-
-  //===========================================================================================
-  //  check if a node has children
-  checkChildren = (node: ITreeNode) => node.nodeChildren.length === 0;
-
-  //===========================================================================================
-  //  Toggle the checkbox for the current node and its descendants
-  //  Expand all descendants of a node when 'Selected'
-  selectAndExpand(node: ITreeNode): void {
-    let stack = new Stack();
-
-    node.nodeSelected = !node.nodeSelected;
-    stack.pushStack(node);
-
-    if (node.nodeSelected) this.treeControl.expandDescendants(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-
-      if (removedNode.nodeAuthorized)
-        removedNode.nodeSelected = node.nodeSelected;
-
-      if (node.nodeSelected && this.currentTabIndex === 1)
-        removedNode.nodeDescendantSelected = true;
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+    for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
+      this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
+      this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
     }
+    this.treeControl.expand(this.treeControl.dataNodes[0]);
 
-    //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
+    // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
+
+    this.treeControl.dataNodes.forEach(node => {
+      if (node.treeNode.nodeSelected) this.selectedNodes.add(node.treeNode);
+    });
   }
 
-  //===========================================================================================
-  //  Checks if any node is selected in the tree
-  //  Used for conditional rendering of "None Selected" if no tree nodes have been selected
-  checkNodeSelection($tabIndex: number): void {
-    this.checkSelected = false;
-    this.currentTabIndex = $tabIndex;
+  ngAfterViewInit() {
+    // console.log(this.tree);
+    // console.log(this.fullDataSource);
+    // this.virtualScroll.renderedRangeStream.subscribe(range => {
+    //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
+    // });
+  }
 
-    if ($tabIndex === 1) {
-      this.searchingSelected = false;
-      this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
+  trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
 
+  //==========================================================================
+  /** Checks if atleast one tree node is selected */
+  checkNodeSelection(): boolean {
+    return this.totalSelectedNodes > 0;
+  }
+
+  //==========================================================================
+  /** Checks if a given tree node has child nodes */
+  checkChildren = (node: FlatTreeNode) => !node.expandable;
+
+  //==========================================================================
+  /** Toggles the expand/collapse state of an expandable tree node */
+  toggleNode(node: FlatTreeNode): void {
+    if (this.treeControl.isExpanded(node)) this.treeControl.collapse(node);
+    else this.treeControl.expand(node);
+  }
+
+  //==========================================================================
+  /** Provide padding to tree node based on their level */
+  providePaddingForNode(node: FlatTreeNode): object {
+    return { "margin-left": node.level * 5 + "%" };
+  }
+
+  //==========================================================================
+  /** Stores the current Tab index and calls a helper method
+   * to build the tree for the `Show Selected` Tab */
+  storeTabIndex($event: number): void {
+    this.currentTabIndex = $event;
+
+    if (this.currentTabIndex === 1)
+      this.buildTreeForShowSelectedTab(this.selectedNodes);
+  }
+
+  //==========================================================================
+  /** Builds the tree for the `Show Selected` Tab */
+  private buildTreeForShowSelectedTab(selectedNodes: Set<TreeNode>) {
+    for (let node of this.treeControl.dataNodes)
+      node.treeNode.nodeDescendantSelected = false;
+
+    selectedNodes.forEach(node => {
       let stack = new Stack();
-      stack.pushStack(this.treeInit.dataSource.data[0]);
+      let queue = new Queue();
+      let selectedNodeFound: boolean = false;
+      let lastNode: TreeNode = this.dataSource.data[0];
+      queue.Enqueue(this.dataSource.data[0]);
 
-      while (stack.stack.length > 0) {
-        let removedNode: ITreeNode = stack.popStack();
-        if (removedNode.nodeSelected) {
-          this.checkSelected = true;
-          break;
+      if (node.nodeID === this.dataSource.data[0].nodeID) {
+        selectedNodeFound = true;
+        stack.pushStack(queue.Dequeue());
+        this.dataSource.data[0].nodeDescendantSelected = true;
+      }
+
+      do {
+        if (!selectedNodeFound) {
+          let removedNodeFromQueue: TreeNode = queue.Dequeue();
+          stack.pushStack(removedNodeFromQueue);
+
+          for (let child of removedNodeFromQueue.nodeChildren) {
+            stack.pushStack(child);
+
+            if (child.nodeID === node.nodeID) {
+              lastNode = child;
+              lastNode.nodeDescendantSelected = true;
+              selectedNodeFound = true;
+              break;
+            }
+
+            queue.Enqueue(child);
+          }
+        } else {
+          let removedNodeFromStack: TreeNode = stack.popStack();
+
+          if (removedNodeFromStack.nodeID === lastNode.nodeParentID) {
+            if (removedNodeFromStack.nodeDescendantSelected) break;
+            removedNodeFromStack.nodeDescendantSelected = true;
+            lastNode = removedNodeFromStack;
+          }
         }
-        for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-      }
-
-      this.CheckDescendantsSelection();
-    } else {
-      this.searching = false;
-      this.treeControl.collapseAll();
-      this.treeControl.expand(this.treeInit.dataSource.data[0]);
-    }
+      } while (stack.stack.length !== 0);
+    });
   }
 
-  //===========================================================================================
-  //  Functions to initialize "nodeDescendantSelected" property to display Selected nodes
-  //  on "Show Selected" Tab
-  private CheckDescendantsSelection(): void {
+  //==========================================================================
+  /** 1) Selects All descendants of a given node.
+   * 2) Expands the provided node (Only first level children)
+   */
+  selectAndExpand(node: FlatTreeNode) {
     let stack = new Stack();
+    stack.pushStack(node.treeNode);
 
-    stack.pushStack(this.treeInit.dataSource.data[0]);
+    node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
+    this.treeControl.expand(node);
 
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
+    if (node.treeNode.nodeSelected) {
+      this.totalSelectedNodes++;
+    } else this.totalSelectedNodes--;
 
-      removedNode.nodeDescendantSelected = false;
+    while (stack.stack.length !== 0) {
+      let removedNode = stack.popStack();
 
-      if (this.checkChildren(removedNode) && removedNode.nodeAuthorized)
-        this.SelectedNodesOnBranch(removedNode);
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-  }
-
-  private SelectedNodesOnBranch(node: ITreeNode) {
-    let queue = new Queue();
-    queue.Enqueue(this.treeInit.dataSource.data[0]);
-
-    while (queue.queue.length !== 0) {
-      let removedNode: ITreeNode = queue.Dequeue();
-
-      if (node.nodeSelected) {
-        node.nodeDescendantSelected = true;
+      if (node.treeNode.nodeSelected) {
+        if (!removedNode.nodeSelected && removedNode.nodeAuthorized)
+          this.totalSelectedNodes++;
       }
 
-      if (node.nodeParentID === removedNode.nodeID) {
-        if (node.nodeDescendantSelected)
-          removedNode.nodeDescendantSelected = true;
-
-        node = removedNode;
-        queue.queue = [];
-        queue.Enqueue(this.treeInit.dataSource.data[0]);
-        continue;
+      if (!node.treeNode.nodeSelected) {
+        if (removedNode.nodeSelected && removedNode.nodeAuthorized)
+          this.totalSelectedNodes--;
       }
 
-      for (let newNode of removedNode.nodeChildren) queue.Enqueue(newNode);
-    }
-  }
-
-  //===========================================================================================
-  //  Search functions for the "Show All" and "Show Selected" Tabs
-  extractNodes($searchString: string): void {
-    let stack = new Stack();
-
-    this.isSearchInProgress($searchString);
-    stack.pushStack(this.treeInit.dataSource.data[0]);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
-
-      removedNode.nodeSearchBreanch = false;
-
-      if (removedNode.nodeAuthorized && this.checkChildren(removedNode))
-        this.searchNode(removedNode, $searchString);
-
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
-    }
-  }
-
-  private isSearchInProgress($searchString: string): void {
-    if ($searchString !== null && $searchString.length > 1) {
-      if (this.currentTabIndex === 0) this.searching = true;
-      else this.searchingSelected = true;
-    } else {
-      if (this.currentTabIndex === 0) {
-        this.searching = false;
-        this.treeControl.collapseAll();
-        this.treeControl.expand(this.treeInit.dataSource.data[0]);
-      } else {
-        this.searchingSelected = false;
-        this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
-      }
-    }
-  }
-
-  private searchNode(node: ITreeNode, $searchString: string) {
-    let queue = new Queue();
-    queue.Enqueue(this.treeInit.dataSource.data[0]);
-
-    while (queue.queue.length !== 0) {
-      let removedNode: ITreeNode = queue.Dequeue();
-
-      if (node.nodeName === $searchString) {
-        node.nodeSearchBreanch = true;
-        if (this.currentTabIndex === 0)
-          this.treeControl.expandDescendants(this.treeInit.dataSource.data[0]);
-      }
-
-      if (node.nodeParentID === removedNode.nodeID) {
-        if (node.nodeSearchBreanch) removedNode.nodeSearchBreanch = true;
-
-        node = removedNode;
-        queue.queue = [];
-        queue.Enqueue(this.treeInit.dataSource.data[0]);
-        continue;
-      }
-
-      for (let newNode of removedNode.nodeChildren) queue.Enqueue(newNode);
-    }
-  }
-
-  //===========================================================================================
-  //  Select Functionality while searching tree nodes
-  selectOnSearch(node: ITreeNode): void {
-    let stack = new Stack();
-
-    node.nodeSelected = !node.nodeSelected;
-    stack.pushStack(node);
-
-    while (stack.stack.length > 0) {
-      let removedNode: ITreeNode = stack.popStack();
       if (removedNode.nodeAuthorized) {
-        removedNode.nodeSelected = node.nodeSelected;
-        removedNode.nodeSearchBreanch = true;
+        removedNode.nodeSelected = node.treeNode.nodeSelected;
+
+        if (removedNode.nodeSelected) this.selectedNodes.add(removedNode);
+        else this.selectedNodes.delete(removedNode);
+
+        if (this.currentTabIndex === 1)
+          removedNode.nodeDescendantSelected = true;
       }
 
-      for (let newNode of removedNode.nodeChildren) stack.pushStack(newNode);
+      for (let child of removedNode.nodeChildren) stack.pushStack(child);
     }
 
-    this.treeControl.expandDescendants(node);
+    this.displaySelectionNotification(node);
+    this.selectedCountEvent.emit(this.totalSelectedNodes);
+  }
 
-    //  Event emission to ms-tree-container to update selection count
-    this.selectedCount.emit(this.treeInit.dataSource.data[0]);
+  //==========================================================================
+  /** Displays a snackbar notification on expandable node selection/unselection */
+  private displaySelectionNotification(node: FlatTreeNode) {
+    if (node.expandable && node.treeNode.nodeSelected)
+      this.snackBar.open("All Descendants Selected!", "", { duration: 2000 });
+    else if (node.expandable && !node.treeNode.nodeSelected)
+      this.snackBar.open("All Descendants Unselected!", "", { duration: 2000 });
+  }
+
+  //==========================================================================
+  /** Build a set of matching tree nodes on search */
+  findMatchingTreeNodes(searchTerm: string): void {
+    if (searchTerm === null || searchTerm === "") {
+      this.treeControl.dataNodes.forEach(node => {
+        node.treeNode.nodeSearchBreanch = true;
+      });
+
+      this.treeControl.collapseAll();
+      this.treeControl.expand(this.treeControl.dataNodes[0]);
+      this.nodesFoundOnSearch = true;
+      return;
+    }
+
+    if (searchTerm.length > 1) {
+      let matchedNames = new Set();
+      let pattern = searchTerm
+        .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+        .split(" ")
+        .filter(splitTerm => {
+          return splitTerm.length > 1;
+        })
+        .join("|");
+
+      let regExp = new RegExp(pattern, "gi");
+
+      if (this.currentTabIndex === 0) {
+        for (let node of this.treeControl.dataNodes) {
+          if (regExp.test(node.treeNode.nodeName)) {
+            matchedNames.add(
+              node.treeNode.nodeName.replace(
+                regExp,
+                matchedString => matchedString
+              )
+            );
+          }
+        }
+      } else {
+        this.selectedNodes.forEach(node => {
+          if (regExp.test(node.nodeName)) {
+            matchedNames.add(
+              node.nodeName.replace(regExp, matchedString => matchedString)
+            );
+          }
+        });
+      }
+
+      if (matchedNames.size > 0) {
+        this.nodesFoundOnSearch = true;
+        this.buildTreeForSearchedNode(matchedNames);
+      } else this.nodesFoundOnSearch = false;
+    }
+  }
+
+  //==========================================================================
+  /** Build the tree when nodes are searched */
+  private buildTreeForSearchedNode(matchedNames: Set<string>): void {
+    this.treeControl.dataNodes.forEach(node => {
+      node.treeNode.nodeSearchBreanch = false;
+    });
+
+    matchedNames.forEach(name => {
+      let stack = new Stack();
+      let queue = new Queue();
+      let matchFound: boolean = false;
+      let lastNode: TreeNode = this.dataSource.data[0];
+      queue.Enqueue(this.dataSource.data[0]);
+
+      if (this.dataSource.data[0].nodeName === name) {
+        this.dataSource.data[0].nodeSearchBreanch = true;
+        stack.pushStack(queue.Dequeue());
+        matchFound = true;
+      }
+
+      do {
+        if (!matchFound) {
+          let removedNodeFromQueue: TreeNode = queue.Dequeue();
+          stack.pushStack(removedNodeFromQueue);
+
+          for (let child of removedNodeFromQueue.nodeChildren) {
+            stack.pushStack(child);
+
+            if (child.nodeName === name) {
+              lastNode = child;
+              lastNode.nodeSearchBreanch = true;
+              matchFound = true;
+              break;
+            }
+
+            queue.Enqueue(child);
+          }
+        } else {
+          let removedNodeFromStack: TreeNode = stack.popStack();
+
+          if (removedNodeFromStack.nodeID === lastNode.nodeParentID) {
+            if (removedNodeFromStack.nodeSearchBreanch) break;
+            removedNodeFromStack.nodeSearchBreanch = true;
+            lastNode = removedNodeFromStack;
+          }
+        }
+      } while (stack.stack.length !== 0);
+    });
+
+    this.treeControl.expandAll();
   }
 }

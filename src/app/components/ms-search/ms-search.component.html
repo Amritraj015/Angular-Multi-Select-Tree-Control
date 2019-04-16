@@ -11,36 +11,21 @@
       type="search"
       aria-label="Number"
       placeholder="Search"
-      [formControl]="searchControl"
-      [matAutocomplete]="auto"
-      (input)="backToTopTree($event.target.value)"
+      (keyup.enter)="emitSearchTerm($event.target.value)"
+      (input)="emitEmptySearchString($event.target.value)"
     />
 
     <!-- "Search" and "Clear" icons that toggle depending on the input field "value" -->
     <mat-icon *ngIf="searchBox.value.length === 0" matSuffix>search</mat-icon>
     <mat-icon
       *ngIf="searchBox.value.length > 0"
-      (click)="searchBox.value = null; highlight(searchBox.value); ngOnInit()"
+      (click)="searchBox.value = ''; emitSearchTerm(searchBox.value)"
       style="cursor: pointer"
       matSuffix
     >
       clear
     </mat-icon>
 
-    <mat-hint>Search User Group(s)</mat-hint>
-
-    <!-- Auto-complete feature -->
-    <mat-autocomplete
-      autoActiveFirstOption="true"
-      (optionSelected)="highlight(searchBox.value)"
-      #auto="matAutocomplete"
-    >
-      <mat-option
-        *ngFor="let option of (filteredOptions | async)"
-        [value]="option"
-      >
-        <div [innerHTML]="option | searchFilter: searchBox.value"></div>
-      </mat-option>
-    </mat-autocomplete>
+    <mat-hint>{{ searchHint }}</mat-hint>
   </mat-form-field>
 </div>
