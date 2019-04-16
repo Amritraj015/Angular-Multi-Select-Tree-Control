@@ -240,7 +240,7 @@ export class MSTreeComponent implements OnInit {
   //==========================================================================
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
-    if (searchTerm === null || searchTerm === "") {
+    if (searchTerm === "") {
       for (let node of this.treeControl.dataNodes)
         node.treeNode.nodeSearchBreanch = true;
 
@@ -249,6 +249,8 @@ export class MSTreeComponent implements OnInit {
       this.nodesFoundOnSearch = true;
       return;
     }
+
+    let start = new Date().getTime();
 
     if (searchTerm.length > 1) {
       let matchedNames = new Set();
@@ -288,6 +290,9 @@ export class MSTreeComponent implements OnInit {
         this.buildTreeForSearchedNode(matchedNames);
       } else this.nodesFoundOnSearch = false;
     }
+
+    let end = new Date().getTime();
+    console.log("Search and Expansion of nodes took " + (end - start) + " ms");
   }
 
   //==========================================================================
