@@ -17,15 +17,14 @@ export class MSMainComponent {
   }
 
   //==========================================================================
-  /**   Calculates the total number of selected nodes everytime
-  nodes are selected/un-selected */
+  /** Updates the node Selection count on the control header */
   updateSelectedCount(selectedCount: number): void {
     this.totalNodesSelected = selectedCount;
     this.renderTree(true);
   }
 
   //==========================================================================
-  /**   Renders the Selected Count on the expansion pannel header */
+  /** Renders the Selected Count on the expansion pannel header */
   renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
     if (!firedFromUpdateSelectedCount) {
       this.text = !this.renderTreeDiv ? " Selected" : "Select User Groups";

@@ -35,6 +35,7 @@ export class GetTreeService {
     this.buildNestedTree(allNodes);
   }
 
+  /** Builds the initial tree for `Show All` Tab*/
   buildNestedTree(allNodes: TreeNode[]): void {
     let stack = new Stack();
     this.tree[0] = allNodes[0];
