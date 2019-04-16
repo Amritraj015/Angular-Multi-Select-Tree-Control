@@ -163,6 +163,7 @@ export class MSTreeComponent implements OnInit {
           let removedNodeFromStack: TreeNode = stack.popStack();
 
           if (removedNodeFromStack.nodeID === lastNode.nodeParentID) {
+            if (removedNodeFromStack.nodeDescendantSelected) break;
             removedNodeFromStack.nodeDescendantSelected = true;
             lastNode = removedNodeFromStack;
           }
@@ -180,15 +181,6 @@ export class MSTreeComponent implements OnInit {
     stack.pushStack(node.treeNode);
 
     node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
-    node.treeNode.nodeDescendantSelected = !node.treeNode
-      .nodeDescendantSelected;
-
-    if (this.nodesFoundOnSearch) {
-      this.treeControl.getDescendants(node).forEach(descendant => {
-        descendant.treeNode.nodeSearchBreanch = true;
-      });
-    }
-
     this.treeControl.expand(node);
 
     if (node.treeNode.nodeSelected) {
@@ -238,8 +230,9 @@ export class MSTreeComponent implements OnInit {
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
     if (searchTerm === null || searchTerm === "") {
-      for (let node of this.treeControl.dataNodes)
+      this.treeControl.dataNodes.forEach(node => {
         node.treeNode.nodeSearchBreanch = true;
+      });
 
       this.treeControl.collapseAll();
       this.treeControl.expand(this.treeControl.dataNodes[0]);
@@ -328,6 +321,7 @@ export class MSTreeComponent implements OnInit {
           let removedNodeFromStack: TreeNode = stack.popStack();
 
           if (removedNodeFromStack.nodeID === lastNode.nodeParentID) {
+            if (removedNodeFromStack.nodeSearchBreanch) break;
             removedNodeFromStack.nodeSearchBreanch = true;
             lastNode = removedNodeFromStack;
           }
