@@ -75,9 +75,8 @@ export class MSTreeComponent implements OnInit {
 
     // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
 
-    this.treeControl.dataNodes.forEach(node => {
+    for (let node of this.treeControl.dataNodes)
       if (node.treeNode.nodeSelected) this.selectedNodes.add(node.treeNode);
-    });
   }
 
   ngAfterViewInit() {
@@ -230,9 +229,8 @@ export class MSTreeComponent implements OnInit {
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
     if (searchTerm === null || searchTerm === "") {
-      this.treeControl.dataNodes.forEach(node => {
+      for (let node of this.treeControl.dataNodes)
         node.treeNode.nodeSearchBreanch = true;
-      });
 
       this.treeControl.collapseAll();
       this.treeControl.expand(this.treeControl.dataNodes[0]);
@@ -283,9 +281,8 @@ export class MSTreeComponent implements OnInit {
   //==========================================================================
   /** Build the tree when nodes are searched */
   private buildTreeForSearchedNode(matchedNames: Set<string>): void {
-    this.treeControl.dataNodes.forEach(node => {
+    for (let node of this.treeControl.dataNodes)
       node.treeNode.nodeSearchBreanch = false;
-    });
 
     matchedNames.forEach(name => {
       let stack = new Stack();
