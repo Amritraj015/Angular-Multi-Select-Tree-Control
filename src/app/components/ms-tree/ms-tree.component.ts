@@ -68,13 +68,16 @@ export class MSTreeComponent implements OnInit {
 
   ngOnInit(): void {
     for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
-      // this.treeControl.dataNodes[i].treeNode.nodeSearchBreanch = true;
       this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
       this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
     }
     this.treeControl.expand(this.treeControl.dataNodes[0]);
 
     // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
+
+    this.treeControl.dataNodes.forEach(node => {
+      if (node.treeNode.nodeSelected) this.selectedNodes.add(node.treeNode);
+    });
   }
 
   ngAfterViewInit() {
@@ -84,6 +87,8 @@ export class MSTreeComponent implements OnInit {
     //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
     // });
   }
+
+  trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
 
   checkNodeSelection(): boolean {
     return this.totalSelectedNodes > 0;
@@ -124,6 +129,7 @@ export class MSTreeComponent implements OnInit {
           let removedNodeFromQueue: TreeNode = queue.Dequeue();
           stack.pushStack(removedNodeFromQueue);
 
+          //console.log(removedNodeFromQueue.nodeName);
           for (let child of removedNodeFromQueue.nodeChildren) {
             stack.pushStack(child);
 
@@ -157,9 +163,9 @@ export class MSTreeComponent implements OnInit {
       .nodeDescendantSelected;
 
     if (this.nodesFoundOnSearch) {
-      const descendanats = this.treeControl.getDescendants(node);
-      for (let descendanat of descendanats)
-        descendanat.treeNode.nodeSearchBreanch = true;
+      this.treeControl.getDescendants(node).forEach(descendant => {
+        descendant.treeNode.nodeSearchBreanch = true;
+      });
     }
 
     this.treeControl.expand(node);
@@ -259,25 +265,24 @@ export class MSTreeComponent implements OnInit {
   }
 
   private buildTreeForSearchedNode(matchedNames: Set<string>): void {
-    for (let node of this.treeControl.dataNodes) {
+    this.treeControl.dataNodes.forEach(node => {
       node.treeNode.nodeSearchBreanch = false;
-    }
+    });
 
     matchedNames.forEach(name => {
       let stack = new Stack();
       let queue = new Queue();
       let matchFound: boolean = false;
-      let lastNode: TreeNode;
+      let lastNode: TreeNode = this.dataSource.data[0];
       queue.Enqueue(this.dataSource.data[0]);
-      stack.pushStack(this.dataSource.data[0]);
 
       if (this.dataSource.data[0].nodeName === name) {
         this.dataSource.data[0].nodeSearchBreanch = true;
-        queue.Dequeue();
-        stack.popStack();
+        stack.pushStack(queue.Dequeue());
+        matchFound = true;
       }
 
-      while (stack.stack.length !== 0) {
+      do {
         if (!matchFound) {
           let removedNodeFromQueue: TreeNode = queue.Dequeue();
           stack.pushStack(removedNodeFromQueue);
@@ -292,7 +297,6 @@ export class MSTreeComponent implements OnInit {
               break;
             }
 
-            //if (removedNodeFromQueue.nodeSearchBreanch) break;
             queue.Enqueue(child);
           }
         } else {
@@ -302,10 +306,8 @@ export class MSTreeComponent implements OnInit {
             removedNodeFromStack.nodeSearchBreanch = true;
             lastNode = removedNodeFromStack;
           }
-
-          //if (removedNodeFromStack.nodeSearchBreanch) break;
         }
-      }
+      } while (stack.stack.length !== 0);
     });
 
     this.treeControl.expandAll();

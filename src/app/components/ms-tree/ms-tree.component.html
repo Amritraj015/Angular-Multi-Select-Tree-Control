@@ -18,6 +18,7 @@
         *ngIf="nodesFoundOnSearch"
         [dataSource]="dataSource"
         [treeControl]="treeControl"
+        [trackBy]="trackTreeNodes"
       >
         <ng-container *matTreeNodeDef="let node">
           <div
@@ -106,97 +107,106 @@
       ></ms-search>
 
       <mat-card class="tree-display">
-        <mat-tree
-          *ngIf="checkNodeSelection() && nodesFoundOnSearch"
-          [dataSource]="dataSource"
-          [treeControl]="treeControl"
-        >
-          <ng-container *matTreeNodeDef="let node">
-            <div
-              *ngIf="node.treeNode.nodeDescendantSelected"
-              [ngStyle]="providePaddingForNode(node)"
-              class="tree-node"
-            >
-              <button
-                class="expand-collapse-button"
-                *ngIf="!checkChildren(node)"
-                mat-icon-button
-                [attr.aria-label]="'toggle ' + node.treeNode.nodeName"
-                (click)="toggleNode(node)"
-              >
-                <mat-icon class="mat-icon-rtl-mirror">
-                  {{
-                    treeControl.isExpanded(node)
-                      ? "expand_more"
-                      : "chevron_right"
-                  }}
-                </mat-icon>
-              </button>
-
-              <button
-                *ngIf="checkChildren(node)"
-                mat-icon-button
-                disabled
-                [attr.aria-label]="'cannot toggle' + node.treeNode.nodeName"
-              >
-                <mat-icon color="warn" class="mat-icon-rtl-mirror"> </mat-icon>
-              </button>
-
+        <ng-container *ngIf="nodesFoundOnSearch">
+          <mat-tree
+            *ngIf="checkNodeSelection() || nodesFoundOnSearch"
+            [dataSource]="dataSource"
+            [treeControl]="treeControl"
+          >
+            <ng-container *matTreeNodeDef="let node">
               <div
-                class="unauthorized-container"
-                *ngIf="!node.treeNode.nodeAuthorized"
+                *ngIf="
+                  node.treeNode.nodeSearchBreanch &&
+                  node.treeNode.nodeDescendantSelected
+                "
+                [ngStyle]="providePaddingForNode(node)"
+                class="tree-node"
               >
-                <mat-icon
-                  color="warn"
-                  [inline]="true"
-                  class="mat-icon-rtl-mirror"
+                <button
+                  class="expand-collapse-button"
+                  *ngIf="!checkChildren(node)"
+                  mat-icon-button
+                  [attr.aria-label]="'toggle ' + node.treeNode.nodeName"
+                  (click)="toggleNode(node)"
                 >
-                  remove_circle
-                </mat-icon>
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{
+                      treeControl.isExpanded(node)
+                        ? "expand_more"
+                        : "chevron_right"
+                    }}
+                  </mat-icon>
+                </button>
+
+                <button
+                  *ngIf="checkChildren(node)"
+                  mat-icon-button
+                  disabled
+                  [attr.aria-label]="'cannot toggle' + node.treeNode.nodeName"
+                >
+                  <mat-icon color="warn" class="mat-icon-rtl-mirror">
+                  </mat-icon>
+                </button>
 
                 <div
-                  class="tree-node-unauthorized"
-                  [innerHTML]="
-                    node.treeNode.nodeName | searchFilter: searchSelected
-                  "
-                ></div>
-              </div>
+                  class="unauthorized-container"
+                  *ngIf="!node.treeNode.nodeAuthorized"
+                >
+                  <mat-icon
+                    color="warn"
+                    [inline]="true"
+                    class="mat-icon-rtl-mirror"
+                  >
+                    remove_circle
+                  </mat-icon>
 
-              <mat-checkbox
-                *ngIf="node.treeNode.nodeAuthorized"
-                class="tree-node-active"
-                [checked]="node.treeNode.nodeSelected"
-                (change)="selectAndExpand(node)"
-                color="accent"
-              >
-                <div
-                  *ngIf="node.treeNode.nodeInactive"
-                  class="tree-node-inactive"
-                  [innerHTML]="
-                    node.treeNode.nodeName | searchFilter: searchSelected
-                  "
-                ></div>
-
-                <div class="inactive-text" *ngIf="node.treeNode.nodeInactive">
-                  (inactive)
+                  <div
+                    class="tree-node-unauthorized"
+                    [innerHTML]="
+                      node.treeNode.nodeName | searchFilter: searchSelected
+                    "
+                  ></div>
                 </div>
 
-                <div
-                  *ngIf="!node.treeNode.nodeInactive"
-                  [innerHTML]="
-                    node.treeNode.nodeName | searchFilter: searchSelected
-                  "
-                ></div>
-              </mat-checkbox>
-            </div>
-          </ng-container>
-        </mat-tree>
+                <mat-checkbox
+                  *ngIf="node.treeNode.nodeAuthorized"
+                  class="tree-node-active"
+                  [checked]="node.treeNode.nodeSelected"
+                  (change)="selectAndExpand(node)"
+                  color="accent"
+                >
+                  <div
+                    *ngIf="node.treeNode.nodeInactive"
+                    class="tree-node-inactive"
+                    [innerHTML]="
+                      node.treeNode.nodeName | searchFilter: searchSelected
+                    "
+                  ></div>
 
+                  <div class="inactive-text" *ngIf="node.treeNode.nodeInactive">
+                    (inactive)
+                  </div>
+
+                  <div
+                    *ngIf="!node.treeNode.nodeInactive"
+                    [innerHTML]="
+                      node.treeNode.nodeName | searchFilter: searchSelected
+                    "
+                  ></div>
+                </mat-checkbox>
+              </div>
+            </ng-container>
+          </mat-tree>
+        </ng-container>
         <div
           *ngIf="!checkNodeSelection() && currentTabIndex === 1"
           class="none-selected-div"
         >
           None Selected
+        </div>
+
+        <div *ngIf="!nodesFoundOnSearch" class="none-selected-div">
+          No Results Found
         </div>
       </mat-card>
     </ng-template>
