@@ -90,25 +90,30 @@ export class MSTreeComponent implements OnInit {
 
   trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
 
+  //==========================================================================
   /** Checks if atleast one tree node is selected */
   checkNodeSelection(): boolean {
     return this.totalSelectedNodes > 0;
   }
 
+  //==========================================================================
   /** Checks if a given tree node has child nodes */
   checkChildren = (node: FlatTreeNode) => !node.expandable;
 
+  //==========================================================================
   /** Toggles the expand/collapse state of an expandable tree node */
   toggleNode(node: FlatTreeNode): void {
     if (this.treeControl.isExpanded(node)) this.treeControl.collapse(node);
     else this.treeControl.expand(node);
   }
 
+  //==========================================================================
   /** Provide padding to tree node based on their level */
   providePaddingForNode(node: FlatTreeNode): object {
     return { "margin-left": node.level * 5 + "%" };
   }
 
+  //==========================================================================
   /** Stores the current Tab index and calls a helper method
    * to build the tree for the `Show Selected` Tab */
   storeTabIndex($event: number): void {
@@ -118,6 +123,7 @@ export class MSTreeComponent implements OnInit {
       this.buildTreeForShowSelectedTab(this.selectedNodes);
   }
 
+  //==========================================================================
   /** Builds the tree for the `Show Selected` Tab */
   private buildTreeForShowSelectedTab(selectedNodes: Set<TreeNode>) {
     for (let node of this.treeControl.dataNodes)
@@ -127,16 +133,22 @@ export class MSTreeComponent implements OnInit {
       let stack = new Stack();
       let queue = new Queue();
       let selectedNodeFound: boolean = false;
-      let lastNode: TreeNode;
+      let lastNode: TreeNode = this.dataSource.data[0];
       queue.Enqueue(this.dataSource.data[0]);
-      stack.pushStack(this.dataSource.data[0]);
+      //stack.pushStack(this.dataSource.data[0]);
 
-      while (stack.stack.length !== 0) {
+      if (node.nodeID === this.dataSource.data[0].nodeID) {
+        selectedNodeFound = true;
+        stack.pushStack(queue.Dequeue());
+        this.dataSource.data[0].nodeDescendantSelected = true;
+      }
+
+      do {
         if (!selectedNodeFound) {
           let removedNodeFromQueue: TreeNode = queue.Dequeue();
           stack.pushStack(removedNodeFromQueue);
 
-          //console.log(removedNodeFromQueue.nodeName);
+          //console.log(queue);
           for (let child of removedNodeFromQueue.nodeChildren) {
             stack.pushStack(child);
 
@@ -157,10 +169,11 @@ export class MSTreeComponent implements OnInit {
             lastNode = removedNodeFromStack;
           }
         }
-      }
+      } while (stack.stack.length !== 0);
     });
   }
 
+  //==========================================================================
   /** 1) Selects All descendants of a given node.
    * 2) Expands the provided node (Only first level children)
    */
@@ -214,6 +227,7 @@ export class MSTreeComponent implements OnInit {
     this.selectedCountEvent.emit(this.totalSelectedNodes);
   }
 
+  //==========================================================================
   /** Displays a snackbar notification on expandable node selection/unselection */
   private displaySelectionNotification(node: FlatTreeNode) {
     if (node.expandable && node.treeNode.nodeSelected)
@@ -222,6 +236,7 @@ export class MSTreeComponent implements OnInit {
       this.snackBar.open("All Descendants Unselected!", "", { duration: 2000 });
   }
 
+  //==========================================================================
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
     if (searchTerm === null || searchTerm === "") {
@@ -274,6 +289,7 @@ export class MSTreeComponent implements OnInit {
     }
   }
 
+  //==========================================================================
   /** Build the tree when nodes are searched */
   private buildTreeForSearchedNode(matchedNames: Set<string>): void {
     this.treeControl.dataNodes.forEach(node => {

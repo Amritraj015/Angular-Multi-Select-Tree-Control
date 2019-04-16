@@ -1,4 +1,4 @@
-/**  This is the interface for a tree node. */
+/**  This is the interface for a flat tree node. */
 export interface ITreeNode {
   /** Name of the node */
   nodeName: string;
@@ -20,7 +20,7 @@ export interface ITreeNode {
   nodeAuthorized: boolean;
 
   /** Represents if a node is inactive.
-   
+  
   'true' if a node is inactive else 'false' */
   nodeInactive: boolean;
 }

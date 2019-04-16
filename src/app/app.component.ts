@@ -7,12 +7,12 @@ import { Component } from "@angular/core";
 })
 export class MSMainComponent {
   totalNodesSelected: number;
-  text: string;
+  headerText: string;
   renderTreeDiv: boolean;
 
   constructor() {
     this.totalNodesSelected = 0;
-    this.text = "Select User Groups";
+    this.headerText = "Select User Groups";
     this.renderTreeDiv = false;
   }
 
@@ -27,10 +27,12 @@ export class MSMainComponent {
   /** Renders the Selected Count on the expansion pannel header */
   renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
     if (!firedFromUpdateSelectedCount) {
-      this.text = !this.renderTreeDiv ? " Selected" : "Select User Groups";
+      this.headerText = !this.renderTreeDiv
+        ? " Selected"
+        : "Select User Groups";
       return (this.renderTreeDiv = !this.renderTreeDiv);
     }
 
-    this.text = " Selected";
+    this.headerText = " Selected";
   }
 }
