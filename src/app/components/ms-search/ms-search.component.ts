@@ -20,13 +20,13 @@ export class MsSearchComponent implements OnChanges {
   searchHint: string;
 
   constructor() {
-    this.searchHint =
-      "1) Type at least two characters. 2) Press ENTER key to Search";
+    this.searchHint = "Type at least two characters to Search";
   }
 
   ngOnChanges(): void {
     this.searchBox.nativeElement.value = "";
     this.searchTerm.emit("");
+    console.log("emiting search term");
     this.searchBox.nativeElement.focus();
   }
 

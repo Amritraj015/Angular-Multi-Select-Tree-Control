@@ -10,7 +10,7 @@
     ></ms-search>
 
     <mat-progress-bar
-      *ngIf="loadingNodes"
+      *ngIf="searchingNodes"
       color="primary"
       mode="buffer"
     ></mat-progress-bar>
@@ -91,6 +91,12 @@
                 [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
               ></div>
             </mat-checkbox>
+            <mat-progress-bar
+              class="loading-nodes-progress-bar"
+              *ngIf="node.treeNode.nodeChildrenLoading"
+              color="primary"
+              mode="indeterminate"
+            ></mat-progress-bar>
           </div>
         </ng-container>
       </mat-tree>

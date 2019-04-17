@@ -25,7 +25,7 @@ export class MSTreeComponent implements OnInit {
   selectedNodes: Set<TreeNode>;
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
-  loadingNodes: boolean;
+  searchingNodes: boolean;
 
   // fullDataSource: TreeNode[];
   // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
@@ -65,7 +65,7 @@ export class MSTreeComponent implements OnInit {
     this.selectedNodes = new Set();
     this.nodesFoundOnSearch = true;
     this.totalSelectedNodes = 0;
-    this.loadingNodes = false;
+    this.searchingNodes = false;
   }
 
   ngOnInit(): void {
@@ -108,16 +108,21 @@ export class MSTreeComponent implements OnInit {
   checkChildren = (node: FlatTreeNode) => !node.expandable;
 
   //==========================================================================
-  /** Toggles the expand/collapse state of an expandable tree node */
-  toggleNode(node: FlatTreeNode): void {
-    if (this.treeControl.isExpanded(node)) this.treeControl.collapse(node);
-    else this.treeControl.expand(node);
-  }
-
-  //==========================================================================
   /** Provide padding to tree node based on their level */
   providePaddingForNode(node: FlatTreeNode): object {
     return { "margin-left": node.level * 5 + "%" };
+  }
+
+  //==========================================================================
+  /** Toggles the expand/collapse state of an expandable tree node */
+  toggleNode(node: FlatTreeNode): void {
+    node.treeNode.nodeChildrenLoading = true;
+
+    setTimeout(() => {
+      if (this.treeControl.isExpanded(node)) this.treeControl.collapse(node);
+      else this.treeControl.expand(node);
+      node.treeNode.nodeChildrenLoading = false;
+    });
   }
 
   //==========================================================================
@@ -184,50 +189,55 @@ export class MSTreeComponent implements OnInit {
    * 2) Expands the provided node (Only first level children)
    */
   selectAndExpand(node: FlatTreeNode) {
-    let stack = new Stack();
-    stack.pushStack(node.treeNode);
+    node.treeNode.nodeChildrenLoading = true;
 
-    node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
-    this.treeControl.expand(node);
+    setTimeout(() => {
+      let stack = new Stack();
+      stack.pushStack(node.treeNode);
 
-    if (this.nodesFoundOnSearch) {
-      let descendants = this.treeControl.getDescendants(node);
-      for (let descendant of descendants)
-        descendant.treeNode.nodeSearchBreanch = true;
-    }
+      node.treeNode.nodeSelected = !node.treeNode.nodeSelected;
+      this.treeControl.expand(node);
 
-    if (node.treeNode.nodeSelected) {
-      this.totalSelectedNodes++;
-    } else this.totalSelectedNodes--;
-
-    while (stack.stack.length !== 0) {
-      let removedNode = stack.popStack();
+      if (this.nodesFoundOnSearch) {
+        let descendants = this.treeControl.getDescendants(node);
+        for (let descendant of descendants)
+          descendant.treeNode.nodeSearchBreanch = true;
+      }
 
       if (node.treeNode.nodeSelected) {
-        if (!removedNode.nodeSelected && removedNode.nodeAuthorized)
-          this.totalSelectedNodes++;
+        this.totalSelectedNodes++;
+      } else this.totalSelectedNodes--;
+
+      while (stack.stack.length !== 0) {
+        let removedNode = stack.popStack();
+
+        if (node.treeNode.nodeSelected) {
+          if (!removedNode.nodeSelected && removedNode.nodeAuthorized)
+            this.totalSelectedNodes++;
+        }
+
+        if (!node.treeNode.nodeSelected) {
+          if (removedNode.nodeSelected && removedNode.nodeAuthorized)
+            this.totalSelectedNodes--;
+        }
+
+        if (removedNode.nodeAuthorized) {
+          removedNode.nodeSelected = node.treeNode.nodeSelected;
+
+          if (removedNode.nodeSelected) this.selectedNodes.add(removedNode);
+          else this.selectedNodes.delete(removedNode);
+
+          if (this.currentTabIndex === 1)
+            removedNode.nodeDescendantSelected = true;
+        }
+
+        for (let child of removedNode.nodeChildren) stack.pushStack(child);
       }
 
-      if (!node.treeNode.nodeSelected) {
-        if (removedNode.nodeSelected && removedNode.nodeAuthorized)
-          this.totalSelectedNodes--;
-      }
-
-      if (removedNode.nodeAuthorized) {
-        removedNode.nodeSelected = node.treeNode.nodeSelected;
-
-        if (removedNode.nodeSelected) this.selectedNodes.add(removedNode);
-        else this.selectedNodes.delete(removedNode);
-
-        if (this.currentTabIndex === 1)
-          removedNode.nodeDescendantSelected = true;
-      }
-
-      for (let child of removedNode.nodeChildren) stack.pushStack(child);
-    }
-
-    this.displaySelectionNotification(node);
-    this.selectedCountEvent.emit(this.totalSelectedNodes);
+      node.treeNode.nodeChildrenLoading = false;
+      this.displaySelectionNotification(node);
+      this.selectedCountEvent.emit(this.totalSelectedNodes);
+    });
   }
 
   //==========================================================================
@@ -243,7 +253,7 @@ export class MSTreeComponent implements OnInit {
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
     let newThis = this;
-    if (searchTerm.length > 1) this.loadingNodes = true;
+    if (searchTerm.length > 1) this.searchingNodes = true;
 
     setTimeout(() => {
       if (searchTerm === "") {
@@ -294,7 +304,7 @@ export class MSTreeComponent implements OnInit {
           newThis.buildTreeForSearchedNode(matchedNames);
         } else newThis.nodesFoundOnSearch = false;
 
-        this.loadingNodes = false;
+        this.searchingNodes = false;
       }
     }, 500);
   }
