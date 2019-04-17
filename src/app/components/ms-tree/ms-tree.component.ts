@@ -185,9 +185,7 @@ export class MSTreeComponent implements OnInit {
   }
 
   //==========================================================================
-  /** 1) Selects All descendants of a given node.
-   * 2) Expands the provided node (Only first level children)
-   */
+  /** Selects all descendants and expands the first level childern of a given node.*/
   selectAndExpand(node: FlatTreeNode) {
     node.treeNode.nodeChildrenLoading = true;
 
@@ -252,7 +250,6 @@ export class MSTreeComponent implements OnInit {
   //==========================================================================
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
-    let newThis = this;
     if (searchTerm.length > 1) this.searchingNodes = true;
 
     setTimeout(() => {
@@ -278,8 +275,8 @@ export class MSTreeComponent implements OnInit {
 
         let regExp = new RegExp(pattern, "gi");
 
-        if (newThis.currentTabIndex === 0) {
-          for (let node of newThis.treeControl.dataNodes) {
+        if (this.currentTabIndex === 0) {
+          for (let node of this.treeControl.dataNodes) {
             if (regExp.test(node.treeNode.nodeName)) {
               matchedNames.add(
                 node.treeNode.nodeName.replace(
@@ -290,7 +287,7 @@ export class MSTreeComponent implements OnInit {
             }
           }
         } else {
-          newThis.selectedNodes.forEach(node => {
+          this.selectedNodes.forEach(node => {
             if (regExp.test(node.nodeName)) {
               matchedNames.add(
                 node.nodeName.replace(regExp, matchedString => matchedString)
@@ -300,9 +297,9 @@ export class MSTreeComponent implements OnInit {
         }
 
         if (matchedNames.size > 0) {
-          newThis.nodesFoundOnSearch = true;
-          newThis.buildTreeForSearchedNode(matchedNames);
-        } else newThis.nodesFoundOnSearch = false;
+          this.nodesFoundOnSearch = true;
+          this.buildTreeForSearchedNode(matchedNames);
+        } else this.nodesFoundOnSearch = false;
 
         this.searchingNodes = false;
       }
