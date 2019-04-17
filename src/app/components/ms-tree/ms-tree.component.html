@@ -9,6 +9,12 @@
       (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
     ></ms-search>
 
+    <mat-progress-bar
+      *ngIf="loadingNodes"
+      color="primary"
+      mode="buffer"
+    ></mat-progress-bar>
+
     <mat-card class="tree-display">
       <!-- <cdk-virtual-scroll-viewport itemSize="48" style="height: 750px;">
         <ng-container
@@ -53,11 +59,7 @@
               class="unauthorized-container"
               *ngIf="!node.treeNode.nodeAuthorized"
             >
-              <mat-icon
-                color="warn"
-                [inline]="true"
-                class="mat-icon-rtl-mirror"
-              >
+              <mat-icon [inline]="true" class="mat-icon-rtl-mirror">
                 remove_circle
               </mat-icon>
 
@@ -69,10 +71,10 @@
 
             <mat-checkbox
               *ngIf="node.treeNode.nodeAuthorized"
-              class="tree-node-active"
+              class="tree-node-checkbox"
               [checked]="node.treeNode.nodeSelected"
               (change)="selectAndExpand(node)"
-              color="accent"
+              color="primary"
             >
               <div
                 *ngIf="node.treeNode.nodeInactive"
@@ -105,6 +107,12 @@
         [tabIndex]="currentTabIndex"
         (searchTerm)="searchSelected = $event; findMatchingTreeNodes($event)"
       ></ms-search>
+
+      <mat-progress-bar
+        *ngIf="loadingNodes"
+        color="primary"
+        mode="buffer"
+      ></mat-progress-bar>
 
       <mat-card class="tree-display">
         <ng-container *ngIf="nodesFoundOnSearch">
@@ -152,11 +160,7 @@
                   class="unauthorized-container"
                   *ngIf="!node.treeNode.nodeAuthorized"
                 >
-                  <mat-icon
-                    color="warn"
-                    [inline]="true"
-                    class="mat-icon-rtl-mirror"
-                  >
+                  <mat-icon [inline]="true" class="mat-icon-rtl-mirror">
                     remove_circle
                   </mat-icon>
 
@@ -170,10 +174,10 @@
 
                 <mat-checkbox
                   *ngIf="node.treeNode.nodeAuthorized"
-                  class="tree-node-active"
+                  class="tree-node-checkbox"
                   [checked]="node.treeNode.nodeSelected"
                   (change)="selectAndExpand(node)"
-                  color="accent"
+                  color="primary"
                 >
                   <div
                     *ngIf="node.treeNode.nodeInactive"

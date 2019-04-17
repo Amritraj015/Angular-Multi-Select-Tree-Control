@@ -33,12 +33,7 @@ export class MsSearchComponent implements OnChanges {
   //===========================================================================================
   /** Emits search term to the ms-tree component */
   emitSearchTerm($searchTerm: string): void {
-    this.searchTerm.emit($searchTerm);
-  }
-
-  //===========================================================================================
-  /** Emits an empty search term to the ms-tree component */
-  emitEmptySearchString($searchTerm: string): void {
-    if ($searchTerm.length < 2) this.searchTerm.emit("");
+    if ($searchTerm.length < 2 || $searchTerm === "") this.searchTerm.emit("");
+    else this.searchTerm.emit($searchTerm);
   }
 }
