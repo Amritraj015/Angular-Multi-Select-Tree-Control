@@ -10,7 +10,8 @@ import {
   MatCardModule,
   MatExpansionModule,
   MatProgressBarModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatProgressSpinnerModule
 } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -48,7 +49,8 @@ import { ScrollDispatchModule } from "@angular/cdk/scrolling";
     MatExpansionModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    ScrollDispatchModule
+    ScrollDispatchModule,
+    MatProgressSpinnerModule
   ],
   providers: [GetTreeService],
   bootstrap: [MSMainComponent]

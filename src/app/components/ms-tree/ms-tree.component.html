@@ -9,6 +9,12 @@
       (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
     ></ms-search>
 
+    <mat-progress-bar
+      *ngIf="loadingNodes"
+      color="primary"
+      mode="buffer"
+    ></mat-progress-bar>
+
     <mat-card class="tree-display">
       <!-- <cdk-virtual-scroll-viewport itemSize="48" style="height: 750px;">
         <ng-container
@@ -101,6 +107,12 @@
         [tabIndex]="currentTabIndex"
         (searchTerm)="searchSelected = $event; findMatchingTreeNodes($event)"
       ></ms-search>
+
+      <mat-progress-bar
+        *ngIf="loadingNodes"
+        color="primary"
+        mode="buffer"
+      ></mat-progress-bar>
 
       <mat-card class="tree-display">
         <ng-container *ngIf="nodesFoundOnSearch">

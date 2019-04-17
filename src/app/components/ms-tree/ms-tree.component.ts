@@ -25,6 +25,7 @@ export class MSTreeComponent implements OnInit {
   selectedNodes: Set<TreeNode>;
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
+  loadingNodes: boolean;
 
   // fullDataSource: TreeNode[];
   // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
@@ -64,6 +65,7 @@ export class MSTreeComponent implements OnInit {
     this.selectedNodes = new Set();
     this.nodesFoundOnSearch = true;
     this.totalSelectedNodes = 0;
+    this.loadingNodes = false;
   }
 
   ngOnInit(): void {
@@ -240,59 +242,61 @@ export class MSTreeComponent implements OnInit {
   //==========================================================================
   /** Build a set of matching tree nodes on search */
   findMatchingTreeNodes(searchTerm: string): void {
-    if (searchTerm === "") {
-      for (let node of this.treeControl.dataNodes)
-        node.treeNode.nodeSearchBreanch = true;
+    let newThis = this;
+    if (searchTerm.length > 1) this.loadingNodes = true;
 
-      this.treeControl.collapseAll();
-      this.treeControl.expand(this.treeControl.dataNodes[0]);
-      this.nodesFoundOnSearch = true;
-      return;
-    }
+    setTimeout(() => {
+      if (searchTerm === "") {
+        for (let node of this.treeControl.dataNodes)
+          node.treeNode.nodeSearchBreanch = true;
 
-    let start = new Date().getTime();
-
-    if (searchTerm.length > 1) {
-      let matchedNames = new Set();
-      let pattern = searchTerm
-        .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-        .split(" ")
-        .filter(splitTerm => {
-          return splitTerm.length > 1;
-        })
-        .join("|");
-
-      let regExp = new RegExp(pattern, "gi");
-
-      if (this.currentTabIndex === 0) {
-        for (let node of this.treeControl.dataNodes) {
-          if (regExp.test(node.treeNode.nodeName)) {
-            matchedNames.add(
-              node.treeNode.nodeName.replace(
-                regExp,
-                matchedString => matchedString
-              )
-            );
-          }
-        }
-      } else {
-        this.selectedNodes.forEach(node => {
-          if (regExp.test(node.nodeName)) {
-            matchedNames.add(
-              node.nodeName.replace(regExp, matchedString => matchedString)
-            );
-          }
-        });
+        this.treeControl.collapseAll();
+        this.treeControl.expand(this.treeControl.dataNodes[0]);
+        this.nodesFoundOnSearch = true;
+        return;
       }
 
-      if (matchedNames.size > 0) {
-        this.nodesFoundOnSearch = true;
-        this.buildTreeForSearchedNode(matchedNames);
-      } else this.nodesFoundOnSearch = false;
-    }
+      if (searchTerm.length > 1) {
+        let matchedNames = new Set();
+        let pattern = searchTerm
+          .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+          .split(" ")
+          .filter(splitTerm => {
+            return splitTerm.length > 1;
+          })
+          .join("|");
 
-    let end = new Date().getTime();
-    console.log("Search and Expansion of nodes took " + (end - start) + " ms");
+        let regExp = new RegExp(pattern, "gi");
+
+        if (newThis.currentTabIndex === 0) {
+          for (let node of newThis.treeControl.dataNodes) {
+            if (regExp.test(node.treeNode.nodeName)) {
+              matchedNames.add(
+                node.treeNode.nodeName.replace(
+                  regExp,
+                  matchedString => matchedString
+                )
+              );
+            }
+          }
+        } else {
+          newThis.selectedNodes.forEach(node => {
+            if (regExp.test(node.nodeName)) {
+              matchedNames.add(
+                node.nodeName.replace(regExp, matchedString => matchedString)
+              );
+            }
+          });
+        }
+
+        if (matchedNames.size > 0) {
+          newThis.nodesFoundOnSearch = true;
+          newThis.buildTreeForSearchedNode(matchedNames);
+        } else newThis.nodesFoundOnSearch = false;
+
+        this.loadingNodes = false;
+      }
+    }, 500);
   }
 
   //==========================================================================
