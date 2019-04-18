@@ -9,7 +9,6 @@ import {
   MatTreeFlattener,
   MatSnackBar
 } from "@angular/material";
-import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { Queue } from "src/app/classes/Queue";
 
 @Component({
@@ -26,9 +25,6 @@ export class MSTreeComponent implements OnInit {
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
   searchingNodes: boolean;
-
-  // fullDataSource: TreeNode[];
-  // @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(
@@ -59,7 +55,6 @@ export class MSTreeComponent implements OnInit {
       this.treeFlattener
     );
 
-    // this.fullDataSource = [];
     this.dataSource.data = treeService.tree;
     this.currentTabIndex = 0;
     this.selectedNodes = new Set();
@@ -69,13 +64,12 @@ export class MSTreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
-      this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
-      this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
-    }
+    // for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
+    //   this.treeControl.dataNodes[i].treeNode.nodeInactive = true;
+    //   this.treeControl.dataNodes[j].treeNode.nodeAuthorized = false;
+    // }
     this.treeControl.expand(this.treeControl.dataNodes[0]);
 
-    // this.fullDataSource[0] = this.treeControl.dataNodes[0].treeNode;
     this.totalSelectedNodes = 0;
     for (let node of this.treeControl.dataNodes) {
       if (node.treeNode.nodeSelected) {
@@ -85,14 +79,6 @@ export class MSTreeComponent implements OnInit {
     }
 
     this.selectedCountEvent.emit(this.totalSelectedNodes);
-  }
-
-  ngAfterViewInit() {
-    // console.log(this.tree);
-    // console.log(this.fullDataSource);
-    // this.virtualScroll.renderedRangeStream.subscribe(range => {
-    //   this.dataSource.data = this.fullDataSource.slice(range.start, range.end);
-    // });
   }
 
   trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
