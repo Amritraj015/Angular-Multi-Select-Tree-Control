@@ -19,7 +19,6 @@ export class GetTreeService {
   }
 
   getTree(): void {
-    let start = new Date().getTime();
     let allNodes = new Set<TreeNode>();
 
     for (let node of flatTreeNodes) {
@@ -39,6 +38,7 @@ export class GetTreeService {
       allNodes.add(newNode);
     }
 
+    let start = new Date().getTime();
     this.buildNestedTree(allNodes);
     let end = new Date().getTime();
     console.log(end - start + " ms");
@@ -75,11 +75,18 @@ export class GetTreeService {
     for (let child of this.tree[0].nodeChildren) {
       queue.Enqueue(child);
     }
-    allNodes.forEach(node => {
-      if (node.nodeParentID === child.nodeID) {
-        child.nodeChildren.push(node);
-      }
-    });
+
+    while (queue.queue.length !== 0) {
+      let removedNode: TreeNode = queue.Dequeue();
+      allNodes.forEach(node => {
+        if (node.nodeParentID === removedNode.nodeID) {
+          removedNode.nodeChildren.push(node);
+          allNodes.delete(node);
+        }
+      });
+
+      for (let child of removedNode.nodeChildren) queue.Enqueue(child);
+    }
 
     console.log(this.tree);
   }
