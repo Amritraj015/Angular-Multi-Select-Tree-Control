@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-//import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
+// import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { Stack } from "../classes/Stack";
 import { TreeNode } from "../classes/TreeNode";
-//import { tree as flatTreeNodes } from "../testData/small_dataset";
+// import { tree as flatTreeNodes } from "../testData/small_dataset";
 import { personnel as flatTreeNodes } from "../testData/large_dataset";
 import { ITreeNode } from "../Interfaces/ITreeNode";
 import { Queue } from "../classes/Queue";
@@ -19,13 +19,16 @@ export class GetTreeService {
   }
 
   getTree(): void {
-    let allNodes = new Set<TreeNode>();
+    let s = new Date().getTime();
+    let allNodes = new Map<string, TreeNode[]>();
+    let allNodesSet = new Set<TreeNode>();
+    let rootCounter: number = 0;
 
     for (let node of flatTreeNodes) {
       const newNode: TreeNode = {
         nodeName: node.fullname,
-        nodeID: parseInt(node.userid),
-        nodeParentID: parseInt(node.manageruserid),
+        nodeID: node.userid,
+        nodeParentID: node.manageruserid,
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSelected: false,
@@ -35,23 +38,38 @@ export class GetTreeService {
         nodeChildren: []
       };
 
-      allNodes.add(newNode);
+      if (newNode.nodeParentID === "NULL") rootCounter++;
+
+      allNodesSet.add(newNode);
+      allNodes.set(newNode.nodeID, []);
+      if (allNodes.has(newNode.nodeParentID)) {
+        let children = allNodes.get(newNode.nodeParentID);
+        children.push(newNode);
+        allNodes.set(newNode.nodeParentID, children);
+      }
     }
 
-    let start = new Date().getTime();
-    this.buildNestedTree(allNodes);
-    let end = new Date().getTime();
-    console.log(end - start + " ms");
+    this.buildNestedTree(allNodes, allNodesSet, rootCounter);
+    let e = new Date().getTime();
+    console.log(e - s);
   }
 
   /** Builds the initial tree for `Show All` Tab*/
-  buildNestedTree(allNodes: Set<TreeNode>): void {
-    console.log("the total number of nodes in allNodes = " + allNodes.size);
-    let pseudoRoot: TreeNode[] = [
-      {
+  buildNestedTree(
+    allNodes: Map<string, TreeNode[]>,
+    allNodesSet: Set<TreeNode>,
+    rootCounter: number
+  ): void {
+    allNodesSet.forEach(node => {
+      if (allNodes.has(node.nodeID))
+        node.nodeChildren = allNodes.get(node.nodeID);
+    });
+
+    if (rootCounter > 1) {
+      this.tree[0] = {
         nodeName: "Root Node",
-        nodeID: -1,
-        nodeParentID: NaN,
+        nodeID: "-1",
+        nodeParentID: "NULL",
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSelected: false,
@@ -59,35 +77,37 @@ export class GetTreeService {
         nodeSearchBreanch: true,
         nodeChildrenLoading: false,
         nodeChildren: []
-      }
-    ];
+      };
 
-    allNodes.forEach(node => {
-      if (isNaN(node.nodeParentID)) {
-        node.nodeParentID = -1;
-        pseudoRoot[0].nodeChildren.push(node);
-        allNodes.delete(node);
-      }
-    });
-
-    let queue = new Queue();
-    this.tree = [...pseudoRoot];
-    for (let child of this.tree[0].nodeChildren) {
-      queue.Enqueue(child);
-    }
-
-    while (queue.queue.length !== 0) {
-      let removedNode: TreeNode = queue.Dequeue();
-      allNodes.forEach(node => {
-        if (node.nodeParentID === removedNode.nodeID) {
-          removedNode.nodeChildren.push(node);
-          allNodes.delete(node);
+      allNodesSet.forEach(node => {
+        if (node.nodeParentID === "NULL") {
+          this.tree[0].nodeChildren.push(node);
         }
       });
-
-      for (let child of removedNode.nodeChildren) queue.Enqueue(child);
+    } else {
+      allNodesSet.forEach(node => {
+        if (node.nodeParentID === "NULL") {
+          this.tree.push(node);
+        }
+      });
     }
 
+    let count = 0;
+
+    let stack = new Stack();
+    stack.pushStack(this.tree[0]);
+
+    while (stack.stack.length !== 0) {
+      let rn = stack.popStack();
+
+      count++;
+
+      for (let child of rn.nodeChildren) stack.pushStack(child);
+    }
+
+    console.log(count);
     console.log(this.tree);
+    console.log(allNodesSet);
+    console.log(allNodes);
   }
 }
