@@ -77,7 +77,7 @@ export class MSTreeComponent implements OnInit {
         this.totalSelectedNodes++;
       }
     }
-
+    //console.log(this.dataSource.data[0]);
     this.selectedCountEvent.emit(this.totalSelectedNodes);
   }
 
@@ -340,6 +340,6 @@ export class MSTreeComponent implements OnInit {
       } while (stack.stack.length !== 0);
     });
 
-    this.treeControl.expandAll();
+    //this.treeControl.expandAll();
   }
 }

@@ -1,11 +1,8 @@
 import { Injectable } from "@angular/core";
-// import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
-import { Stack } from "../classes/Stack";
+import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { TreeNode } from "../classes/TreeNode";
 // import { tree as flatTreeNodes } from "../testData/small_dataset";
-import { personnel as flatTreeNodes } from "../testData/large_dataset";
-import { ITreeNode } from "../Interfaces/ITreeNode";
-import { Queue } from "../classes/Queue";
+// import { personnel as flatTreeNodes } from "../testData/large_dataset";
 
 @Injectable({
   providedIn: "root"
@@ -20,15 +17,15 @@ export class GetTreeService {
 
   getTree(): void {
     let s = new Date().getTime();
-    let allNodes = new Map<string, TreeNode[]>();
+    let allNodesMap = new Map<string, TreeNode[]>();
     let allNodesSet = new Set<TreeNode>();
     let rootCounter: number = 0;
 
     for (let node of flatTreeNodes) {
       const newNode: TreeNode = {
-        nodeName: node.fullname,
-        nodeID: node.userid,
-        nodeParentID: node.manageruserid,
+        nodeName: node.companyname,
+        nodeID: node.companyid,
+        nodeParentID: node.paretnid,
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSelected: false,
@@ -38,33 +35,26 @@ export class GetTreeService {
         nodeChildren: []
       };
 
-      if (newNode.nodeParentID === "NULL") rootCounter++;
+      if (newNode.nodeParentID === "NULL") {
+        rootCounter++;
+        newNode.nodeParentID = "-1";
+      }
 
       allNodesSet.add(newNode);
-      allNodes.set(newNode.nodeID, []);
-      if (allNodes.has(newNode.nodeParentID)) {
-        let children = allNodes.get(newNode.nodeParentID);
-        children.push(newNode);
-        allNodes.set(newNode.nodeParentID, children);
-      }
+      allNodesMap.set(newNode.nodeID, []);
     }
 
-    this.buildNestedTree(allNodes, allNodesSet, rootCounter);
+    this.buildNestedTree(allNodesMap, allNodesSet, rootCounter);
     let e = new Date().getTime();
     console.log(e - s);
   }
 
   /** Builds the initial tree for `Show All` Tab*/
   buildNestedTree(
-    allNodes: Map<string, TreeNode[]>,
+    allNodesMap: Map<string, TreeNode[]>,
     allNodesSet: Set<TreeNode>,
     rootCounter: number
   ): void {
-    allNodesSet.forEach(node => {
-      if (allNodes.has(node.nodeID))
-        node.nodeChildren = allNodes.get(node.nodeID);
-    });
-
     if (rootCounter > 1) {
       this.tree[0] = {
         nodeName: "Root Node",
@@ -79,35 +69,20 @@ export class GetTreeService {
         nodeChildren: []
       };
 
-      allNodesSet.forEach(node => {
-        if (node.nodeParentID === "NULL") {
-          this.tree[0].nodeChildren.push(node);
-        }
-      });
-    } else {
-      allNodesSet.forEach(node => {
-        if (node.nodeParentID === "NULL") {
-          this.tree.push(node);
-        }
-      });
+      allNodesMap.set(this.tree[0].nodeID, []);
+      allNodesSet.add(this.tree[0]);
     }
 
-    let count = 0;
+    allNodesSet.forEach(node => {
+      if (allNodesMap.has(node.nodeParentID)) {
+        let children = allNodesMap.get(node.nodeParentID);
+        children.push(node);
+        allNodesMap.set(node.nodeParentID, children);
+      }
 
-    let stack = new Stack();
-    stack.pushStack(this.tree[0]);
-
-    while (stack.stack.length !== 0) {
-      let rn = stack.popStack();
-
-      count++;
-
-      for (let child of rn.nodeChildren) stack.pushStack(child);
-    }
-
-    console.log(count);
-    console.log(this.tree);
-    console.log(allNodesSet);
-    console.log(allNodes);
+      if (allNodesMap.has(node.nodeID)) {
+        node.nodeChildren = allNodesMap.get(node.nodeID);
+      }
+    });
   }
 }
