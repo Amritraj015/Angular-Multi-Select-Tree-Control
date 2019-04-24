@@ -9,7 +9,6 @@ import {
   MatTreeFlattener,
   MatSnackBar
 } from "@angular/material";
-import { Queue } from "src/app/classes/Queue";
 
 @Component({
   selector: "ms-tree",
