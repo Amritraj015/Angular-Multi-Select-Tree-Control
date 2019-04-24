@@ -35,9 +35,7 @@ export class GetTreeService {
         nodeChildren: []
       };
 
-      if (newNode.nodeParentID === "NULL") {
-        rootCounter++;
-      }
+      if (newNode.nodeParentID === "NULL") rootCounter++;
 
       allNodesSet.add(newNode);
       nodeChildrenMap.set(newNode.nodeID, []);

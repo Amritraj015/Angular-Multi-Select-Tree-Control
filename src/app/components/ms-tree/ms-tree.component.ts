@@ -95,7 +95,10 @@ export class MSTreeComponent implements OnInit {
   //==========================================================================
   /** Provide padding to tree node based on their level */
   providePaddingForNode(node: FlatTreeNode): object {
-    return { "margin-left": node.level * 5 + "%" };
+    return {
+      "margin-left": node.level * 5 + "%",
+      "border-left": "1px solid black"
+    };
   }
 
   //==========================================================================
