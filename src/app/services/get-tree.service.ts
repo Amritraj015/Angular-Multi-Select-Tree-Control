@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
+// import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { TreeNode } from "../classes/TreeNode";
 // import { tree as flatTreeNodes } from "../testData/small_dataset";
-// import { personnel as flatTreeNodes } from "../testData/large_dataset";
+import { personnel as flatTreeNodes } from "../testData/large_dataset";
 
 @Injectable({
   providedIn: "root"
@@ -15,17 +15,17 @@ export class GetTreeService {
     this.getTree();
   }
 
-  getTree(): void {
+  private getTree(): void {
     let s = new Date().getTime();
-    let allNodesMap = new Map<string, TreeNode[]>();
+    let nodeChildrenMap = new Map<string, TreeNode[]>();
     let allNodesSet = new Set<TreeNode>();
     let rootCounter: number = 0;
 
     for (let node of flatTreeNodes) {
       const newNode: TreeNode = {
-        nodeName: node.companyname,
-        nodeID: node.companyid,
-        nodeParentID: node.paretnid,
+        nodeName: node.fullname,
+        nodeID: node.userid,
+        nodeParentID: node.manageruserid,
         nodeAuthorized: true,
         nodeInactive: false,
         nodeSelected: false,
@@ -41,17 +41,17 @@ export class GetTreeService {
       }
 
       allNodesSet.add(newNode);
-      allNodesMap.set(newNode.nodeID, []);
+      nodeChildrenMap.set(newNode.nodeID, []);
     }
 
-    this.buildNestedTree(allNodesMap, allNodesSet, rootCounter);
+    this.buildNestedTree(nodeChildrenMap, allNodesSet, rootCounter);
     let e = new Date().getTime();
     console.log(e - s);
   }
 
   /** Builds the initial tree for `Show All` Tab*/
-  buildNestedTree(
-    allNodesMap: Map<string, TreeNode[]>,
+  private buildNestedTree(
+    nodeChildrenMap: Map<string, TreeNode[]>,
     allNodesSet: Set<TreeNode>,
     rootCounter: number
   ): void {
@@ -69,20 +69,23 @@ export class GetTreeService {
         nodeChildren: []
       };
 
-      allNodesMap.set(this.tree[0].nodeID, []);
+      nodeChildrenMap.set(this.tree[0].nodeID, []);
       allNodesSet.add(this.tree[0]);
+    } else {
+      allNodesSet.forEach(node => {
+        if (node.nodeParentID === "-1") this.tree[0] = node;
+      });
     }
 
     allNodesSet.forEach(node => {
-      if (allNodesMap.has(node.nodeParentID)) {
-        let children = allNodesMap.get(node.nodeParentID);
+      if (nodeChildrenMap.has(node.nodeParentID)) {
+        let children = nodeChildrenMap.get(node.nodeParentID);
         children.push(node);
-        allNodesMap.set(node.nodeParentID, children);
+        nodeChildrenMap.set(node.nodeParentID, children);
       }
 
-      if (allNodesMap.has(node.nodeID)) {
-        node.nodeChildren = allNodesMap.get(node.nodeID);
-      }
+      if (nodeChildrenMap.has(node.nodeID))
+        node.nodeChildren = nodeChildrenMap.get(node.nodeID);
     });
   }
 }
