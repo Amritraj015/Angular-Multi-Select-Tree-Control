@@ -10,10 +10,11 @@ import { tree as flatTreeNodes } from "./testData/small_dataset";
   styleUrls: ["./app.component.less"]
 })
 export class AppComponent {
-  flatTree: ITreeNode[];
-  enableSearch: boolean;
+  flatTree;
+  disableSearch: boolean;
   constructor() {
-    this.flatTree = flatTreeNodes;
-    this.enableSearch = true;
+    this.flatTree = JSON.stringify(flatTreeNodes);
+    //console.log(JSON.stringify(flatTreeNodes));
+    this.disableSearch = true;
   }
 }

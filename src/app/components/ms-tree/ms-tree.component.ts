@@ -30,7 +30,7 @@ export class MSTreeComponent implements OnInit {
 
   @Input() flatTreeNodes: ITreeNode[];
   nodeIDMap = new Map<string, FlatTreeNode>();
-  @Input() enableSearch: boolean;
+  @Input() disableSearch: boolean;
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(

@@ -30,7 +30,7 @@
     <ms-tree
       *ngIf="renderTreeDiv"
       [flatTreeNodes]="flatTreeNodes"
-      [enableSearch]="enableSearch"
+      [disableSearch]="disableSearch"
       (selectedCountEvent)="updateSelectedCount($event)"
     ></ms-tree>
   </ng-template>

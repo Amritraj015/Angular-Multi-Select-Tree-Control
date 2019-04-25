@@ -5,7 +5,7 @@
 >
   <mat-tab label="Show All">
     <ms-search
-      *ngIf="enableSearch"
+      *ngIf="!disableSearch"
       [tabIndex]="currentTabIndex"
       (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
     ></ms-search>
@@ -107,7 +107,7 @@
   <mat-tab label="Show Selected">
     <ng-template matTabContent>
       <ms-search
-        *ngIf="enableSearch"
+        *ngIf="!disableSearch"
         [tabIndex]="currentTabIndex"
         (searchTerm)="searchSelected = $event; findMatchingTreeNodes($event)"
       ></ms-search>
