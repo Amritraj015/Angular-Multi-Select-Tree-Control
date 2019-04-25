@@ -3,8 +3,8 @@ import { ITreeNode } from "../Interfaces/ITreeNode";
 export class TreeNode implements ITreeNode {
   // Interface properties
   nodeName: string;
-  nodeID: number;
-  nodeParentID: number;
+  nodeID: string;
+  nodeParentID: string;
   nodeAuthorized: boolean;
   nodeInactive: boolean;
 

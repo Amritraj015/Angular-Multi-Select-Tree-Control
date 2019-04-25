@@ -3,16 +3,13 @@ export interface ITreeNode {
   /** Name of the node */
   nodeName: string;
 
-  /** ID of a node (unique number which ∈ Z+ for each node) */
-  nodeID: number;
+  /** ID of a node (unique identifier each node) */
+  nodeID: string;
 
   /** Parent's ID number for a given node.
   Each node can have one and only one parent.
-  Multiple nodes can have the same parent.
-  
-  nodeParentID ∈ Z+,
-  `nodeParentID = NaN` (for root node) */
-  nodeParentID: number;
+  Multiple nodes can have the same parent. */
+  nodeParentID: string;
 
   /** Used to designate if a node is accessible to a given user/user group.
   
