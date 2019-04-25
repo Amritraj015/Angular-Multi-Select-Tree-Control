@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 import { GetTreeService } from "src/app/services/get-tree.service";
 import { FlatTreeNode } from "src/app/classes/FlatTreeNode";
 import { FlatTreeControl } from "@angular/cdk/tree";
@@ -9,6 +9,7 @@ import {
   MatTreeFlattener,
   MatSnackBar
 } from "@angular/material";
+import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 
 @Component({
   selector: "ms-tree",
@@ -18,13 +19,18 @@ import {
 export class MSTreeComponent implements OnInit {
   dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
   treeControl: FlatTreeControl<FlatTreeNode>;
+
   totalSelectedNodes: number;
   @Output() selectedCountEvent = new EventEmitter<number>();
   selectedNodes: Set<TreeNode>;
+
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
   searchingNodes: boolean;
+
+  @Input() flatTreeNodes: ITreeNode[];
   nodeIDMap = new Map<string, FlatTreeNode>();
+  @Input() enableSearch: boolean;
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(
@@ -50,27 +56,25 @@ export class MSTreeComponent implements OnInit {
       node => node.expandable
     );
 
-    this.dataSource = new MatTreeFlatDataSource(
-      this.treeControl,
-      this.treeFlattener
-    );
-
-    this.dataSource.data = treeService.tree;
     this.currentTabIndex = 0;
     this.selectedNodes = new Set();
     this.nodesFoundOnSearch = true;
     this.totalSelectedNodes = 0;
     this.searchingNodes = false;
-
-    for (let node of this.treeControl.dataNodes)
-      this.nodeIDMap.set(node.treeNode.nodeID, node);
   }
 
   ngOnInit(): void {
-    for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
-      this.treeControl.dataNodes[i].treeNode.nodeAuthorized = false;
-      this.treeControl.dataNodes[j].treeNode.nodeInactive = true;
-    }
+    this.treeService.flatTreeNodes = this.flatTreeNodes;
+
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
+
+    this.dataSource.data = this.treeService.getTree();
+
+    for (let node of this.treeControl.dataNodes)
+      this.nodeIDMap.set(node.treeNode.nodeID, node);
 
     this.treeControl.expand(this.treeControl.dataNodes[0]);
 

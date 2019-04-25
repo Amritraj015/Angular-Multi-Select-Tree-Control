@@ -1,4 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { TreeNode } from "src/app/classes/TreeNode";
+import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 
 @Component({
   selector: "ms-tree-control",
@@ -9,6 +11,8 @@ export class MsTreeControlComponent {
   totalNodesSelected: number;
   headerText: string;
   renderTreeDiv: boolean;
+  @Input() flatTreeNodes: ITreeNode[];
+  @Input() enableSearch: boolean;
 
   constructor() {
     this.totalNodesSelected = 0;
