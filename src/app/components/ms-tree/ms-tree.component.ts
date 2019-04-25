@@ -67,6 +67,11 @@ export class MSTreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
+      this.treeControl.dataNodes[i].treeNode.nodeAuthorized = false;
+      this.treeControl.dataNodes[j].treeNode.nodeInactive = true;
+    }
+
     this.treeControl.expand(this.treeControl.dataNodes[0]);
 
     this.totalSelectedNodes = 0;
@@ -290,6 +295,6 @@ export class MSTreeComponent implements OnInit {
       }
     }
 
-    //this.treeControl.expandAll();
+    this.treeControl.expandAll();
   }
 }
