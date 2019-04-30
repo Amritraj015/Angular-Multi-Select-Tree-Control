@@ -1,7 +1,5 @@
 import { Component, Input, ElementRef, SecurityContext } from "@angular/core";
-import { TreeNode } from "src/app/classes/TreeNode";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
-import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "ms-tree-control",
@@ -12,17 +10,10 @@ export class MsTreeControlComponent {
   totalNodesSelected: number;
   headerText: string;
   renderTreeDiv: boolean;
-  flatTreeNodes: string;
+  @Input() flatTreeNodes: ITreeNode[];
   @Input() disableSearch: boolean;
 
-  constructor(private elementRef: ElementRef, private sanitizer: DomSanitizer) {
-    this.flatTreeNodes = this.sanitizer.sanitize(
-      SecurityContext.HTML,
-      this.elementRef.nativeElement.getAttribute("flatTreeNodes")
-    );
-
-    console.log(this.flatTreeNodes);
-
+  constructor() {
     this.totalNodesSelected = 0;
     this.headerText = "Select User Groups";
     this.renderTreeDiv = false;
