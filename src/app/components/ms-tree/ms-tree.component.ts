@@ -295,6 +295,6 @@ export class MSTreeComponent implements OnInit {
       }
     }
 
-    this.treeControl.expandAll();
+    //this.treeControl.expandAll();
   }
 }

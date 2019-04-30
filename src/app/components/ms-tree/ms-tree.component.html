@@ -1,20 +1,22 @@
+<ms-search
+  [tabIndex]="currentTabIndex"
+  (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
+></ms-search>
+
+<div class="progress-bar">
+  <mat-progress-bar
+    *ngIf="searchingNodes"
+    color="primary"
+    mode="buffer"
+  ></mat-progress-bar>
+</div>
+
 <mat-tab-group
   (selectedIndexChange)="storeTabIndex($event)"
   animationDuration="100"
   mat-align-tabs="center"
 >
   <mat-tab label="Show All">
-    <ms-search
-      [tabIndex]="currentTabIndex"
-      (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
-    ></ms-search>
-
-    <mat-progress-bar
-      *ngIf="searchingNodes"
-      color="primary"
-      mode="buffer"
-    ></mat-progress-bar>
-
     <mat-card class="tree-display">
       <mat-tree
         *ngIf="nodesFoundOnSearch"
@@ -105,17 +107,6 @@
 
   <mat-tab label="Show Selected">
     <ng-template matTabContent>
-      <ms-search
-        [tabIndex]="currentTabIndex"
-        (searchTerm)="searchSelected = $event; findMatchingTreeNodes($event)"
-      ></ms-search>
-
-      <mat-progress-bar
-        *ngIf="searchingNodes"
-        color="primary"
-        mode="buffer"
-      ></mat-progress-bar>
-
       <mat-card class="tree-display">
         <ng-container *ngIf="nodesFoundOnSearch">
           <mat-tree
@@ -169,7 +160,7 @@
                   <div
                     class="tree-node-unauthorized"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
                 </div>
@@ -185,7 +176,7 @@
                     *ngIf="node.treeNode.nodeInactive"
                     class="tree-node-inactive"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
 
@@ -196,7 +187,7 @@
                   <div
                     *ngIf="!node.treeNode.nodeInactive"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
                 </mat-checkbox>
