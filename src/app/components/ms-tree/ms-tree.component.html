@@ -162,7 +162,7 @@
                   <div
                     class="tree-node-unauthorized"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
                 </div>
@@ -178,7 +178,7 @@
                     *ngIf="node.treeNode.nodeInactive"
                     class="tree-node-inactive"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
 
@@ -189,7 +189,7 @@
                   <div
                     *ngIf="!node.treeNode.nodeInactive"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
                 </mat-checkbox>
