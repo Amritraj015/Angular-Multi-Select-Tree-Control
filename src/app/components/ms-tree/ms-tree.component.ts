@@ -71,7 +71,7 @@ export class MSTreeComponent implements OnInit {
       this.treeFlattener
     );
 
-    this.dataSource.data = this.getTree();
+    this.dataSource.data = this.treeService.getTree();
 
     for (let node of this.treeControl.dataNodes)
       this.nodeIDMap.set(node.treeNode.nodeID, node);
@@ -86,93 +86,8 @@ export class MSTreeComponent implements OnInit {
       }
     }
 
-    this.selectedCountEvent.emit(this.totalSelectedNodes);
+    console.log(this.totalSelectedNodes);
   }
-
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
-
-  getTree(): TreeNode[] {
-    let s = new Date().getTime();
-    let nodeChildrenMap = new Map<string, TreeNode[]>();
-    let allNodesSet = new Set<TreeNode>();
-    let rootCounter: number = 0;
-
-    for (let node of this.flatTreeNodes) {
-      const newNode: TreeNode = {
-        nodeName: node.nodeName,
-        nodeID: node.nodeID,
-        nodeParentID: node.nodeParentID,
-        nodeAuthorized: true,
-        nodeInactive: false,
-        nodeSelected: false,
-        nodeDescendantSelected: false,
-        nodeSearchBreanch: true,
-        nodeChildrenLoading: false,
-        nodeChildren: []
-      };
-
-      if (newNode.nodeParentID === "NULL") rootCounter++;
-
-      allNodesSet.add(newNode);
-      nodeChildrenMap.set(newNode.nodeID, []);
-    }
-
-    this.buildNestedTree(nodeChildrenMap, allNodesSet, rootCounter);
-    let e = new Date().getTime();
-    console.log("Building the initial tree = " + (e - s));
-
-    return this.dataSource.data;
-  }
-
-  /** Builds the initial tree for `Show All` Tab*/
-  private buildNestedTree(
-    nodeChildrenMap: Map<string, TreeNode[]>,
-    allNodesSet: Set<TreeNode>,
-    rootCounter: number
-  ): void {
-    if (rootCounter > 1) {
-      allNodesSet.forEach(node => {
-        if (node.nodeParentID === "NULL") node.nodeParentID = "-1";
-      });
-
-      this.dataSource.data[0] = {
-        nodeName: "Root Node",
-        nodeID: "-1",
-        nodeParentID: "NULL",
-        nodeAuthorized: true,
-        nodeInactive: false,
-        nodeSelected: false,
-        nodeDescendantSelected: false,
-        nodeSearchBreanch: true,
-        nodeChildrenLoading: false,
-        nodeChildren: []
-      };
-
-      nodeChildrenMap.set(this.dataSource.data[0].nodeID, []);
-      allNodesSet.add(this.dataSource.data[0]);
-    } else {
-      allNodesSet.forEach(node => {
-        if (node.nodeParentID === "NULL") this.dataSource.data[0] = node;
-      });
-    }
-
-    allNodesSet.forEach(node => {
-      if (nodeChildrenMap.has(node.nodeParentID)) {
-        let children = nodeChildrenMap.get(node.nodeParentID);
-        children.push(node);
-        nodeChildrenMap.set(node.nodeParentID, children);
-      }
-
-      if (nodeChildrenMap.has(node.nodeID))
-        node.nodeChildren = nodeChildrenMap.get(node.nodeID);
-    });
-  }
-
-  //===================================================================================
-  //===================================================================================
-  //===================================================================================
 
   trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
 
