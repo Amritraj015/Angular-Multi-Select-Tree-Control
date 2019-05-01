@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  ElementRef,
-  SecurityContext,
-  OnInit
-} from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { GetTreeService } from "src/app/services/get-tree.service";
 

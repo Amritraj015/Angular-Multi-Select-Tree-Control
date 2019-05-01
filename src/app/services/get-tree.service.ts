@@ -15,7 +15,6 @@ export class GetTreeService {
   }
 
   getTree(): TreeNode[] {
-    let s = new Date().getTime();
     let nodeChildrenMap = new Map<string, TreeNode[]>();
     let allNodesSet = new Set<TreeNode>();
     let rootCounter: number = 0;
@@ -41,8 +40,6 @@ export class GetTreeService {
     }
 
     this.buildNestedTree(nodeChildrenMap, allNodesSet, rootCounter);
-    let e = new Date().getTime();
-    console.log("Building the initial tree = " + (e - s));
 
     return this.tree;
   }

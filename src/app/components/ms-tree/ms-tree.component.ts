@@ -9,7 +9,6 @@ import {
   MatTreeFlattener,
   MatSnackBar
 } from "@angular/material";
-import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 
 @Component({
   selector: "ms-tree",
@@ -28,7 +27,6 @@ export class MSTreeComponent implements OnInit {
   nodesFoundOnSearch: boolean;
   searchingNodes: boolean;
 
-  @Input() flatTreeNodes: ITreeNode[];
   nodeIDMap = new Map<string, FlatTreeNode>();
   @Input() disableSearch: boolean;
 
@@ -56,6 +54,13 @@ export class MSTreeComponent implements OnInit {
       node => node.expandable
     );
 
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
+
+    this.dataSource.data = this.treeService.getTree();
+
     this.currentTabIndex = 0;
     this.selectedNodes = new Set();
     this.nodesFoundOnSearch = true;
@@ -64,29 +69,10 @@ export class MSTreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.treeService.flatTreeNodes = this.flatTreeNodes;
-
-    this.dataSource = new MatTreeFlatDataSource(
-      this.treeControl,
-      this.treeFlattener
-    );
-
-    this.dataSource.data = this.treeService.getTree();
-
     for (let node of this.treeControl.dataNodes)
       this.nodeIDMap.set(node.treeNode.nodeID, node);
 
     this.treeControl.expand(this.treeControl.dataNodes[0]);
-
-    this.totalSelectedNodes = 0;
-    for (let node of this.treeControl.dataNodes) {
-      if (node.treeNode.nodeSelected) {
-        this.selectedNodes.add(node.treeNode);
-        this.totalSelectedNodes++;
-      }
-    }
-
-    console.log(this.totalSelectedNodes);
   }
 
   trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
@@ -264,20 +250,12 @@ export class MSTreeComponent implements OnInit {
           });
         }
 
-        let n = new Date().getTime();
-        console.log("filtering = " + (n - m));
-
-        let s = new Date().getTime();
-
         if (matchedNames.size > 0) {
           this.nodesFoundOnSearch = true;
           this.buildTreeForSearchedNode(matchedNames);
         } else this.nodesFoundOnSearch = false;
 
         this.searchingNodes = false;
-
-        let e = new Date().getTime();
-        console.log("searching = " + (e - s));
       }
     }, 500);
   }
