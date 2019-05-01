@@ -60,7 +60,6 @@ export class MSTreeComponent implements OnInit {
     );
 
     this.dataSource.data = this.treeService.getTree();
-
     this.currentTabIndex = 0;
     this.selectedNodes = new Set();
     this.nodesFoundOnSearch = true;
