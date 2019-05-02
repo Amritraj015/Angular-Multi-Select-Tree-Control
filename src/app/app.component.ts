@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 // import { orgUnits as flatTreeNodes } from "./testData/medium_dataset";
 import { tree as flatTreeNodes } from "./testData/small_dataset";
 // import { personnel as flatTreeNodes } from "./testData/large_dataset";

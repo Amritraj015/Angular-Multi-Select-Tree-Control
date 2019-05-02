@@ -19,9 +19,9 @@ export class MSTreeComponent implements OnInit {
   dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
   treeControl: FlatTreeControl<FlatTreeNode>;
 
-  totalSelectedNodes: number;
+  private _selectedNodes: Set<TreeNode>;
+  private _inactiveSelectedNodes: Set<TreeNode>;
   @Output() selectedCountEvent = new EventEmitter<number>();
-  selectedNodes: Set<TreeNode>;
 
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
@@ -61,9 +61,9 @@ export class MSTreeComponent implements OnInit {
 
     this.dataSource.data = this.treeService.getTree();
     this.currentTabIndex = 0;
-    this.selectedNodes = new Set();
+    this._selectedNodes = new Set();
+    this._inactiveSelectedNodes = new Set();
     this.nodesFoundOnSearch = true;
-    this.totalSelectedNodes = 0;
     this.searchingNodes = false;
   }
 
@@ -74,12 +74,28 @@ export class MSTreeComponent implements OnInit {
     this.treeControl.expand(this.treeControl.dataNodes[0]);
   }
 
+  get selectedNodes(): Set<TreeNode> {
+    return this._selectedNodes;
+  }
+
+  get inactiveSelectedNodes(): Set<TreeNode> {
+    return this._inactiveSelectedNodes;
+  }
+
+  getTotalSelectionCount(): number {
+    return this.selectedNodes.size;
+  }
+
+  getInactiveSelectionCount(): number {
+    return this.inactiveSelectedNodes.size;
+  }
+
   trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
 
   //==========================================================================
   /** Checks if atleast one tree node is selected */
   checkNodeSelection(): boolean {
-    return this.totalSelectedNodes > 0;
+    return this.getTotalSelectionCount() > 0;
   }
 
   //==========================================================================
@@ -114,7 +130,7 @@ export class MSTreeComponent implements OnInit {
     this.currentTabIndex = $event;
 
     if (this.currentTabIndex === 1)
-      this.buildTreeForShowSelectedTab(this.selectedNodes);
+      this.buildTreeForShowSelectedTab(this._selectedNodes);
   }
 
   //==========================================================================
@@ -154,28 +170,23 @@ export class MSTreeComponent implements OnInit {
           descendant.treeNode.nodeSearchBreanch = true;
       }
 
-      if (node.treeNode.nodeSelected) {
-        this.totalSelectedNodes++;
-      } else this.totalSelectedNodes--;
-
       while (stack.stack.length !== 0) {
         let removedNode = stack.popStack();
-
-        if (node.treeNode.nodeSelected) {
-          if (!removedNode.nodeSelected && removedNode.nodeAuthorized)
-            this.totalSelectedNodes++;
-        }
-
-        if (!node.treeNode.nodeSelected) {
-          if (removedNode.nodeSelected && removedNode.nodeAuthorized)
-            this.totalSelectedNodes--;
-        }
 
         if (removedNode.nodeAuthorized) {
           removedNode.nodeSelected = node.treeNode.nodeSelected;
 
-          if (removedNode.nodeSelected) this.selectedNodes.add(removedNode);
-          else this.selectedNodes.delete(removedNode);
+          if (removedNode.nodeSelected) {
+            this._selectedNodes.add(removedNode);
+
+            if (removedNode.nodeInactive)
+              this._inactiveSelectedNodes.add(removedNode);
+          } else {
+            this._selectedNodes.delete(removedNode);
+
+            if (removedNode.nodeInactive)
+              this._inactiveSelectedNodes.delete(removedNode);
+          }
 
           if (this.currentTabIndex === 1)
             removedNode.nodeDescendantSelected = true;
@@ -186,8 +197,25 @@ export class MSTreeComponent implements OnInit {
 
       node.treeNode.nodeChildrenLoading = false;
       this.displaySelectionNotification(node);
-      this.selectedCountEvent.emit(this.totalSelectedNodes);
+      this.selectedCountEvent.emit(this.getTotalSelectionCount());
+      this.dispatchNodeSelectionEvent();
     });
+  }
+
+  private dispatchNodeSelectionEvent(): void {
+    let checkbox = document.querySelector("mat-checkbox");
+    const event = new CustomEvent("nodeSelected", {
+      detail: {
+        allSelectedNodes: this._selectedNodes,
+        totalSelectedCount: this.getTotalSelectionCount(),
+        inactiveSelectedNodes: this.inactiveSelectedNodes,
+        inactiveSelectedCount: this.getInactiveSelectionCount()
+      },
+      bubbles: true,
+      cancelable: true
+    });
+
+    checkbox.dispatchEvent(event);
   }
 
   //==========================================================================
@@ -240,7 +268,7 @@ export class MSTreeComponent implements OnInit {
             }
           }
         } else {
-          this.selectedNodes.forEach(node => {
+          this._selectedNodes.forEach(node => {
             if (regExp.test(node.nodeName)) {
               matchedNames.add(
                 node.nodeName.replace(regExp, matchedString => matchedString)
