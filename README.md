@@ -1,4 +1,24 @@
-# TQAngularTree
+# Multi-Select Tree Control
+
+## Inputs for the control
+
+The control takes 2 inputs:
+
+1. `flatTreeNodes: ITreenode[]`: An array of flat tree nodes as input data.
+   Where `ITreeNode` is an interface that defines a tree node, it has the following properties:
+   `nodeName: string` => Name of the tree node,
+   `nodeID: string` => Unique ID for a tree node,
+   `nodeParentID: string` => Parent node ID of a tree node (multiple tree node may have the same `nodeParentID`),
+   `nodeAuthorized: boolean` => Represnets if a node is Authorized (`true` if authorized else `false`),
+   `nodeInactive: boolean` => Represents if a node is inactive (`true` if a node is inactive else `false`)
+
+2. `disableSearch: boolean`: A boolean value to disable the search feature (`true` if search needs to be disabled else `false`, the value is `false` by default)
+
+## Outputs from the control
+
+The control raises a custom bubbling event `nodeSelected` whenever any node is selected.
+
+---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
 
