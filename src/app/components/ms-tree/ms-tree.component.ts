@@ -18,15 +18,12 @@ import {
 export class MSTreeComponent implements OnInit {
   dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
   treeControl: FlatTreeControl<FlatTreeNode>;
-
   private _selectedNodes: Set<TreeNode>;
   private _inactiveSelectedNodes: Set<TreeNode>;
   @Output() selectedCountEvent = new EventEmitter<number>();
-
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
   searchingNodes: boolean;
-
   nodeIDMap = new Map<string, FlatTreeNode>();
   @Input() disableSearch: boolean;
 
@@ -74,18 +71,26 @@ export class MSTreeComponent implements OnInit {
     this.treeControl.expand(this.treeControl.dataNodes[0]);
   }
 
+  //==========================================================================
+  /** Returns a set of all selected nodes */
   get selectedNodes(): Set<TreeNode> {
     return this._selectedNodes;
   }
 
+  //==========================================================================
+  /** Returns a set of all inactive selected nodes */
   get inactiveSelectedNodes(): Set<TreeNode> {
     return this._inactiveSelectedNodes;
   }
 
+  //==========================================================================
+  /** Returns total number of nodes selected */
   getTotalSelectionCount(): number {
     return this.selectedNodes.size;
   }
 
+  //==========================================================================
+  /** Returns total number of inactive nodes selected */
   getInactiveSelectionCount(): number {
     return this.inactiveSelectedNodes.size;
   }
@@ -99,7 +104,7 @@ export class MSTreeComponent implements OnInit {
   }
 
   //==========================================================================
-  /** Checks if a given tree node has child nodes */
+  /** Checks if a given tree node has children nodes */
   checkChildren = (node: FlatTreeNode) => !node.expandable;
 
   //==========================================================================
@@ -202,6 +207,8 @@ export class MSTreeComponent implements OnInit {
     });
   }
 
+  //==========================================================================
+  /** Creates and duspatches a custom node selection event */
   private dispatchNodeSelectionEvent(): void {
     let checkbox = document.querySelector("mat-checkbox");
     const event = new CustomEvent("nodeSelected", {
