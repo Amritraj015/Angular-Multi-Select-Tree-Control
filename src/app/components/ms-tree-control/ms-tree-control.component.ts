@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { ITreeNode } from "src/app/Interfaces/ITreeNode";
 import { GetTreeService } from "src/app/services/get-tree.service";
+import { NodeSelectionData } from "src/app/classes/NodeSelectionData";
 
 @Component({
   selector: "ms-tree-control",
@@ -13,6 +14,7 @@ export class MsTreeControlComponent implements OnInit {
   renderTreeDiv: boolean;
   @Input() flatTreeNodes: ITreeNode[];
   @Input() disableSearch: boolean;
+  @Output() nodeSelectionEvent = new EventEmitter<NodeSelectionData>();
 
   constructor(public treeService: GetTreeService) {
     this.totalNodesSelected = 0;
@@ -26,9 +28,10 @@ export class MsTreeControlComponent implements OnInit {
 
   //==========================================================================
   /** Updates the node Selection count on the control header */
-  updateSelectedCount(selectedCount: number): void {
-    this.totalNodesSelected = selectedCount;
+  updateSelectedCount($selectionEvent: NodeSelectionData): void {
+    this.totalNodesSelected = $selectionEvent.totalSelectedCount;
     this.renderTree(true);
+    this.nodeSelectionEvent.emit($selectionEvent);
   }
 
   //==========================================================================
