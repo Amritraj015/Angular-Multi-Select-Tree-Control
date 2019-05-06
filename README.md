@@ -27,6 +27,25 @@ The control main component `<ms-tree-control>` takes 2 inputs:
 
 ---
 
+## Example Usage
+
+`<ms-tree-control [flatTreeNodes]="allFlatTreeNodes" [disableSearch]="false" (nodeSelectionEvent)="functionToHandleEvent($event)"> </ms-tree-control>`
+
+where:
+
+- `allFlatTreeNodes` is of type `ITreeNode` as defined above.
+- `functionToHandleEvent($event)` handles the node select/unselect event
+
+---
+
+## Important Notes
+
+- Nodes with no parents (root nodes) must have `nodeID: string = "NULL"` for expected behaviour. Although this can be tweeked as per needs in the `GetTreeService`.
+- The search field must have atleast 2 characters for the node search to execute.
+- There is a `500 ms` time delay after characters have been entered in the search field and before the search algorithm executes. This time delay can be changed/removed as per needs in the `findMatchingTreeNodes(searchTerm: string)` method of the `MSTreeComponent` component `class`.
+
+---
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
 
 ## Development server

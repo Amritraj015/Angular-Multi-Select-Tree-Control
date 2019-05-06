@@ -203,15 +203,14 @@ export class MSTreeComponent implements OnInit {
 
       node.treeNode.nodeChildrenLoading = false;
       this.displaySelectionNotification(node);
-      this.dispatchNodeSelectionEvents();
+      this.dispatchNodeSelectionEvent();
     });
   }
 
   //==========================================================================
   /** Creates and duspatches a custom node selection event */
-  private dispatchNodeSelectionEvents(): void {
-    let $eventData: NodeSelectionData;
-    $eventData = {
+  private dispatchNodeSelectionEvent(): void {
+    let $eventData: NodeSelectionData = {
       allSelectedNodes: this._selectedNodes,
       totalSelectedCount: this.getTotalSelectionCount(),
       inactiveSelectedNodes: this.inactiveSelectedNodes,
@@ -307,6 +306,6 @@ export class MSTreeComponent implements OnInit {
       }
     }
 
-    //this.treeControl.expandAll();
+    this.treeControl.expandAll();
   }
 }
