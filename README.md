@@ -14,11 +14,18 @@ The control takes 2 inputs:
 
 2. `disableSearch: boolean`: A boolean value to disable the search feature (`true` if search needs to be disabled else `false`, the value is `false` by default)
 
+---
+
 ## Outputs from the control
 
 The control raises a custom bubbling event `nodeSelected` whenever any node is selected.
+The event object's `detail` property contains the following information regarding node selection.
+_ `allSelectedNodes: Set<TreeNode>` => A set of all the nodes that are selected
+_ `totalSelectedCount: number` => Total number of selected nodes
+_ `inactiveSelectedNodes: Set<TreeNode>` => A set of all selected inactive nodes
+_ `inactiveSelectedCount: number` => Total number of inactive selected nodes
 
----
+===
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
 
