@@ -9,6 +9,7 @@ import {
   MatTreeFlattener,
   MatSnackBar
 } from "@angular/material";
+import { NodeSelectionData } from "src/app/classes/NodeSelectionData";
 
 @Component({
   selector: "ms-tree",
@@ -20,12 +21,12 @@ export class MSTreeComponent implements OnInit {
   treeControl: FlatTreeControl<FlatTreeNode>;
   private _selectedNodes: Set<TreeNode>;
   private _inactiveSelectedNodes: Set<TreeNode>;
-  @Output() selectedCountEvent = new EventEmitter<number>();
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
   searchingNodes: boolean;
   nodeIDMap = new Map<string, FlatTreeNode>();
   @Input() disableSearch: boolean;
+  @Output() nodeSelectionEvent = new EventEmitter<NodeSelectionData>();
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(
@@ -202,27 +203,22 @@ export class MSTreeComponent implements OnInit {
 
       node.treeNode.nodeChildrenLoading = false;
       this.displaySelectionNotification(node);
-      this.selectedCountEvent.emit(this.getTotalSelectionCount());
-      this.dispatchNodeSelectionEvent();
+      this.dispatchNodeSelectionEvents();
     });
   }
 
   //==========================================================================
   /** Creates and duspatches a custom node selection event */
-  private dispatchNodeSelectionEvent(): void {
-    let checkbox = document.querySelector("mat-checkbox");
-    const event = new CustomEvent("nodeSelected", {
-      detail: {
-        allSelectedNodes: this._selectedNodes,
-        totalSelectedCount: this.getTotalSelectionCount(),
-        inactiveSelectedNodes: this.inactiveSelectedNodes,
-        inactiveSelectedCount: this.getInactiveSelectionCount()
-      },
-      bubbles: true,
-      cancelable: true
-    });
+  private dispatchNodeSelectionEvents(): void {
+    let $eventData: NodeSelectionData;
+    $eventData = {
+      allSelectedNodes: this._selectedNodes,
+      totalSelectedCount: this.getTotalSelectionCount(),
+      inactiveSelectedNodes: this.inactiveSelectedNodes,
+      inactiveSelectedCount: this.getInactiveSelectionCount()
+    };
 
-    checkbox.dispatchEvent(event);
+    this.nodeSelectionEvent.emit($eventData);
   }
 
   //==========================================================================

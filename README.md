@@ -2,7 +2,7 @@
 
 ## Inputs for the control
 
-The control takes 2 inputs:
+The control main component `<ms-tree-control>` takes 2 inputs:
 
 1.  `flatTreeNodes: ITreenode[]`: An array of flat tree nodes as input data, where `ITreeNode` is an `interface` that defines a tree node, it has the following properties:
 
@@ -18,8 +18,7 @@ The control takes 2 inputs:
 
 ## Outputs from the control
 
-1.  The control raises a custom bubbling event `nodeSelected` whenever any node is selected.
-    The event object's `detail` property contains the following information regarding node selection.
+1.  The control's main component `<ms-tree-control>` raises an event `nodeSelectionEvent` whenever a node is selectde or unselected. The emitted event object is of type `NodeSelectionData`, which contains the following properties:
 
 - `allSelectedNodes: Set<TreeNode>` => A set of all the nodes that are selected
 - `totalSelectedCount: number` => Total number of selected nodes
