@@ -4,7 +4,7 @@
 
 The control takes 2 inputs:
 
-1.  `flatTreeNodes: ITreenode[]`: An array of flat tree nodes as input data, where `ITreeNode` is an interface that defines a tree node, it has the following properties:
+1.  `flatTreeNodes: ITreenode[]`: An array of flat tree nodes as input data, where `ITreeNode` is an `interface` that defines a tree node, it has the following properties:
 
 - `nodeName: string` => Name of the tree node
 - `nodeID: string` => Unique ID for a tree node
