@@ -12,7 +12,7 @@ The control takes 2 inputs:
    - `nodeAuthorized: boolean` => Represnets if a node is Authorized (`true` if authorized else `false`)
    - `nodeInactive: boolean` => Represents if a node is inactive (`true` if a node is inactive else `false`)
 
-2) `disableSearch: boolean`: A boolean value to disable the search feature (`true` if search needs to be disabled else `false`, the value is `false` by default)
+2. `disableSearch: boolean`: A boolean value to disable the search feature (`true` if search needs to be disabled else `false`, the value is `false` by default)
 
 ---
 
