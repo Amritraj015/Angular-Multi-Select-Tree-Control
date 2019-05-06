@@ -1,19 +1,27 @@
-import { Component } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
+import { ITreeNode } from "src/app/Interfaces/ITreeNode";
+import { GetTreeService } from "src/app/services/get-tree.service";
 
 @Component({
   selector: "ms-tree-control",
   templateUrl: "./ms-tree-control.component.html",
   styleUrls: ["./ms-tree-control.component.less"]
 })
-export class MsTreeControlComponent {
+export class MsTreeControlComponent implements OnInit {
   totalNodesSelected: number;
   headerText: string;
   renderTreeDiv: boolean;
+  @Input() flatTreeNodes: ITreeNode[];
+  @Input() disableSearch: boolean;
 
-  constructor() {
+  constructor(public treeService: GetTreeService) {
     this.totalNodesSelected = 0;
     this.headerText = "Select User Groups";
     this.renderTreeDiv = false;
+  }
+
+  ngOnInit(): void {
+    this.treeService.flatTreeNodes = this.flatTreeNodes;
   }
 
   //==========================================================================
@@ -26,6 +34,8 @@ export class MsTreeControlComponent {
   //==========================================================================
   /** Renders the Selected Count on the expansion pannel header */
   renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
+    if (!this.renderTreeDiv) this.totalNodesSelected = 0;
+
     if (!firedFromUpdateSelectedCount) {
       this.headerText = !this.renderTreeDiv
         ? " Selected"

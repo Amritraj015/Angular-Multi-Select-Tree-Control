@@ -26,7 +26,6 @@ export class MsSearchComponent implements OnChanges {
   ngOnChanges(): void {
     this.searchBox.nativeElement.value = "";
     this.searchTerm.emit("");
-    console.log("emiting search term");
     this.searchBox.nativeElement.focus();
   }
 

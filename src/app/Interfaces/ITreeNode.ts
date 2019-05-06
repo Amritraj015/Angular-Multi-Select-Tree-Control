@@ -3,7 +3,7 @@ export interface ITreeNode {
   /** Name of the node */
   nodeName: string;
 
-  /** ID of a node (unique identifier each node) */
+  /** ID of a node (unique identifier for each node) */
   nodeID: string;
 
   /** Parent's ID number for a given node.

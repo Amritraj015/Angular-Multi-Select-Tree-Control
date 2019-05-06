@@ -29,6 +29,7 @@
   <ng-template matExpansionPanelContent>
     <ms-tree
       *ngIf="renderTreeDiv"
+      [disableSearch]="disableSearch"
       (selectedCountEvent)="updateSelectedCount($event)"
     ></ms-tree>
   </ng-template>

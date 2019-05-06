@@ -13,7 +13,6 @@ import {
   MatProgressBarModule,
   MatSnackBarModule
 } from "@angular/material";
-import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
@@ -47,8 +46,7 @@ import { SearchFilterPipe } from "./pipes/search-filter.pipe";
     MatCardModule,
     MatExpansionModule,
     MatProgressBarModule,
-    MatSnackBarModule,
-    ScrollDispatchModule
+    MatSnackBarModule
   ],
   providers: [GetTreeService],
   bootstrap: [AppComponent],

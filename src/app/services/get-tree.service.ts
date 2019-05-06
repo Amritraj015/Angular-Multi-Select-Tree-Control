@@ -1,33 +1,31 @@
 import { Injectable } from "@angular/core";
-import { orgUnits as flatTreeNodes } from "../testData/medium_dataset";
 import { TreeNode } from "../classes/TreeNode";
-// import { tree as flatTreeNodes } from "../testData/small_dataset";
-// import { personnel as flatTreeNodes } from "../testData/large_dataset";
+import { ITreeNode } from "../Interfaces/ITreeNode";
 
 @Injectable({
   providedIn: "root"
 })
 export class GetTreeService {
   tree: TreeNode[];
+  flatTreeNodes: ITreeNode[];
 
   constructor() {
+    this.flatTreeNodes = [];
     this.tree = [];
-    this.getTree();
   }
 
-  private getTree(): void {
-    let s = new Date().getTime();
+  getTree(): TreeNode[] {
     let nodeChildrenMap = new Map<string, TreeNode[]>();
     let allNodesSet = new Set<TreeNode>();
     let rootCounter: number = 0;
 
-    for (let node of flatTreeNodes) {
+    for (let node of this.flatTreeNodes) {
       const newNode: TreeNode = {
-        nodeName: node.companyname,
-        nodeID: node.companyid,
-        nodeParentID: node.parentid,
-        nodeAuthorized: true,
-        nodeInactive: false,
+        nodeName: node.nodeName,
+        nodeID: node.nodeID,
+        nodeParentID: node.nodeParentID,
+        nodeAuthorized: node.nodeAuthorized,
+        nodeInactive: node.nodeInactive,
         nodeSelected: false,
         nodeDescendantSelected: false,
         nodeSearchBreanch: true,
@@ -42,8 +40,8 @@ export class GetTreeService {
     }
 
     this.buildNestedTree(nodeChildrenMap, allNodesSet, rootCounter);
-    let e = new Date().getTime();
-    console.log("Building the initial tree = " + (e - s));
+
+    return this.tree;
   }
 
   /** Builds the initial tree for `Show All` Tab*/

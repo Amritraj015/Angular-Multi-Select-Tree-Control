@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output, Input } from "@angular/core";
 import { GetTreeService } from "src/app/services/get-tree.service";
 import { FlatTreeNode } from "src/app/classes/FlatTreeNode";
 import { FlatTreeControl } from "@angular/cdk/tree";
@@ -18,13 +18,14 @@ import {
 export class MSTreeComponent implements OnInit {
   dataSource: MatTreeFlatDataSource<TreeNode, FlatTreeNode>;
   treeControl: FlatTreeControl<FlatTreeNode>;
-  totalSelectedNodes: number;
+  private _selectedNodes: Set<TreeNode>;
+  private _inactiveSelectedNodes: Set<TreeNode>;
   @Output() selectedCountEvent = new EventEmitter<number>();
-  selectedNodes: Set<TreeNode>;
   currentTabIndex: number;
   nodesFoundOnSearch: boolean;
   searchingNodes: boolean;
   nodeIDMap = new Map<string, FlatTreeNode>();
+  @Input() disableSearch: boolean;
 
   private transformer = (node: TreeNode, level: number) => {
     return new FlatTreeNode(
@@ -55,34 +56,43 @@ export class MSTreeComponent implements OnInit {
       this.treeFlattener
     );
 
-    this.dataSource.data = treeService.tree;
+    this.dataSource.data = this.treeService.getTree();
     this.currentTabIndex = 0;
-    this.selectedNodes = new Set();
+    this._selectedNodes = new Set();
+    this._inactiveSelectedNodes = new Set();
     this.nodesFoundOnSearch = true;
-    this.totalSelectedNodes = 0;
     this.searchingNodes = false;
-
-    for (let node of this.treeControl.dataNodes)
-      this.nodeIDMap.set(node.treeNode.nodeID, node);
   }
 
   ngOnInit(): void {
-    for (let i = 100, j = 500; i < 400 && j < 800; i++, j++) {
-      this.treeControl.dataNodes[i].treeNode.nodeAuthorized = false;
-      this.treeControl.dataNodes[j].treeNode.nodeInactive = true;
-    }
+    for (let node of this.treeControl.dataNodes)
+      this.nodeIDMap.set(node.treeNode.nodeID, node);
 
     this.treeControl.expand(this.treeControl.dataNodes[0]);
+  }
 
-    this.totalSelectedNodes = 0;
-    for (let node of this.treeControl.dataNodes) {
-      if (node.treeNode.nodeSelected) {
-        this.selectedNodes.add(node.treeNode);
-        this.totalSelectedNodes++;
-      }
-    }
+  //==========================================================================
+  /** Returns a set of all selected nodes */
+  get selectedNodes(): Set<TreeNode> {
+    return this._selectedNodes;
+  }
 
-    this.selectedCountEvent.emit(this.totalSelectedNodes);
+  //==========================================================================
+  /** Returns a set of all inactive selected nodes */
+  get inactiveSelectedNodes(): Set<TreeNode> {
+    return this._inactiveSelectedNodes;
+  }
+
+  //==========================================================================
+  /** Returns total number of nodes selected */
+  getTotalSelectionCount(): number {
+    return this.selectedNodes.size;
+  }
+
+  //==========================================================================
+  /** Returns total number of inactive nodes selected */
+  getInactiveSelectionCount(): number {
+    return this.inactiveSelectedNodes.size;
   }
 
   trackTreeNodes = (index: number, node: FlatTreeNode) => node.treeNode.nodeID;
@@ -90,11 +100,11 @@ export class MSTreeComponent implements OnInit {
   //==========================================================================
   /** Checks if atleast one tree node is selected */
   checkNodeSelection(): boolean {
-    return this.totalSelectedNodes > 0;
+    return this.getTotalSelectionCount() > 0;
   }
 
   //==========================================================================
-  /** Checks if a given tree node has child nodes */
+  /** Checks if a given tree node has children nodes */
   checkChildren = (node: FlatTreeNode) => !node.expandable;
 
   //==========================================================================
@@ -125,7 +135,7 @@ export class MSTreeComponent implements OnInit {
     this.currentTabIndex = $event;
 
     if (this.currentTabIndex === 1)
-      this.buildTreeForShowSelectedTab(this.selectedNodes);
+      this.buildTreeForShowSelectedTab(this._selectedNodes);
   }
 
   //==========================================================================
@@ -165,28 +175,23 @@ export class MSTreeComponent implements OnInit {
           descendant.treeNode.nodeSearchBreanch = true;
       }
 
-      if (node.treeNode.nodeSelected) {
-        this.totalSelectedNodes++;
-      } else this.totalSelectedNodes--;
-
       while (stack.stack.length !== 0) {
         let removedNode = stack.popStack();
-
-        if (node.treeNode.nodeSelected) {
-          if (!removedNode.nodeSelected && removedNode.nodeAuthorized)
-            this.totalSelectedNodes++;
-        }
-
-        if (!node.treeNode.nodeSelected) {
-          if (removedNode.nodeSelected && removedNode.nodeAuthorized)
-            this.totalSelectedNodes--;
-        }
 
         if (removedNode.nodeAuthorized) {
           removedNode.nodeSelected = node.treeNode.nodeSelected;
 
-          if (removedNode.nodeSelected) this.selectedNodes.add(removedNode);
-          else this.selectedNodes.delete(removedNode);
+          if (removedNode.nodeSelected) {
+            this._selectedNodes.add(removedNode);
+
+            if (removedNode.nodeInactive)
+              this._inactiveSelectedNodes.add(removedNode);
+          } else {
+            this._selectedNodes.delete(removedNode);
+
+            if (removedNode.nodeInactive)
+              this._inactiveSelectedNodes.delete(removedNode);
+          }
 
           if (this.currentTabIndex === 1)
             removedNode.nodeDescendantSelected = true;
@@ -197,8 +202,27 @@ export class MSTreeComponent implements OnInit {
 
       node.treeNode.nodeChildrenLoading = false;
       this.displaySelectionNotification(node);
-      this.selectedCountEvent.emit(this.totalSelectedNodes);
+      this.selectedCountEvent.emit(this.getTotalSelectionCount());
+      this.dispatchNodeSelectionEvent();
     });
+  }
+
+  //==========================================================================
+  /** Creates and duspatches a custom node selection event */
+  private dispatchNodeSelectionEvent(): void {
+    let checkbox = document.querySelector("mat-checkbox");
+    const event = new CustomEvent("nodeSelected", {
+      detail: {
+        allSelectedNodes: this._selectedNodes,
+        totalSelectedCount: this.getTotalSelectionCount(),
+        inactiveSelectedNodes: this.inactiveSelectedNodes,
+        inactiveSelectedCount: this.getInactiveSelectionCount()
+      },
+      bubbles: true,
+      cancelable: true
+    });
+
+    checkbox.dispatchEvent(event);
   }
 
   //==========================================================================
@@ -251,7 +275,7 @@ export class MSTreeComponent implements OnInit {
             }
           }
         } else {
-          this.selectedNodes.forEach(node => {
+          this._selectedNodes.forEach(node => {
             if (regExp.test(node.nodeName)) {
               matchedNames.add(
                 node.nodeName.replace(regExp, matchedString => matchedString)
@@ -260,20 +284,12 @@ export class MSTreeComponent implements OnInit {
           });
         }
 
-        let n = new Date().getTime();
-        console.log("filtering = " + (n - m));
-
-        let s = new Date().getTime();
-
         if (matchedNames.size > 0) {
           this.nodesFoundOnSearch = true;
           this.buildTreeForSearchedNode(matchedNames);
         } else this.nodesFoundOnSearch = false;
 
         this.searchingNodes = false;
-
-        let e = new Date().getTime();
-        console.log("searching = " + (e - s));
       }
     }, 500);
   }
