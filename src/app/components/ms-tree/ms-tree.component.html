@@ -1,25 +1,25 @@
+<ng-container *ngIf="!disableSearch">
+  <ms-search
+    [tabIndex]="currentTabIndex"
+    (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
+  ></ms-search>
+
+  <div class="progress-bar">
+    <mat-progress-bar
+      *ngIf="searchingNodes"
+      color="primary"
+      mode="buffer"
+    ></mat-progress-bar>
+  </div>
+</ng-container>
+
 <mat-tab-group
   (selectedIndexChange)="storeTabIndex($event)"
   animationDuration="100"
   mat-align-tabs="center"
 >
   <mat-tab label="Show All">
-    <ms-search
-      [tabIndex]="currentTabIndex"
-      (searchTerm)="searchTerm = $event; findMatchingTreeNodes($event)"
-    ></ms-search>
-
-    <mat-progress-bar
-      *ngIf="loadingNodes"
-      color="primary"
-      mode="buffer"
-    ></mat-progress-bar>
-
     <mat-card class="tree-display">
-      <!-- <cdk-virtual-scroll-viewport itemSize="48" style="height: 750px;">
-        <ng-container
-          *cdkVirtualFor="let data of fullDataSource"
-        ></ng-container> -->
       <mat-tree
         *ngIf="nodesFoundOnSearch"
         [dataSource]="dataSource"
@@ -91,10 +91,16 @@
                 [innerHTML]="node.treeNode.nodeName | searchFilter: searchTerm"
               ></div>
             </mat-checkbox>
+
+            <mat-progress-bar
+              class="loading-nodes-progress-bar"
+              *ngIf="node.treeNode.nodeChildrenLoading"
+              color="primary"
+              mode="indeterminate"
+            ></mat-progress-bar>
           </div>
         </ng-container>
       </mat-tree>
-      <!-- </cdk-virtual-scroll-viewport> -->
       <div *ngIf="!nodesFoundOnSearch" class="none-selected-div">
         No Results Found
       </div>
@@ -103,17 +109,6 @@
 
   <mat-tab label="Show Selected">
     <ng-template matTabContent>
-      <ms-search
-        [tabIndex]="currentTabIndex"
-        (searchTerm)="searchSelected = $event; findMatchingTreeNodes($event)"
-      ></ms-search>
-
-      <mat-progress-bar
-        *ngIf="loadingNodes"
-        color="primary"
-        mode="buffer"
-      ></mat-progress-bar>
-
       <mat-card class="tree-display">
         <ng-container *ngIf="nodesFoundOnSearch">
           <mat-tree
@@ -167,7 +162,7 @@
                   <div
                     class="tree-node-unauthorized"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
                 </div>
@@ -183,7 +178,7 @@
                     *ngIf="node.treeNode.nodeInactive"
                     class="tree-node-inactive"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
 
@@ -194,10 +189,17 @@
                   <div
                     *ngIf="!node.treeNode.nodeInactive"
                     [innerHTML]="
-                      node.treeNode.nodeName | searchFilter: searchSelected
+                      node.treeNode.nodeName | searchFilter: searchTerm
                     "
                   ></div>
                 </mat-checkbox>
+
+                <mat-progress-bar
+                  class="loading-nodes-progress-bar"
+                  *ngIf="node.treeNode.nodeChildrenLoading"
+                  color="primary"
+                  mode="indeterminate"
+                ></mat-progress-bar>
               </div>
             </ng-container>
           </mat-tree>

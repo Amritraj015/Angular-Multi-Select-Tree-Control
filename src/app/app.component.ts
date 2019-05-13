@@ -1,38 +1,24 @@
 import { Component } from "@angular/core";
+// import { orgUnits as flatTreeNodes } from "./testData/medium_dataset";
+import { tree as flatTreeNodes } from "./testData/small_dataset";
+import { ITreeNode } from "./Interfaces/ITreeNode";
+// import { personnel as flatTreeNodes } from "./testData/large_dataset";
 
 @Component({
-  selector: "ms-tree-control",
+  selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.less"]
 })
-export class MSMainComponent {
-  totalNodesSelected: number;
-  headerText: string;
-  renderTreeDiv: boolean;
+export class AppComponent {
+  flatTree: ITreeNode[];
+  disableSearch: boolean;
 
   constructor() {
-    this.totalNodesSelected = 0;
-    this.headerText = "Select User Groups";
-    this.renderTreeDiv = false;
+    this.disableSearch = false;
+    this.flatTree = flatTreeNodes;
   }
 
-  //==========================================================================
-  /** Updates the node Selection count on the control header */
-  updateSelectedCount(selectedCount: number): void {
-    this.totalNodesSelected = selectedCount;
-    this.renderTree(true);
-  }
-
-  //==========================================================================
-  /** Renders the Selected Count on the expansion pannel header */
-  renderTree(firedFromUpdateSelectedCount?: boolean): boolean {
-    if (!firedFromUpdateSelectedCount) {
-      this.headerText = !this.renderTreeDiv
-        ? " Selected"
-        : "Select User Groups";
-      return (this.renderTreeDiv = !this.renderTreeDiv);
-    }
-
-    this.headerText = " Selected";
+  test($event): void {
+    console.log($event);
   }
 }
