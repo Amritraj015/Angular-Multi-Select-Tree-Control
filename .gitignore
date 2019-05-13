@@ -45,4 +45,4 @@ Thumbs.db
 
 
 # Test Data
-/src/app/testData/*
+/src/app/testData/
