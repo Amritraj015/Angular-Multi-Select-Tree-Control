@@ -30,7 +30,7 @@ export let tree: ITreeNode[] = [
     nodeInactive: false
   },
   {
-    nodeName: "TalentQuest",
+    nodeName: "Company 1",
     nodeID: "6",
     nodeParentID: "5",
     nodeAuthorized: true,
