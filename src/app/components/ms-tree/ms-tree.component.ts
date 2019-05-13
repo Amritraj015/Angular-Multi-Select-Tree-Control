@@ -246,7 +246,6 @@ export class MSTreeComponent implements OnInit {
       }
 
       if (searchTerm.length > 1) {
-        let m = new Date().getTime();
         let matchedNames = new Set();
         let pattern = searchTerm
           .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
